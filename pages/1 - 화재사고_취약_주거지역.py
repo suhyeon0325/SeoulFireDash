@@ -16,7 +16,7 @@ from utils.map_visualization import create_and_show_map
 set_page_config()
 
 df = load_data("data/total_rank.csv")
-gdf = load_shp_data("data\구경계_geo\구경계_geo.shp")
+gdf = load_shp_data("data/구경계_geo/구경계_geo.shp")
 
 df_09 = df.iloc[:, 0:9]
 df_09.rename(columns={'서울시 주거 시설 중 주택 비율': '주택 중 아파트를 제외한 건물 비율'}, inplace=True)
