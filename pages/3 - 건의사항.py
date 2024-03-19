@@ -12,8 +12,8 @@ def main():
     """
 
 
-    st.title('건의사항 페이지', help=help_text)
-    st.divider()
+    st.header('건의사항 페이지', help=help_text, divider='gray')
+
     with st.container(border=True):
     # 사용자로부터 입력 받기
         username = st.text_input('이름')

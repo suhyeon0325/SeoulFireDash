@@ -72,3 +72,26 @@ def visualize_pie_chart(labels, values_list, names, title, colors=['#F25E6B', '#
         fig.add_trace(go.Pie(labels=labels, values=values, name=name, marker_colors=colors), 1, i)
     fig.update_layout(title_text=title)
     st.plotly_chart(fig)
+
+
+def visualize_horizontal_bar_chart(df, selected_column, title, color_scale='Reds'):
+    """
+    스트림릿에서 선택한 열에 따른 자치구별 가로 막대 그래프를 시각화하는 함수.
+    
+    :param df: 데이터프레임
+    :param selected_column: 사용자가 선택한 열 이름
+    :param title: 그래프 제목 (기본값: '가로 막대 그래프')
+    :param color_scale: 막대 색상 스케일 (사용자가 선택 가능)
+    """
+    df_sorted = df.sort_values(by=selected_column)
+    
+    fig = px.bar(df_sorted, y='자치구', x=selected_column,
+                 labels={'자치구': '자치구', selected_column: selected_column},
+                 title=title, orientation='h',
+                 color=selected_column, color_continuous_scale=px.colors.sequential.__dict__[color_scale])
+    
+    # y축 레이블이 더 넓게 표시되도록 조정 및 글꼴 크기 조정
+    fig.update_layout(plot_bgcolor='rgba(240, 240, 240, 0.6)', margin=dict(l=50))
+    fig.update_yaxes(tickmode='array', tickvals=df_sorted['자치구'], tickfont=dict(size=10))
+    
+    st.plotly_chart(fig)
