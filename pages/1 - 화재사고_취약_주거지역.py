@@ -15,7 +15,7 @@ from utils.map_visualization import create_and_show_map
 # 페이지 설정
 set_page_config()
 
-df = load_data("\data\total_rank.csv")
+df = load_data("data\total_rank.csv")
 gdf = load_shp_data("data\구경계_geo\구경계_geo.shp")
 
 df_09 = df.iloc[:, 0:9]
