@@ -76,7 +76,7 @@ with st.container(border=True, height=650):
 
         with col2:
             chart_type = st.selectbox(
-            '차트 유형 선택:',
+            '차트 유형 선택',
             ('막대 그래프', '원형 차트'),  # 더 친숙하고 이해하기 쉬운 단어 사용
             key='chart_type'
             )
@@ -102,7 +102,7 @@ with st.container(border=True, height=650):
 
             # 시각화
             visualize_pie_chart(labels, [values_2021, values_2022], names=["2021", "2022"], 
-                                title=f"{selected_sig_data['자치구'].iloc[0]} - 2021년 대비 2022년 화재 발생 유형 비교", 
+                                title=f"{selected_sig_data['자치구'].iloc[0]} - 2021년과 2022년 화재 발생 유형 분석", 
                                 colors=custom_colors)
                     
         elif chart_type == '막대 그래프':
@@ -129,7 +129,7 @@ with st.container(border=True, height=650):
         with col2:
             # 차트 유형 선택
             chart_type = st.selectbox(
-                '차트 유형 선택:',
+                '차트 유형 선택',
                 ('막대 그래프', '원형 차트'),
                 key='chart_type_tab3'
             )
@@ -165,7 +165,7 @@ with st.container(border=True, height=650):
             # 화재 피해금액 비교를 위한 파이 차트 시각화
             # 2021년과 2022년 데이터를 각각 다른 파이 차트로 표시
             visualize_pie_chart(labels, [values_2021, values_2022], names=["2021", "2022"], 
-                                title=f"{selected_sig_data['자치구'].iloc[0]} - 화재 피해 금액 비교", 
+                                title=f"{selected_sig_data['자치구'].iloc[0]} - 2021년과 2022년 화재 피해 금액 비교", 
                                 colors=custom_colors)
 
     with tab4:
@@ -178,7 +178,7 @@ with st.container(border=True, height=650):
         with col2:
             # 차트 유형 선택
             chart_type = st.selectbox(
-            '차트 유형 선택:',
+            '차트 유형 선택',
             ('막대 그래프', '원형 차트'),  # 사용자에게 친숙한 용어 사용
             key='chart_type_tab4'
             )
@@ -227,5 +227,5 @@ with st.container(border=True, height=650):
 
             # 시각화
             visualize_pie_chart(labels_p, [values_2021_p, values_2022_p], names=["2021", "2022"], 
-                                title=f"{selected_sig_data['자치구'].iloc[0]} - 2021년 대비 2022년 화재 발생 유형 비교", 
+                                title=f"{selected_sig_data['자치구'].iloc[0]} - 2021년과 2022년 화재 사고 인명 피해 분석", 
                                 colors=custom_colors)
