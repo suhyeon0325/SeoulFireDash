@@ -9,7 +9,7 @@ import geopandas as gpd
 from plotly.subplots import make_subplots
 from utils.data_loader import set_page_config, load_data
 from utils.filters import select_data
-from utils.visualizations import visualize_bar_chart, visualize_pie_chart
+from utils.visualizations import visualize_bar_chart, visualize_pie_chart, visualize_bar_chart_updated
 
 # 페이지 설정
 set_page_config()
@@ -45,7 +45,7 @@ with col4:
 
 # 그래프 시각화
 with st.container(border=True, height=650):
-    tab1, tab2, tab3, tab4 = st.tabs(["월별 화재발생 건수", "화재 발생 유형", "화재 피해 금액", "인평 피해 분석"])
+    tab1, tab2, tab3, tab4 = st.tabs(["월별 화재발생 건수", "화재 발생 유형", "화재 피해 금액", "인명 피해 분석"])
 
     # 월별 화재발생 건수 탭 시각화
     with tab1:
@@ -66,8 +66,23 @@ with st.container(border=True, height=650):
 
     # 화재발생 유형 파이차트로 시각화
     with tab2:
-        # 자치구 선택 및 데이터 필터링
-        selected_sig_data = select_data(data, '자치구', '_sig_select')
+        col1, col2 = st.columns(2)
+
+        # 첫 번째 컬럼에서 차트 유형 선택
+        with col1:
+            # 자치구 선택 및 데이터 필터링
+            selected_sig_data = select_data(data, '자치구', '_sig_select')
+
+
+        with col2:
+            chart_type = st.selectbox(
+            '차트 유형 선택:',
+            ('막대 그래프', '원형 차트'),  # 더 친숙하고 이해하기 쉬운 단어 사용
+            key='chart_type'
+            )
+
+
+    if chart_type == '원형 차트':
 
         # 화재 발생 유형별 데이터 집계
         labels = ['실화 발생', '방화 발생', '기타 발생']
@@ -89,4 +104,93 @@ with st.container(border=True, height=650):
         visualize_pie_chart(labels, [values_2021, values_2022], names=["2021", "2022"], 
                             title=f"{selected_sig_data['자치구'].iloc[0]} - 2021년 대비 2022년 화재 발생 유형 비교", 
                             colors=custom_colors)
+                
+    elif chart_type == '막대 그래프':
+        # 바차트 시각화 함수 호출
+        visualize_bar_chart_updated(
+            df=selected_sig_data,
+            x_axes=['자치구', '자치구', '자치구'],  # x 축으로 사용될 열 이름
+            y_axes_list=[['2021_실화_발생', '2022_실화_발생'], ['2021_방화_발생', '2022_방화_발생'], ['2021_기타_발생', '2022_기타_발생']],
+            names_list=[['2021 실화', '2022 실화'], ['2021 방화', '2022 방화'], ['2021 기타', '2022 기타']],
+            title=f'{selected_sig_data['자치구'].iloc[0]} - 화재 발생 유형별 비교',
+            xaxis_titles=['실화 발생', '방화 발생', '기타 발생'],
+            yaxis_title='발생 건수',
+            colors_list=[['#F25E6B', '#032CA6'], ['#FAD04A', '#2B2726'], ['#9FC031', '#EEDFE2']]
+        )
+        
+    # 화재 피해금액 시각화
+    with tab3:
+        col1, col2 = st.columns(2)
+
+        with col1:
+            # 자치구 선택 및 데이터 필터링
+            selected_sig_data = select_data(data, '자치구', '_sig_select_tab3')
+
+        with col2:
+            # 차트 유형 선택
+            chart_type = st.selectbox(
+                '차트 유형 선택:',
+                ('막대 그래프', '원형 차트'),
+                key='chart_type_tab3'
+            )
+
+        if chart_type =='막대 그래프':
+            # 시각화
+            visualize_bar_chart_updated(
+                df=selected_sig_data,
+                x_axes=['자치구', '자치구', '자치구'],  # x 축으로 사용될 열 이름
+                y_axes_list=[['2021_소계_피해액', '2022_소계_피해액'], ['2021_부동산_피해액', '2022_부동산_피해액'], ['2021_동산_피해액', '2022_동산_피해액']],
+                names_list=[['2021 총 피해액', '2022 총 피해액'], ['2021 부동산 피해액', '2022 부동산 피해액'], ['2021 동산 피해액', '2022 동산 피해액']],
+                title='자치구별 화재 피해 금액 비교',
+                xaxis_titles=['총 피해액', '부동산 피해액', '동산 피해액'],
+                yaxis_title='피해액 (단위: 원)',
+                colors_list=[['#EE6A66', '#1E1A77'], ['#FAD04A', '#2B2726'], ['#9FC031', '#EEDFE2']]
+            )
+
+        elif chart_type == '원형 차트':
+        # 원형 차트 시각화 코드 추가 (예시: 화재 피해금액 비교)
+            labels = ['2021 부동산 피해액', '2021 동산 피해액', '2022 부동산 피해액', '2022 동산 피해액']
+            values = [
+                selected_sig_data['2021_부동산_피해액'].sum(),
+                selected_sig_data['2021_동산_피해액'].sum(),
+                selected_sig_data['2022_부동산_피해액'].sum(),
+                selected_sig_data['2022_동산_피해액'].sum()
+            ]
+            
+            custom_colors = ['#F25E6B', '#032CA6', '#FCE77C', '#FFA07A']
+            
+            # 원형 차트 시각화 함수 호출
+            visualize_pie_chart(labels=labels, values_list=[values], names=['피해액'], 
+                                title=f"{selected_sig_data['자치구'].iloc[0]} - 화재 피해 금액 비교", 
+                                colors=custom_colors)
+
+    with tab4:
+        
+        # 자치구 선택 및 데이터 필터링
+        selected_sig_4 = select_data(data, '자치구', '_sig_select_4')
+
+        # 시각화
+        visualize_bar_chart_updated(
+            df=selected_sig_4,
+            x_axes=['자치구', '자치구', '자치구'],  # 모든 서브플롯에서 x 축으로 사용될 열 이름
+            y_axes_list=[
+                ['2021_소계_인명피해', '2022_소계_인명피해'],
+                ['2021_사망_인명피해', '2022_사망_인명피해'],
+                ['2021_부상_인명피해', '2022_부상_인명피해']
+            ],
+            names_list=[
+                ['2021 소계 인명피해', '2022 소계 인명피해'],
+                ['2021 사망 인명피해', '2022 사망 인명피해'],
+                ['2021 부상 인명피해', '2022 부상 인명피해']
+            ],
+            title='자치구별 인명피해 비교',
+            xaxis_titles=['소계 인명피해', '사망 인명피해', '부상 인명피해'],
+            yaxis_title='인원 수',
+            colors_list=[
+                ['#EE6A66', '#1E1A77'],  # 소계 인명피해
+                ['#FAD04A', '#2B2726'],  # 사망 인명피해
+                ['#9FC031', '#EEDFE2']   # 부상 인명피해
+            ]
+        )
+
 
