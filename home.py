@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import geopandas as gpd
 from plotly.subplots import make_subplots
 from utils.data_loader import set_page_config, load_data
-from utils.filters import select_data
+from utils.filters import select_data, select_dong
 from utils.visualizations import visualize_bar_chart, visualize_pie_chart, visualize_bar_chart_updated
 
 # 페이지 설정
@@ -17,6 +17,7 @@ set_page_config()
 # 데이터 불러오기
 data = load_data("C:/Users/1qlqj/Desktop/multicamp_semi/SeoulFireDash/data/구별_화재발생_현황_2021_2022.csv")
 df = load_data("data\화재발생_자치구별_현황(월별).csv", encoding='cp949')
+dong = load_data("data\동별_화재발생_장소_2021_2022.csv")
 
 st.title('서울시 화재사고 현황', help='이 페이지에서는 서울시 내의 최근 화재 사고 발생 통계, 화재 유형별 및 지역별 분석, 화재 예방 및 대응에 관한 정보를 제공합니다. 사용자는 화재 발생 빈도, 피해 규모, 대응 시간 등 다양한 데이터를 통해 서울시의 화재 안전 상태를 파악할 수 있으며, 화재 예방과 대응에 유용한 인사이트를 얻을 수 있습니다.')
 st.divider()
@@ -229,3 +230,18 @@ with st.container(border=True, height=650):
             visualize_pie_chart(labels_p, [values_2021_p, values_2022_p], names=["2021", "2022"], 
                                 title=f"{selected_sig_data['자치구'].iloc[0]} - 2021년과 2022년 화재 사고 인명 피해 분석", 
                                 colors=custom_colors)
+
+# 동별 화재발생 현황 그래프
+with st.container(border=True, height=650):
+    col1, col2 = st.columns(2)
+
+    # 첫 번째 컬럼에서 차트 유형 선택
+    with col1:
+        # 구 선택
+        df_filtered_by_gu = select_data(df, '자치구', '_gu')
+
+    with col2:
+        # 동 선택
+        df_filtered_by_dong = select_dong(df_filtered_by_gu, '동', '_dong_1')
+
+    
