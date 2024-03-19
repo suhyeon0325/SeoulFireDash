@@ -26,7 +26,7 @@ merged_data = gdf.merge(df, left_on='구', right_on='자치구')
 def main():
     
     # 스트림릿 대시보드
-    st.header('자치구별 데이터 시각화', divider="gray")
+    st.header('화재사고 취약지역 분석', divider="gray")
 
     with st.container(border=True, height=650):
 

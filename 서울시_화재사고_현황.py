@@ -264,7 +264,7 @@ def main():
                         color_discrete_sequence=colors)
 
         # 차트 제목 설정
-        fig.update_layout(title='동별 화재 발생 현황 트리맵')
+        fig.update_layout(title='동별 화재 장소유형 트리맵')
 
         # 전반적인 텍스트 스타일 조정
         fig.update_layout(font=dict(family="Arial, sans-serif", size=14, color="black"))
