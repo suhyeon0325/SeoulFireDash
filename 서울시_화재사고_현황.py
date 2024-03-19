@@ -15,9 +15,9 @@ from utils.visualizations import visualize_bar_chart, visualize_pie_chart, visua
 set_page_config()
 
 # 데이터 불러오기
-data = load_data("data\구별_화재발생_현황_2021_2022.csv")
-df = load_data("data\화재발생_자치구별_현황(월별).csv", encoding='cp949')
-dong = load_data("data\동별_화재발생_장소_2021_2022.csv")
+data = load_data("data/구별_화재발생_현황_2021_2022.csv")
+df = load_data("data/화재발생_자치구별_현황(월별).csv", encoding='cp949')
+dong = load_data("data/동별_화재발생_장소_2021_2022.csv")
 
 def main():
 
