@@ -1,6 +1,16 @@
 import folium
 import streamlit.components.v1 as components
+import geopandas as gpd
+from shapely import wkt
+from folium.plugins import MarkerCluster
+from streamlit_folium import folium_static
+import streamlit as st
+from folium import plugins
+import branca
+from folium import IFrame
 
+
+# 화재사고 취약 페이지 - 지도 시각화
 def create_and_show_map(data, columns, key_on, fill_color='YlOrRd'):
     """
     GeoDataFrame의 지리 정보를 사용하여 서울시 자치구별 지도에 Choropleth 레이어를 추가하고 시각화하는 함수.
@@ -53,3 +63,95 @@ def create_and_show_map(data, columns, key_on, fill_color='YlOrRd'):
 
     # HTML로 변환 후 반환
     return seoul_map._repr_html_()
+
+
+# 서울시 비상소화장치 시각화
+def display_folium_map_with_clusters(gdf):
+    """
+    GeoDataFrame의 포인트들을 클러스터링하여 Folium 지도에 표시하고, 이를 스트림릿에서 보여주는 개선된 함수.
+    
+    :param gdf: GeoDataFrame, 포인트들의 좌표를 포함하는 `geometry` 열을 가져야 하며, '구'와 '동' 정보를 포함해야 함.
+    """
+    # 서울시 중심에 지도를 생성하고, CartoDB Positron 타일을 사용
+    m = folium.Map(location=[37.5665, 126.9780], tiles='OpenStreetMap', zoom_start=11)
+    
+    # 클러스터 객체 생성
+    marker_cluster = MarkerCluster().add_to(m)
+    
+    # GeoDataFrame 내의 각 지점에 대해 마커 추가
+    for idx, row in gdf.iterrows():
+        # 마커에 표시될 팝업 및 툴팁 생성
+        tooltip = f"{row['구']}, {row['동']}"
+        
+        # 마커에 팝업과 툴팁 추가, 빨간색 아이콘 사용
+        folium.Marker(
+            location=[row['geometry'].y, row['geometry'].x],
+            tooltip=tooltip,
+            icon=folium.Icon(color='red', icon='info-sign')
+        ).add_to(marker_cluster)
+    
+    # 스트림릿에서 지도 표시
+    folium_static(m)
+
+
+# 소방용수 함수 정의
+def visualize_fire_water(grid, column_name='소방용수_수'):
+    """
+    소방용수 분포를 지도에 시각화하는 함수입니다.
+    GeoPandas와 Folium 라이브러리를 사용하여 소방용수가 있는 위치를 지도 위에 표시합니다.
+    이 때, 소방용수의 양에 따라 지도 상의 색상이 달라집니다.
+    
+    :param grid: 소방용수 분포 데이터가 담긴 DataFrame. 'geometry' 컬럼에는 WKT 포맷의 지리 정보가, 
+                 column_name에 지정된 컬럼에는 소방용수의 양 정보가 있어야 합니다.
+    :param column_name: 소방용수의 양을 나타내는 컬럼 이름. 기본값은 '소방용수_수'.
+    """
+    # geometry 열을 GeoPandas의 geometry로 변환
+    grid['geometry'] = gpd.GeoSeries.from_wkt(grid['geometry'])
+    gdf = gpd.GeoDataFrame(grid, geometry='geometry')
+    gdf.crs = "EPSG:4326"
+
+    # 지도 객체 생성 (서울시 중심 좌표로 설정)
+    map_fw = folium.Map(location=[37.564, 126.997], zoom_start=11, tiles='OpenStreetMap')
+
+    # 색상을 결정하는 함수. 여기서는 단순화를 위해 소방용수의 양에 따라 색상을 분류합니다.
+    def color_scale(amount):
+        """
+        소방용수의 양에 따라 색상을 매핑하는 함수입니다. 소방용수의 양이 1부터 10까지는 각각 다른 색상을,
+        10 이상, 20 이상, 30 이상에서도 각각 특정 색상을 할당합니다.
+        """
+        if amount == 30:
+            return '#01579B' 
+        elif amount == 20:
+            return '#0277BD' 
+        elif amount == 10:
+            return '#0288D1' 
+        elif amount in[8, 9]:
+            return '#039BE5'
+        elif amount in[6, 7]:
+            return '#03A9F4'  
+        elif amount == 5:
+            return '#29B6F6'  
+        elif amount == 4:
+            return '#4FC3F7'  
+        elif amount == 3:
+            return '#81D4FA'  
+        elif amount == 2:
+            return '#B3E5FC'  
+        elif amount == 1:
+            return '#E1F5FE' 
+        else:
+            return '#808080' # 회색 (양이 0 또는 정의되지 않은 경우)
+
+
+    # GeoPandas DataFrame을 이용하여 지도에 추가
+    folium.GeoJson(
+        gdf,
+        style_function=lambda feature: {
+            'fillColor': color_scale(feature['properties'][column_name]),
+            'color': 'black',
+            'weight': 0.1,
+            'fillOpacity': 0.7,
+        }
+    ).add_to(map_fw)
+    # 지도 표시 (스트림릿으로 변환시 st.write(m) 사용)
+    folium_static(map_fw)

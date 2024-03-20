@@ -57,7 +57,6 @@ def visualize_bar_chart_updated(df, x_axes, y_axes_list, names_list, title, xaxi
     # Streamlit에 차트 표시
     st.plotly_chart(fig)
 
-
 def visualize_pie_chart(labels, values_list, names, title, colors=['#F25E6B', '#032CA6', '#FCE77C']):
     """
     파이 차트 시각화 함수.
@@ -72,7 +71,6 @@ def visualize_pie_chart(labels, values_list, names, title, colors=['#F25E6B', '#
         fig.add_trace(go.Pie(labels=labels, values=values, name=name, marker_colors=colors), 1, i)
     fig.update_layout(title_text=title)
     st.plotly_chart(fig)
-
 
 def visualize_horizontal_bar_chart(df, selected_column, title, color_scale='Reds'):
     """
