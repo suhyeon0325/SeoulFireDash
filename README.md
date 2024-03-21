@@ -1,6 +1,12 @@
 # SeoulFireDash
+**Version 0.1.1**: 
+- **Ward Fire Place Type Treemap**: Visualize fire incidents by place types within wards.
+- **Vulnerable Area Analysis**: Explore in-depth or top 5 most fire-prone areas based on critical indicators like emergency hydrant counts, building types, population density, old housing numbers, and more.
+- **Fire Vulnerability Mapping in Seoul**: New visual tool to pinpoint and assess fire-susceptible areas.
+- **Seoul Firefighting Infrastructure Visualization**: Map out crucial firefighting resources including stations, hydrants, and water supplies.
+- **Suggestions Page**: A new avenue for feedback and ideas to enhance app utility and user experience.
 
-Version 0.1.0 :
+**Version 0.1.0** :
 
 - **Dynamic Data Visualization**: Leveraging Streamlit for interactive visualization, allowing users to explore fire incident data, including incidents, casualties, and damages.
 - **In-depth Analysis**: Detailed analyses by incident type and region with custom filters and visualization options to uncover trends and patterns.
