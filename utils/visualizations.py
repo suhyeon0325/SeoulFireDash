@@ -4,6 +4,7 @@ import plotly.graph_objects as go
 import plotly.express as px 
 import geopandas as gpd
 import matplotlib.pyplot as plt
+import numpy as np
 import geopandas as gpd
 from plotly.subplots import make_subplots
 
@@ -92,4 +93,24 @@ def visualize_horizontal_bar_chart(df, selected_column, title, color_scale='Reds
     fig.update_layout(plot_bgcolor='rgba(240, 240, 240, 0.6)', margin=dict(l=50))
     fig.update_yaxes(tickmode='array', tickvals=df_sorted['자치구'], tickfont=dict(size=10))
     
+    st.plotly_chart(fig)
+
+def visualize_facilities(df_selected):
+    fig = go.Figure()
+
+    # 제공된 색상 목록
+    colors = ['#F25E6B', '#F2C744', '#A1BF34', '#EEDFE2', '#FCE77C', '#E2D0F8', '#DCE2F0', '#F2EFBB', '#D5D971', '#6779A1', '#9B7776','#1BBFBF', '#D94B2B', '#D98F89', '#FFDEDC', '#ACC7B4']
+    
+    # 시설 유형 목록
+    facility_types = ['단독주택', '공동주택', '기타주택', '학교', '일반업무', '판매시설', '숙박시설', '종교시설', '의료시설', '공장 및 창고', '작업장', '위락오락시설', '음식점', '일상서비스시설', '기타']
+    
+    # 시설 유형과 색상 매핑
+    color_map = dict(zip(facility_types, colors))
+
+    for column in df_selected.columns[2:]:  # '자치구'와 '동' 컬럼을 제외한 나머지 컬럼에 대해 반복
+        total = df_selected[column].sum()  # 해당 시설 유형의 총합
+        # 시설 유형별로 지정된 색상 사용, 레전드 표시하지 않음
+        fig.add_trace(go.Bar(x=[column], y=[total], marker_color=color_map.get(column), showlegend=False))
+
+    fig.update_layout(title="시설 유형별 총계", xaxis_title="시설 유형", yaxis_title="총계")
     st.plotly_chart(fig)

@@ -18,7 +18,11 @@ set_page_config()
 df = load_data("data/total_rank.csv")
 gdf = load_shp_data("data/구경계_geo/구경계_geo.shp")
 
-df_09 = df.iloc[:, 0:9]
+columns_to_exclude = ["비상소화장치 설치개수 점수", "서울시 주거 시설 중 주택 비율 점수", "인구밀도(명/km^2) 점수", 
+                      "노후 주택 수 점수", "소방관 1명당 담당인구 점수", "화재발생건수 점수", "안전센터 1개소당 담당인구 점수", 
+                      "출동소요시간 점수", "순위", "전체 점수"]
+columns_for_df_09 = [col for col in df.columns if col not in columns_to_exclude]
+df_09 = df[columns_for_df_09]
 df_09.rename(columns={'서울시 주거 시설 중 주택 비율': '주택 중 아파트를 제외한 건물 비율'}, inplace=True)
 
 merged_data = gdf.merge(df, left_on='구', right_on='자치구')
@@ -29,9 +33,11 @@ def main():
     st.header('화재사고 취약지역 분석', divider="gray")
 
     with st.container(border=True, height=650):
+        st.subheader('서울시 주택화재 취약지역 분석')
 
-        tab1, tab2 = st.tabs(["전체 자치구 통계", "상/하위 자치구 분석"])
+        tab1, tab2, tab3 = st.tabs(["전체 자치구 통계", "상/하위 자치구 분석", "취약 점수"])
         with tab1:
+            
             selected_column = st.selectbox('분석 카테고리 선택', options=df_09.columns[1:], index=0, key='_selected_data_1')
 
             # 선택한 열에 대한 가로 막대 그래프 시각화
@@ -63,6 +69,9 @@ def main():
             # 스트림릿으로 그래프 표시
             st.plotly_chart(fig)
 
+        with tab3:
+            st.dataframe(df)
+
     with st.container(border=True, height=650):        
 
         st.subheader('서울시 소방 취약지역 시각화')
@@ -84,7 +93,6 @@ def main():
 
         # 스트림릿에서 지도 표시
         st.components.v1.html(html_string, height=700)
-
 
 
 if __name__ == "__main__":

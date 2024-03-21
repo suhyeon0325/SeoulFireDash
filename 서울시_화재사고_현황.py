@@ -9,7 +9,7 @@ import geopandas as gpd
 from plotly.subplots import make_subplots
 from utils.data_loader import set_page_config, load_data
 from utils.filters import select_data, select_dong
-from utils.visualizations import visualize_bar_chart, visualize_pie_chart, visualize_bar_chart_updated
+from utils.visualizations import visualize_bar_chart, visualize_pie_chart, visualize_facilities, visualize_bar_chart_updated
 
 # 페이지 설정
 set_page_config()
@@ -18,6 +18,15 @@ set_page_config()
 data = load_data("data/구별_화재발생_현황_2021_2022.csv")
 df = load_data("data/화재발생_자치구별_현황(월별).csv", encoding='cp949')
 dong = load_data("data/동별_화재발생_장소_2021_2022.csv")
+
+dong = dong.drop(columns=["Unnamed: 0"])
+# "서울시 전체" 행 추가
+seoul_total = dong.drop(['자치구', '동'], axis=1).sum().rename('서울시 전체')
+seoul_total['자치구'] = '서울시 전체'
+seoul_total['동'] = '전체'
+
+# 최종 데이터 프레임 조합
+dong = pd.concat([dong, pd.DataFrame([seoul_total])], ignore_index=True)
 
 def main():
 
@@ -233,50 +242,61 @@ def main():
                                     colors=custom_colors)
 
     # 동별 화재발생 현황 그래프
-    with st.container(border=True, height=650):
-        col1, col2 = st.columns(2)
+    with st.container(border=True, height=700):
+        st.subheader('화재 장소 유형 분석')
+        tab1, tab2 = st.tabs(["트리맵으로 보기", "막대 그래프로 보기"])
+        with tab1:
+            col1, col2 = st.columns(2)
 
-        # 첫 번째 컬럼에서 차트 유형 선택
-        with col1:
-            # 구 선택
-            df_filtered_by_gu = select_data(dong, '자치구', '_gu')
+            # 첫 번째 컬럼에서 차트 유형 선택
+            with col1:
+                # 구 선택
+                df_filtered_by_gu = select_data(dong, '자치구', '_gu')
 
-        with col2:
-            # 동 선택
-            df_filtered_by_dong = select_dong(df_filtered_by_gu, '동', '_dong_1')
+            with col2:
+                # 동 선택
+                df_filtered_by_dong = select_dong(df_filtered_by_gu, '동', '_dong_1')
 
-        # 화재 발생 장소 유형
-        place_types = ['단독주택', '공동주택', '기타주택', '학교', '일반업무', '판매시설', '숙박시설', '종교시설', '의료시설', '공장 및 창고', '작업장', '위락오락시설', '음식점', '일상서비스시설', '기타']
+            # 화재 발생 장소 유형
+            place_types = ['단독주택', '공동주택', '기타주택', '학교', '일반업무', '판매시설', '숙박시설', '종교시설', '의료시설', '공장 및 창고', '작업장', '위락오락시설', '음식점', '일상서비스시설', '기타']
 
-        # 장소 유형별 화재 발생 건수 데이터를 '장소 유형'과 '건수' 컬럼을 가진 새로운 데이터프레임으로 변환
-        df_treemap = df_filtered_by_dong.melt(id_vars=['자치구', '동'], value_vars=place_types, var_name='장소 유형', value_name='건수')
+            # 장소 유형별 화재 발생 건수 데이터를 '장소 유형'과 '건수' 컬럼을 가진 새로운 데이터프레임으로 변환
+            df_treemap = df_filtered_by_dong.melt(id_vars=['자치구', '동'], value_vars=place_types, var_name='장소 유형', value_name='건수')
 
-        # 건수가 0 이상인 데이터만 필터링
-        df_treemap = df_treemap[df_treemap['건수'] > 0]
+            # 건수가 0 이상인 데이터만 필터링
+            df_treemap = df_treemap[df_treemap['건수'] > 0]
 
-        # 사용자 지정 색상 리스트
-        colors = ['#F25E6B', '#F2C744', '#A1BF34', '#EEDFE2', '#FCE77C', '#E2D0F8', '#DCE2F0', '#F2EFBB', '#D5D971', '#6779A1', '#9B7776','#1BBFBF', '#D94B2B', '#D98F89', '#FFDEDC', '#ACC7B4']
+            # 사용자 지정 색상 리스트
+            colors = ['#F25E6B', '#F2C744', '#A1BF34', '#EEDFE2', '#FCE77C', '#E2D0F8', '#DCE2F0', '#F2EFBB', '#D5D971', '#6779A1', '#9B7776','#1BBFBF', '#D94B2B', '#D98F89', '#FFDEDC', '#ACC7B4']
 
-        # 트리맵 생성
-        fig = px.treemap(df_treemap, path=['자치구', '동', '장소 유형'], values='건수',
-                        color='장소 유형',
-                        hover_data=['건수'],
-                        color_discrete_sequence=colors)
+            # 트리맵 생성
+            fig = px.treemap(df_treemap, path=['자치구', '동', '장소 유형'], values='건수',
+                            color='장소 유형',
+                            hover_data=['건수'],
+                            color_discrete_sequence=colors)
 
-        # 차트 제목 설정
-        fig.update_layout(title='동별 화재 장소유형 트리맵')
+            # 차트 제목 설정
+            fig.update_layout(title='동별 화재 장소유형 트리맵')
 
-        # 전반적인 텍스트 스타일 조정
-        fig.update_layout(font=dict(family="Arial, sans-serif", size=14, color="black"))
+            # 전반적인 텍스트 스타일 조정
+            fig.update_layout(font=dict(family="Arial, sans-serif", size=14, color="black"))
 
-        # 툴팁 커스터마이징
-        fig.update_traces(
-            hovertemplate='장소 유형: %{label}<br>건수: %{value}<br>전체 대비 비율: %{percentRoot:.2%}',
-            textfont=dict(family="Arial, sans-serif", size=12, color="black")
-        )
+            # 툴팁 커스터마이징
+            fig.update_traces(
+                hovertemplate='장소 유형: %{label}<br>건수: %{value}<br>전체 대비 비율: %{percentRoot:.2%}',
+                textfont=dict(family="Arial, sans-serif", size=12, color="black")
+            )
 
-        # Streamlit에 트리맵 표시
-        st.plotly_chart(fig)
+            # Streamlit에 트리맵 표시
+            st.plotly_chart(fig)
+
+        with tab2:
+            selected_gu = st.selectbox("자치구 선택", options=dong['자치구'].unique())
+            df_selected = dong[dong['자치구'] == selected_gu]
+
+            visualize_facilities(df_selected)
+
+
 
 if __name__ == "__main__":
     main()

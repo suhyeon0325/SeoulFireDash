@@ -21,3 +21,4 @@ def select_data(df, column_name='자치구', key_suffix=''):
 # 동 선택 필터링 함수
 def select_dong(df, column_name='동', key_suffix='_dong'):
     return select_data(df, column_name, key_suffix)
+

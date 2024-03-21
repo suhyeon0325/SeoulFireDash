@@ -1,6 +1,10 @@
 import streamlit as st
 import pandas as pd
 import os
+from utils.data_loader import set_page_config
+
+# 페이지 설정
+set_page_config()
 
 def main():
     help_text = """
