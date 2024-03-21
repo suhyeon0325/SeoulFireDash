@@ -177,3 +177,64 @@ def create_folium_map(df):
         ).add_to(m)
 
     return m
+
+# 송파구 비상소화장치 시각화 함수
+def create_fire_equip_map(fire_equip):
+    map_songpa = folium.Map(location=[37.490364, 127.157410], zoom_start=12)
+
+    colors = {
+        '소방차진입곤란': 'red',
+        '주거지역': 'blue',
+        '시장지역': 'green',
+        '영세민밀집': 'purple',
+        '소방차진입불가': 'orange'
+    }
+
+    for index, row in fire_equip.iterrows():
+        icon_color = colors.get(row['설치지역'], 'gray')
+        popup_html = f"""
+        <h4>소방 장비 정보</h4>
+        <ul style="margin: 0; padding: 0;">
+            <li>설치지역: {row['설치지역']}</li>
+            <li>설치유형구분: {row['설치유형구분']}</li>
+            <li>상세위치: {row['상세위치']}</li>
+            <li>주소: {row['주소']}</li>
+        </ul>
+        """
+        popup = folium.Popup(popup_html, max_width=250)
+        folium.Marker(
+            location=[row['경위도좌표Y'], row['경위도좌표X']],
+            popup=popup,
+            tooltip=row['주소'],
+            icon=folium.Icon(color=icon_color)
+        ).add_to(map_songpa)
+
+    legend_html = '''
+    <div style="position: fixed; 
+         top: 10px; right: 10px; width: 180px; height: 120px; 
+         background-color: white; border:2px solid rgba(0,0,0,0.2); 
+         z-index:9999; font-size:11px; border-radius: 8px; 
+         box-shadow: 3px 3px 5px rgba(0,0,0,0.3); padding: 8px;">
+         <h4 style="text-align:center; font-size:14px; font-weight: bold; margin-top: 0;">설치지역별 마커 색상</h4>
+         &nbsp; 소방차진입곤란: <i style="background:#D33D2A; border-radius: 50%; width: 12px; height: 12px; display: inline-block;"></i> 빨강<br>
+         &nbsp; 소방차진입불가: <i style="background:#F0932F; border-radius: 50%; width: 12px; height: 12px; display: inline-block;"></i> 주황<br>
+         &nbsp; 시장지역: <i style="background:#73A626; border-radius: 50%; width: 12px; height: 12px; display: inline-block;"></i> 초록<br>
+         &nbsp; 주거지역: <i style="background:#3BACD9; border-radius: 50%; width: 12px; height: 12px; display: inline-block;"></i> 파랑<br>
+         &nbsp; 영세민밀집: <i style="background:#BF4EAC; border-radius: 50%; width: 12px; height: 12px; display: inline-block;"></i> 보라<br>
+    </div>
+    '''
+
+    map_songpa.get_root().html.add_child(folium.Element(legend_html))
+
+    # 기존의 create_fire_equip_map 함수 끝부분에 다음 코드 추가
+    map_songpa.save('map_with_legend.html')  # 지도를 HTML 파일로 저장
+
+    # 스트림릿에서 지도를 표시하는 부분을 아래와 같이 변경
+    with open('map_with_legend.html', 'r', encoding='utf-8') as f:
+        map_html = f.read()
+
+    components.html(map_html, height=400, width=550)  # 조절이 필요할 수 있음
+    
+    map_songpa.get_root().html.add_child(folium.Element(legend_html))
+    map_songpa.save('map_with_legend.html') 
+

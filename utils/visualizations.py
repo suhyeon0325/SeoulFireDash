@@ -73,6 +73,7 @@ def visualize_pie_chart(labels, values_list, names, title, colors=['#F25E6B', '#
     fig.update_layout(title_text=title)
     st.plotly_chart(fig)
 
+# 소방취약지역 가로그래프
 def visualize_horizontal_bar_chart(df, selected_column, title, color_scale='Reds'):
     """
     스트림릿에서 선택한 열에 따른 자치구별 가로 막대 그래프를 시각화하는 함수.
@@ -89,11 +90,16 @@ def visualize_horizontal_bar_chart(df, selected_column, title, color_scale='Reds
                  title=title, orientation='h',
                  color=selected_column, color_continuous_scale=px.colors.sequential.__dict__[color_scale])
     
-    # y축 레이블이 더 넓게 표시되도록 조정 및 글꼴 크기 조정
-    fig.update_layout(plot_bgcolor='rgba(240, 240, 240, 0.6)', margin=dict(l=50))
+    # y축 레이블이 더 넓게 표시되도록 조정 및 글꼴 크기 조정, 레전드 위치 조정
+    fig.update_layout(plot_bgcolor='rgba(240, 240, 240, 0.6)',
+                      margin=dict(l=50, b=100),  # 바텀 마진을 늘려 레전드에 공간을 만듭니다.
+                      width=700
+                      )
     fig.update_yaxes(tickmode='array', tickvals=df_sorted['자치구'], tickfont=dict(size=10))
     
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width=True)
+
+
 
 def visualize_facilities(df_selected):
     fig = go.Figure()

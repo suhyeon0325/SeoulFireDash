@@ -28,3 +28,8 @@ def load_shp_data(shp_file):
 @st.cache_data
 def load_json_data(geojson_file):
     return gpd.read_file(geojson_file)
+
+# Excel 데이터 로딩 함수
+@st.cache_data
+def load_excel_data(excel_file):
+    return pd.read_excel(excel_file)
