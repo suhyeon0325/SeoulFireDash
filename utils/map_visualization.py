@@ -155,3 +155,25 @@ def visualize_fire_water(grid, column_name='소방용수_수'):
     ).add_to(map_fw)
     # 지도 표시 (스트림릿으로 변환시 st.write(m) 사용)
     folium_static(map_fw)
+
+# 서울시 소방서 및 안전센터 시각화 함수
+# 지도 생성 및 마커 추가 함수
+def create_folium_map(df):
+    m = folium.Map(location=[37.5642135, 127.0016985], zoom_start=11)
+    colors = {
+        '소방서': 'red',
+        '안전센터': 'blue',
+        '구조대': 'orange',
+        '소방항공대': 'lightblue',
+        '특수대응단': 'purple'
+    }
+
+    for index, row in df.iterrows():
+        popup_content = f"<b>서센터명:</b> {row['서ㆍ센터명']}<br><b>유형구분명:</b> {row['유형구분명']}"
+        folium.Marker(
+            location=[row['위도'], row['경도']],
+            popup=folium.Popup(popup_content, max_width=300),
+            icon=folium.Icon(color=colors[row['유형구분명']])
+        ).add_to(m)
+
+    return m
