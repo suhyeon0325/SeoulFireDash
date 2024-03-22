@@ -1,4 +1,10 @@
 # SeoulFireDash
+
+**Version 0.1.2**:
+- **Fire Place Type Bar Graph**: A new bar graph visualization for fire incidents by place types, offering a clear and quick data understanding.
+- **Seoul Residential Fire Vulnerability Analysis Table**: An in-depth data table detailing fire vulnerability in Seoul's residential areas, complementing our graphical analyses.
+- **Emergency Hydrant Location Suggestion Page**: Introducing a map visualization for proposed emergency hydrant locations in Songpa District, along with insights into local firefighting resources, to enhance fire preparedness and infrastructure.
+
 **Version 0.1.1**: 
 - **Ward Fire Place Type Treemap**: Visualize fire incidents by place types within wards.
 - **Vulnerable Area Analysis**: Explore in-depth or top 5 most fire-prone areas based on critical indicators like emergency hydrant counts, building types, population density, old housing numbers, and more.
