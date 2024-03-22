@@ -18,6 +18,17 @@ from utils.map_visualization import create_and_show_map, create_folium_map, disp
 st.set_page_config(
     page_title="소방 인프라 분석",
     initial_sidebar_state="expanded",
+
+data = load_data("data/서울시_비상소화장치_좌표_구동.csv")
+grid = load_data("data/seoul_500_grid_water.csv", encoding='euc-kr')
+df = load_data("data/서울시_소방서_안전세터_구조대.csv")
+
+# `geometry` 열을 Point 객체로 변환
+data['geometry'] = data['geometry'].apply(wkt.loads)
+
+# GeoDataFrame 생성
+gdf = gpd.GeoDataFrame(data, geometry='geometry')
+
 )
 def menu():
     with st.sidebar:
@@ -40,17 +51,6 @@ def menu():
 
 # 메뉴 함수 호출
 menu()
-data = load_data("data/서울시_비상소화장치_좌표_구동.csv")
-grid = load_data("data/seoul_500_grid_water.csv", encoding='euc-kr')
-df = load_data("data/서울시_소방서_안전세터_구조대.csv")
-
-# `geometry` 열을 Point 객체로 변환
-data['geometry'] = data['geometry'].apply(wkt.loads)
-
-# GeoDataFrame 생성
-gdf = gpd.GeoDataFrame(data, geometry='geometry')
-
-
 def main():
 
     # 스트림릿 대시보드

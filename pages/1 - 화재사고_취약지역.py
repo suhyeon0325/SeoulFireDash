@@ -16,6 +16,8 @@ st.set_page_config(
     page_title="화재사고 취약지역",
     initial_sidebar_state="expanded",
 )
+df = load_data("data/total_rank.csv", encoding='cp949')
+gdf = load_shp_data("data/구경계_geo/구경계_geo.shp")
 def menu():
     with st.sidebar:
         # 옵션 메뉴를 사용하여 메인 메뉴 생성
@@ -40,8 +42,7 @@ menu()
 def main():
 
     
-    df = load_data("data/total_rank.csv", encoding='cp949')
-    gdf = load_shp_data("data/구경계_geo/구경계_geo.shp")
+
 
     columns_to_exclude = ["비상소화장치 설치개수 점수", "서울시 주거 시설 중 주택 비율 점수", "인구밀도(명/km^2) 점수", 
                         "노후 주택 수 점수", "소방관 1명당 담당인구 점수", "화재발생건수 점수", "안전센터 1개소당 담당인구 점수", 

@@ -16,11 +16,26 @@ from utils.visualizations import visualize_bar_chart, visualize_housing_type_dis
 from utils.map_visualization import create_and_show_map, create_fire_equip_map
 
 # 페이지 설정
-# 페이지 설정
+
 st.set_page_config(
     page_title="비상소화장치 위치 제안",
     initial_sidebar_state="expanded",
 )
+
+data = load_excel_data("data/(송파소방서)비상소화장치.xlsx")
+df = load_data("data/2020-2022_송파구_동별_화재건수.csv", encoding='CP949')
+df_P = load_data("data/2022-2023_송파구_인구.csv", encoding='CP949')
+df_O = load_data("data/2021-2023_송파구_고령자현황.csv", encoding='CP949')
+df_H = load_data("data/2020_송파구_주택.csv", encoding='CP949')
+
+df = df.replace('-', 0)
+df['화재건수'] = df['화재건수'].astype(int)
+
+df_H = df_H.replace('X', 0)
+df_H['단독주택'] = df_H['단독주택'].astype(int)
+df_H['연립주택'] = df_H['연립주택'].astype(int)
+df_H['다세대주택'] = df_H['다세대주택'].astype(int)
+df_H['비거주용건물내주택'] = df_H['비거주용건물내주택'].astype(int)
 def menu():
     with st.sidebar:
         # 옵션 메뉴를 사용하여 메인 메뉴 생성
@@ -42,21 +57,6 @@ def menu():
 
 # 메뉴 함수 호출
 menu()
-data = load_excel_data("data/(송파소방서)비상소화장치.xlsx")
-df = load_data("data/2020-2022_송파구_동별_화재건수.csv", encoding='CP949')
-df_P = load_data("data/2022-2023_송파구_인구.csv", encoding='CP949')
-df_O = load_data("data/2021-2023_송파구_고령자현황.csv", encoding='CP949')
-df_H = load_data("data/2020_송파구_주택.csv", encoding='CP949')
-
-df = df.replace('-', 0)
-df['화재건수'] = df['화재건수'].astype(int)
-
-df_H = df_H.replace('X', 0)
-df_H['단독주택'] = df_H['단독주택'].astype(int)
-df_H['연립주택'] = df_H['연립주택'].astype(int)
-df_H['다세대주택'] = df_H['다세대주택'].astype(int)
-df_H['비거주용건물내주택'] = df_H['비거주용건물내주택'].astype(int)
-
 def main():
     view_selection = st.sidebar.radio("선택", ("송파구 비상소화장치 제안 위치", "송파구 종합 정보 분석"), label_visibility="collapsed")
     if view_selection == "송파구 비상소화장치 제안 위치":
