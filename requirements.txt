@@ -10,3 +10,4 @@ geopandas
 shapely
 streamlit_folium
 openpyxl
+streamlit-option-menu

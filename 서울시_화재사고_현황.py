@@ -10,9 +10,13 @@ from plotly.subplots import make_subplots
 from utils.data_loader import set_page_config, load_data
 from utils.filters import select_data, select_dong
 from utils.visualizations import visualize_bar_chart, visualize_pie_chart, visualize_facilities, visualize_bar_chart_updated
+from streamlit_option_menu import option_menu
+
 
 # 페이지 설정
 set_page_config()
+
+
 
 # 데이터 불러오기
 data = load_data("data/구별_화재발생_현황_2021_2022.csv")
@@ -28,8 +32,33 @@ seoul_total['동'] = '전체'
 # 최종 데이터 프레임 조합
 dong = pd.concat([dong, pd.DataFrame([seoul_total])], ignore_index=True)
 
-def main():
 
+def menu():
+    with st.sidebar:
+        # 옵션 메뉴를 사용하여 메인 메뉴 생성
+        selected = option_menu("메인 메뉴", ["화재사고 현황", '화재사고 취약지역', "소방 인프라 분석", "비상소화장치 위치 제안", "건의사항"], 
+                                icons=['bi-fire', 'bi-exclamation-triangle-fill', 'bi-truck', 'bi-lightbulb', 'bi-chat-dots'], 
+                                menu_icon="house", default_index=0)
+
+    # 선택된 메뉴에 따라 페이지 전환
+    if selected == '화재사고 현황':
+        st.switch_page("서울시_화재사고_현황.py")
+    elif selected == '화재사고 취약지역':
+        st.switch_page("pages/1 - 화재사고_취약지역.py")
+    elif selected == '소방 인프라 분석':
+        st.switch_page('pages/2 - 서울시_소방_인프라.py')
+    elif selected == '비상소화장치 위치 제안':
+        st.switch_page('pages/3 - 비상소화장치_위치_제안.py')
+    elif selected == '건의사항':
+        st.switch_page('pages/4 - 건의사항.py')
+
+# 메뉴 함수 호출
+menu()
+
+
+
+def main():
+    
     st.header('서울시 화재사고 현황', help='이 페이지에서는 서울시 내의 최근 화재 사고 발생 통계, 화재 유형별 및 지역별 분석에 관한 정보를 제공합니다. 2021, 2022년도의 데이터를 사용하였습니다.', divider='gray')
 
     # 서브헤더 생성

@@ -5,6 +5,12 @@ import plotly.express as px
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import geopandas as gpd
+from streamlit_option_menu import option_menu
+
+
+
+
+    
 
 # 구 선택 필터링 함수
 def select_data(df, column_name='자치구', key_suffix=''):

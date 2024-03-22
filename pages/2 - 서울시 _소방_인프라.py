@@ -7,6 +7,7 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 from streamlit_folium import folium_static
 from shapely import wkt
+from streamlit_option_menu import option_menu
 from plotly.subplots import make_subplots
 from utils.data_loader import set_page_config, load_data, load_shp_data
 from utils.filters import select_data, select_dong
@@ -14,8 +15,31 @@ from utils.visualizations import visualize_bar_chart, visualize_pie_chart, visua
 from utils.map_visualization import create_and_show_map, create_folium_map, display_folium_map_with_clusters, visualize_fire_water
 
 # 페이지 설정
-set_page_config()
+st.set_page_config(
+    page_title="소방 인프라 분석",
+    initial_sidebar_state="expanded",
+)
+def menu():
+    with st.sidebar:
+        # 옵션 메뉴를 사용하여 메인 메뉴 생성
+        selected = option_menu("메인 메뉴", ["화재사고 현황", '화재사고 취약지역', "소방 인프라 분석", "비상소화장치 위치 제안", "건의사항"], 
+                                icons=['bi-fire', 'bi-exclamation-triangle-fill', 'bi-truck', 'bi-lightbulb', 'bi-chat-dots'], 
+                                menu_icon="house", default_index=0)
 
+    # 선택된 메뉴에 따라 페이지 전환
+    if selected == '화재사고 현황':
+        st.switch_page("서울시_화재사고_현황.py")
+    elif selected == '화재사고 취약지역':
+        st.switch_page("pages/1 - 화재사고_취약지역.py")
+    elif selected == '소방 인프라 분석':
+        st.switch_page('pages/2 - 서울시_소방_인프라.py')
+    elif selected == '비상소화장치 위치 제안':
+        st.switch_page('pages/3 - 비상소화장치_위치_제안.py')
+    elif selected == '건의사항':
+        st.switch_page('pages/4 - 건의사항.py')
+
+# 메뉴 함수 호출
+menu()
 data = load_data("data/서울시_비상소화장치_좌표_구동.csv")
 grid = load_data("data/seoul_500_grid_water.csv", encoding='euc-kr')
 df = load_data("data/서울시_소방서_안전세터_구조대.csv")

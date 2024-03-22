@@ -100,7 +100,7 @@ def visualize_horizontal_bar_chart(df, selected_column, title, color_scale='Reds
     st.plotly_chart(fig, use_container_width=True)
 
 
-
+# 시설 함수
 def visualize_facilities(df_selected):
     fig = go.Figure()
 
@@ -120,3 +120,72 @@ def visualize_facilities(df_selected):
 
     fig.update_layout(title="시설 유형별 총계", xaxis_title="시설 유형", yaxis_title="총계")
     st.plotly_chart(fig)
+
+# 송파구 연도별 화재발생현황(동)
+def visualize_fire_counts_by_selected_year(df, selected_year):
+    df_year = df[df['시점'] == selected_year].sort_values(by='화재건수', ascending=True)
+    fig = px.bar(df_year, x='화재건수', y='동', text_auto=True,
+                 title=f"{selected_year}년 송파구 화재건수",
+                 color='화재건수',
+                 color_continuous_scale=px.colors.sequential.OrRd)
+    fig.update_traces(textfont_size=10, textangle=0, textposition="outside", cliponaxis=False)
+    fig.update_yaxes(tickmode='array', tickvals=df_year['동'].unique())
+    fig.update_layout(height=600)
+    return fig
+
+# 송파구 연도별 거주 인구
+def visualize_population_by_selected_year(df, selected_year):
+    df_year = df[df['시점'] == selected_year].sort_values(by='전체인구', ascending=True)
+    fig = px.bar(df_year, x='전체인구', y='동', text_auto=True,
+                 title=f"{selected_year}년 송파구 거주인구",
+                 color='전체인구',
+                 color_continuous_scale=px.colors.sequential.OrRd)
+    fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
+    fig.update_yaxes(tickmode='array', tickvals=df_year['동'].unique())
+    return fig
+
+def visualize_elderly_population_by_year(df, time_column='시점'):
+    """
+    각 연도별로 '65세이상 인구'를 시각화하는 함수입니다.
+    
+    :param df: 데이터프레임, '시점'과 '65세이상 인구', '동' 컬럼을 포함해야 합니다.
+    :param time_column: 시간을 나타내는 컬럼의 이름, 기본값은 '시점'입니다.
+    """
+    unique_years = df[time_column].unique() # '시점' 컬럼의 고유값을 가져옵니다.
+    
+    selected_year = st.selectbox("연도 선택", options=sorted(unique_years, reverse=True), key='year_select') # 연도를 선택할 수 있는 selectbox를 생성합니다.
+    
+    df_year = df[df[time_column] == selected_year].sort_values(by='65세이상 인구', ascending=True) # 선택된 연도에 해당하는 데이터를 추출하고, '65세이상 인구' 기준으로 정렬합니다.
+    
+    # Plotly Express를 사용하여 막대 그래프를 생성합니다.
+    fig = px.bar(df_year, x='65세이상 인구', y='동', text_auto=True,
+                 title=f"{selected_year}년 송파구 노년인구",
+                 color='65세이상 인구',
+                 color_continuous_scale=px.colors.sequential.OrRd)
+    
+    fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False) # 텍스트 스타일 조정
+    fig.update_yaxes(tickmode='array', tickvals=df_year['동']) # y축 조정
+    fig.update_layout(height=600)
+    st.plotly_chart(fig, use_container_width=True)
+
+def visualize_elderly_population_ratio_by_selected_year(df, selected_year):
+    df_year = df[df['시점'] == selected_year].copy()
+    df_year.loc[:, '65세이상 인구 비율'] = (df_year['65세이상 인구'] / df_year['전체인구']) * 100
+    df_year.sort_values(by='65세이상 인구 비율', ascending=True, inplace=True)
+
+    fig = px.bar(df_year, x='65세이상 인구 비율', y='동', text_auto=True,
+                 title=f"{selected_year}년 송파구 노년인구 비율",
+                 color='65세이상 인구 비율',
+                 color_continuous_scale=px.colors.sequential.OrRd)
+    fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
+    fig.update_yaxes(tickmode='array', tickvals=df_year['동'].unique())
+    return fig
+
+import plotly.express as px
+
+def visualize_housing_type_distribution_by_selected_dong(df, selected_dong):
+    df_dong = df[df['동'] == selected_dong]
+    df_melted = df_dong.melt(id_vars=['시점', '동'], var_name='주택 유형', value_name='수량')
+    fig = px.bar(df_melted, x='주택 유형', y='수량', text_auto=True, color='수량',
+                 color_continuous_scale=px.colors.sequential.OrRd, title=f"{selected_dong} 주택 유형별 분포")
+    return fig
