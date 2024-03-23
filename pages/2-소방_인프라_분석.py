@@ -29,7 +29,6 @@ data['geometry'] = data['geometry'].apply(wkt.loads)
 # GeoDataFrame 생성
 gdf = gpd.GeoDataFrame(data, geometry='geometry')
 
-)
 
 def main():
 
