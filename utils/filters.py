@@ -5,7 +5,7 @@ import plotly.express as px
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import geopandas as gpd
-from streamlit_option_menu import option_menu
+
 
 
 

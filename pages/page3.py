@@ -36,27 +36,7 @@ df_H['단독주택'] = df_H['단독주택'].astype(int)
 df_H['연립주택'] = df_H['연립주택'].astype(int)
 df_H['다세대주택'] = df_H['다세대주택'].astype(int)
 df_H['비거주용건물내주택'] = df_H['비거주용건물내주택'].astype(int)
-def menu():
-    with st.sidebar:
-        # 옵션 메뉴를 사용하여 메인 메뉴 생성
-        selected = option_menu("메인 메뉴", ["화재사고 현황", '화재사고 취약지역', "소방 인프라 분석", "비상소화장치 위치 제안", "건의사항"], 
-                                icons=['bi-fire', 'bi-exclamation-triangle-fill', 'bi-truck', 'bi-lightbulb', 'bi-chat-dots'], 
-                                menu_icon="house", default_index=0)
 
-    # 선택된 메뉴에 따라 페이지 전환
-    if selected == '화재사고 현황':
-        st.switch_page("서울시_화재사고_현황.py")
-    elif selected == '화재사고 취약지역':
-        st.switch_page("pages/1 - 화재사고_취약지역.py")
-    elif selected == '소방 인프라 분석':
-        st.switch_page('pages/2 - 서울시_소방_인프라.py')
-    elif selected == '비상소화장치 위치 제안':
-        st.switch_page('pages/3 - 비상소화장치_위치_제안.py')
-    elif selected == '건의사항':
-        st.switch_page('pages/4 - 건의사항.py')
-
-# 메뉴 함수 호출
-menu()
 def main():
     view_selection = st.sidebar.radio("선택", ("송파구 비상소화장치 제안 위치", "송파구 종합 정보 분석"), label_visibility="collapsed")
     if view_selection == "송파구 비상소화장치 제안 위치":
