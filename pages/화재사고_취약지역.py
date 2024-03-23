@@ -12,10 +12,7 @@ from utils.filters import select_data, select_dong
 from utils.visualizations import visualize_bar_chart, visualize_pie_chart, visualize_bar_chart_updated, visualize_horizontal_bar_chart
 from utils.map_visualization import create_and_show_map
 from streamlit_option_menu import option_menu
-st.set_page_config(
-    page_title="화재사고 취약지역",
-    initial_sidebar_state="expanded",
-)
+st.set_page_config()
 df = load_data("data/total_rank.csv", encoding='cp949')
 gdf = load_shp_data("data/구경계_geo/구경계_geo.shp")
 
