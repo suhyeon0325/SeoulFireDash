@@ -233,7 +233,7 @@ def create_fire_equip_map(fire_equip):
     with open('map_with_legend.html', 'r', encoding='utf-8') as f:
         map_html = f.read()
 
-    components.html(map_html, height=400)  # 조절이 필요할 수 있음
+    components.html(map_html, height=600)  # 조절이 필요할 수 있음
     
     map_songpa.get_root().html.add_child(folium.Element(legend_html))
     map_songpa.save('map_with_legend.html') 
