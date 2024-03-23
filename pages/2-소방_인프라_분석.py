@@ -16,8 +16,8 @@ from utils.map_visualization import create_and_show_map, create_folium_map, disp
 
 # 페이지 설정
 st.set_page_config(
-    page_title="소방 인프라 분석",
-    initial_sidebar_state="expanded",
+   layout="wide",
+   initial_sidebar_state="expanded")
 
 data = load_data("data/서울시_비상소화장치_좌표_구동.csv")
 grid = load_data("data/seoul_500_grid_water.csv", encoding='euc-kr')

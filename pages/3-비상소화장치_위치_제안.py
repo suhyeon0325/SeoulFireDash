@@ -18,8 +18,8 @@ from utils.map_visualization import create_and_show_map, create_fire_equip_map
 # 페이지 설정
 
 st.set_page_config(
-    page_title="비상소화장치 위치 제안",
-    initial_sidebar_state="expanded",
+   layout="wide",
+   initial_sidebar_state="expanded"
 )
 
 data = load_excel_data("data/(송파소방서)비상소화장치.xlsx")
@@ -54,26 +54,12 @@ def main():
 
         with tab1:
 
-            col1, col2 = st.columns([7, 3])
-            with col1:
-                with st.container(border=True, height=600):
-                    st.subheader('송파구 소방 인프라 분석')   
-                    create_fire_equip_map(data)  # fire_equip_df는 당신의 데이터프레임 변수명입니다.
 
-            with col2:
-                with st.container(border=False, height=600):
-                    with st.container(border=True, height=138):
-                        st.metric(label="송파구 비상소화장치", value='34개', delta= ' (평균대비)',
-                                delta_color="normal", help="미접수 거래는 반영되지 않았습니다.")
-                    with st.container(border=True, height=138):
-                        st.metric(label="송파구 소방용수", value='ㅇ', delta='ㅇ',
-                                delta_color="normal", help="강서구의 1월 거래량은 총 236건입니다.")
-                    with st.container(border=True, height=138):
-                        st.metric(label="송파구 화재출동 건수", value='ㅇ', delta='ㅇ',
-                                delta_color="normal", help="강남구의 1월 평균 거래가는 158,170만원입니다.")
-                    with st.container(border=True, height=138):
-                        st.metric(label="송파구 소방서 및 안전센터", value='송파구', delta='송파구',
-                                delta_color="normal", help="성동구의 1월 평균 건물면적은 84.75㎡입니다.")
+            with st.container(border=True, height=600):
+                st.subheader('송파구 소방 인프라 분석')   
+                create_fire_equip_map(data)  # fire_equip_df는 당신의 데이터프레임 변수명입니다.
+
+
 
         # 송파구 화재 건수 분석
         with tab2:

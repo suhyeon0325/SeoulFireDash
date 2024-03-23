@@ -5,8 +5,8 @@ from utils.data_loader import set_page_config
 from streamlit_option_menu import option_menu
 # 페이지 설정
 st.set_page_config(
-    page_title="건의사항",
-    initial_sidebar_state="expanded",
+   layout="wide",
+   initial_sidebar_state="expanded"
 )
 
 def main():

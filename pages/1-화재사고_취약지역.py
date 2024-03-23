@@ -12,13 +12,12 @@ from utils.filters import select_data, select_dong
 from utils.visualizations import visualize_bar_chart, visualize_pie_chart, visualize_bar_chart_updated, visualize_horizontal_bar_chart
 from utils.map_visualization import create_and_show_map
 from streamlit_option_menu import option_menu
-st.set_page_config()
+st.set_page_config(layout="wide",
+   initial_sidebar_state="expanded")
 df = load_data("data/total_rank.csv", encoding='cp949')
 gdf = load_shp_data("data/구경계_geo/구경계_geo.shp")
 
-def main():
-
-    
+def main():  
 
 
     columns_to_exclude = ["비상소화장치 설치개수 점수", "서울시 주거 시설 중 주택 비율 점수", "인구밀도(명/km^2) 점수", 

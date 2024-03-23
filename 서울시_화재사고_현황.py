@@ -14,7 +14,8 @@ from streamlit_option_menu import option_menu
 
 
 # 페이지 설정
-set_page_config()
+set_page_config(layout="wide",
+   initial_sidebar_state="expanded")
 
 
 
