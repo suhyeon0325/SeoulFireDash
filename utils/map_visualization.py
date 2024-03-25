@@ -258,7 +258,7 @@ def display_fire_extinguisher_map(center, locations, zoom_start=13):
 
     m = folium.Map(location=center, zoom_start=13)
 
-    for idx, (lat, lon, label, image_url) in enumerate(locations):
+    for idx, (lat, lon, label, image_path) in enumerate(locations):
         # 마커에 표시할 번호를 포함한 HTML 문자열 생성
         icon_html = f"""<div style="font-family: Arial; font-size: 12px; color: blue;"><b>{idx+1}</b></div>"""
         
@@ -271,7 +271,7 @@ def display_fire_extinguisher_map(center, locations, zoom_start=13):
         # 선택적으로, 팝업도 추가할 수 있습니다.
         folium.Marker(
             location=[lat, lon],
-            popup=f'<b>{idx+1}. {label}</b></b><br>{lat},{lon}</b><br><img src="{image_url}" width="150" height="100">',
+            popup=f'<b>{idx+1}. {label}</b></b><br>{lat},{lon}</b><br><img src="{image_path}" width="150" height="100">',
             icon=folium.Icon(color="red", icon="info-sign"),
         ).add_to(m)
 
