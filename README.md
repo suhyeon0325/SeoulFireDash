@@ -1,5 +1,13 @@
 # SeoulFireDash
 
+**Version 0.1.3:**
+- **Sidebar Icons & UI Enhancements**: Introduced intuitive icons for sidebar navigation and refreshed the UI theme for a better user experience.
+- **Enhanced Suggestions Page**:
+  - Added anonymity and file upload features for submitting suggestions, improving user engagement and feedback detail.
+- **Emergency Hydrant Location Suggestion Map for Songpa District**: A new interactive map suggesting optimal locations for emergency hydrants, enriched with local firefighting resource insights.
+- **Firefighting Infrastructure & Welfare Information**: Updated the firefighting infrastructure page with direct links to policies and welfare information, enhancing public awareness and access to resources.
+- **Vulnerability Analysis Enhancement**: Integrated a vulnerability score ranking data frame in the fire accident vulnerability analysis, offering deeper insights into fire-prone areas.
+
 **Version 0.1.2**:
 - **Fire Place Type Bar Graph**: A new bar graph visualization for fire incidents by place types, offering a clear and quick data understanding.
 - **Seoul Residential Fire Vulnerability Analysis Table**: An in-depth data table detailing fire vulnerability in Seoul's residential areas, complementing our graphical analyses.
