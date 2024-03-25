@@ -7,14 +7,21 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 import geopandas as gpd
 from plotly.subplots import make_subplots
-from utils.data_loader import set_page_config, load_data
+from utils.data_loader import load_data
 from utils.filters import select_data, select_dong
 from utils.visualizations import visualize_bar_chart, visualize_pie_chart, visualize_facilities, visualize_bar_chart_updated
 from streamlit_option_menu import option_menu
 
 
 # 페이지 설정
-set_page_config()
+st.set_page_config(layout="wide",
+   initial_sidebar_state="expanded", page_icon="🔥")
+
+st.sidebar.page_link("서울시_화재사고_현황.py", label="서울시 화재사고 현황", icon="🔥")
+st.sidebar.page_link("pages/1-화재사고_취약지역.py", label="화재사고 취약지역", icon="⚠️")
+st.sidebar.page_link("pages/2-소방_인프라_분석.py", label="소방 인프라 분석", icon="🚒")
+st.sidebar.page_link("pages/3-비상소화장치_위치_제안.py", label="비상소화장치 위치 제안", icon="🧯")
+st.sidebar.page_link("pages/4-건의사항.py", label="건의사항", icon="💬")
 
 
 

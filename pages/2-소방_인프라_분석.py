@@ -9,7 +9,7 @@ from streamlit_folium import folium_static
 from shapely import wkt
 from streamlit_option_menu import option_menu
 from plotly.subplots import make_subplots
-from utils.data_loader import set_page_config, load_data, load_shp_data
+from utils.data_loader import load_data, load_shp_data
 from utils.filters import select_data, select_dong
 from utils.visualizations import visualize_bar_chart, visualize_pie_chart, visualize_bar_chart_updated, visualize_horizontal_bar_chart
 from utils.map_visualization import create_and_show_map, create_folium_map, display_folium_map_with_clusters, visualize_fire_water
@@ -17,8 +17,12 @@ from utils.map_visualization import create_and_show_map, create_folium_map, disp
 # 페이지 설정
 st.set_page_config(
    layout="wide",
-   initial_sidebar_state="expanded")
-
+   initial_sidebar_state="expanded", page_icon='🚒')
+st.sidebar.page_link("서울시_화재사고_현황.py", label="서울시 화재사고 현황", icon="🔥")
+st.sidebar.page_link("pages/1-화재사고_취약지역.py", label="화재사고 취약지역", icon="⚠️")
+st.sidebar.page_link("pages/2-소방_인프라_분석.py", label="소방 인프라 분석", icon="🚒")
+st.sidebar.page_link("pages/3-비상소화장치_위치_제안.py", label="비상소화장치 위치 제안", icon="🧯")
+st.sidebar.page_link("pages/4-건의사항.py", label="건의사항", icon="💬")
 data = load_data("data/서울시_비상소화장치_좌표_구동.csv")
 grid = load_data("data/seoul_500_grid_water.csv", encoding='euc-kr')
 df = load_data("data/서울시_소방서_안전세터_구조대.csv")
@@ -56,7 +60,7 @@ def main():
                 display_folium_map_with_clusters(data)
 
             with tab3:
-                with st.expander("💡 **시각화 기준 설명**"):
+                with st.popover("💡 **시각화 기준 설명**"):
                     st.markdown("""
                     - **소방용수의 분포**: 이 지도상의 색상은 소방용수의 분포를 나타냅니다. 색이 **더 진할수록 소방용수의 양이 많음**을 의미합니다.
                     - **소화용수 접근성**: 서울시 내 대부분의 지역에서는 500미터 이내에 최소 한 개 이상의 소화용수 점이 위치하고 있어, 접근성이 높습니다.

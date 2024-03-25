@@ -180,7 +180,7 @@ def create_folium_map(df):
 
 # 송파구 비상소화장치 시각화 함수
 def create_fire_equip_map(fire_equip):
-    map_songpa = folium.Map(location=[37.490364, 127.157410], zoom_start=12)
+    map_songpa = folium.Map(location=[37.514543, 127.106597], zoom_start=13)
 
     colors = {
         '소방차진입곤란': 'red',
@@ -238,3 +238,24 @@ def create_fire_equip_map(fire_equip):
     map_songpa.get_root().html.add_child(folium.Element(legend_html))
     map_songpa.save('map_with_legend.html') 
 
+def display_fire_extinguisher_map(center, locations, zoom_start=13):
+    """
+    비상 소화장치 위치와 관련 정보를 포함한 지도를 생성하고 표시하는 함수.
+    
+    :param center: 지도의 중심이 될 위치의 (위도, 경도)
+    :param locations: 비상 소화장치의 위치, 각 위치는 (위도, 경도, 설명, 사진 URL)의 튜플로 구성됨
+    :param zoom_start: 초기 지도 줌 레벨
+    """
+    m = folium.Map(location=center, zoom_start=12)
+
+    for lat, lon, label, image_url in locations:
+        # HTML을 사용하여 이미지를 표시하는 iframe 생성
+        html = f'<img src="{image_url}" width="150" height="100"><br>{label}'
+        iframe = IFrame(html, width=200, height=150)
+        popup = folium.Popup(iframe, max_width=300)
+
+        # 마커에 iframe 팝업 추가
+        folium.Marker([lat, lon], popup=popup).add_to(m)
+
+    # Streamlit을 사용하여 지도 표시
+    folium_static(m)

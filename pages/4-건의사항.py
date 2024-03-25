@@ -1,14 +1,18 @@
 import streamlit as st
 import pandas as pd
 import os
-from utils.data_loader import set_page_config
-from streamlit_option_menu import option_menu
+
+
 # 페이지 설정
 st.set_page_config(
    layout="wide",
-   initial_sidebar_state="expanded"
+   initial_sidebar_state="expanded", page_icon='💬'
 )
-
+st.sidebar.page_link("서울시_화재사고_현황.py", label="서울시 화재사고 현황", icon="🔥")
+st.sidebar.page_link("pages/1-화재사고_취약지역.py", label="화재사고 취약지역", icon="⚠️")
+st.sidebar.page_link("pages/2-소방_인프라_분석.py", label="소방 인프라 분석", icon="🚒")
+st.sidebar.page_link("pages/3-비상소화장치_위치_제안.py", label="비상소화장치 위치 제안", icon="🧯")
+st.sidebar.page_link("pages/4-건의사항.py", label="건의사항", icon="💬")
 def main():
     help_text = """
     대시보드를 함께 개선해 나갈 수 있도록 건의사항을 남겨주세요:
