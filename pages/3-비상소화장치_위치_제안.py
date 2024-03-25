@@ -135,8 +135,13 @@ def main():
                 - **좌표 사진**
                                 
                 <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20131913.png?raw=true" width="400" height="300">                
-
-                """, unsafe_allow_html=True)                                
+                
+                - **주변 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20171747.png?raw=true" width="400" height="300">                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20171821.png?raw=true" width="400" height="300"> 
+                """, unsafe_allow_html=True)      
+                                              
                 with st.popover("**3번 위치**", use_container_width=True):
                     st.markdown("""
                 **삼전동 / 경위도좌표 X,Y (37.50231025,127.0901942)**
@@ -144,7 +149,11 @@ def main():
                 - **좌표 사진**
                                 
                 <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20132425.png?raw=true" width="400" height="300">                
-
+                
+                - **주변 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20172103.png?raw=true" width="400" height="300">                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20172119.png?raw=true" width="400" height="300"> 
                 """, unsafe_allow_html=True)                                 
                 with st.popover("**5번 위치**", use_container_width=True):
                     st.markdown("""
@@ -155,6 +164,10 @@ def main():
                                 
                 <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20132839.png?raw=true" width="400" height="300">                
 
+                - **주변 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20172310.png?raw=true" width="400" height="300">                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20172431.png?raw=true" width="400" height="300">                 
                 """, unsafe_allow_html=True) 
                 with st.popover("**7번 위치**", use_container_width=True):
                     st.markdown("""
@@ -164,7 +177,11 @@ def main():
                 - **좌표 사진**
                                 
                 <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20132956.png?raw=true" width="400" height="300">                
-
+                
+                - **주변 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20172523.png?raw=true" width="400" height="300">                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20172536.png?raw=true" width="400" height="300">                            
                 """, unsafe_allow_html=True) 
                 with st.popover("**9번 위치**", use_container_width=True):
                     st.markdown("""
@@ -226,6 +243,11 @@ def main():
                 - **좌표 사진**
                                 
                 <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20133212.png?raw=true" width="400" height="300">  
+                
+                - **주변 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20172634.png?raw=true" width="400" height="300">                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20172652.png?raw=true" width="400" height="300"> 
                 """, unsafe_allow_html=True)     
                 with st.popover("**17번 위치**", use_container_width=True):
                     st.markdown("""
@@ -269,6 +291,11 @@ def main():
                 - **좌표 사진**
                                 
                 <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20132301.png?raw=true" width="400" height="300">  
+                
+                - **주변 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20172739.png?raw=true" width="400" height="300">                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20172831.png?raw=true" width="400" height="300"> 
                 """, unsafe_allow_html=True)  
                 with st.popover("**4번 위치**", use_container_width=True):
                     st.markdown("""
@@ -277,6 +304,11 @@ def main():
                 - **좌표 사진**
                                 
                 <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20132509.png?raw=true" width="400" height="300">  
+                
+                - **주변 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20172925.png?raw=true" width="400" height="300">                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20172935.png?raw=true" width="400" height="300"> 
                 """, unsafe_allow_html=True)  
                 with st.popover("**6번 위치**", use_container_width=True):
                     st.markdown("""
@@ -286,6 +318,12 @@ def main():
                 - **좌표 사진**
                                 
                 <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20132919.png?raw=true" width="400" height="300">  
+                
+                - **주변 사진**
+
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20173041.png?raw=true" width="400" height="300">  
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20173122.png?raw=true" width="400" height="300"> 
+                    
                 """, unsafe_allow_html=True)  
                 with st.popover("**8번 위치**", use_container_width=True):
                     st.markdown("""
@@ -340,7 +378,11 @@ def main():
                 - **좁은 골목에 주택이 촘촘히 위치한 지역**
                 - 불법주정차 차량이 많아 **사람도 겨우 지나갈 수 있는 길이 많음**
                 - **비상소화장치가 설치되면 좋을 것**
-                """)
+                - **주변 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20173334.png?raw=true" width="400" height="300">
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20173352.png?raw=true" width="400" height="300">
+                """, unsafe_allow_html=True)
 
                 with st.popover("**16번 위치**", use_container_width=True):
                     st.markdown("""
