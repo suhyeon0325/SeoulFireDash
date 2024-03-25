@@ -117,7 +117,7 @@ def main():
                         font-weight: bold;
                         margin: 4px 2px;
                         cursor: pointer;
-                        background-color: #F24C3D;
+                        background-color: #ED1B24;
                         border-radius: 8px;'>
                     각 위치별 상세 정보
                     </button>
