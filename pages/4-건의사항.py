@@ -27,9 +27,32 @@ def main():
 
     with st.container(border=True):
     # 사용자로부터 입력 받기
-        username = st.text_input('이름')
-        email = st.text_input('email')
+        # 익명 기능 선택
+        anonymous = st.checkbox('익명으로 제출하기')
+        if anonymous:
+            username = "익명"
+            email = "익명"
+        else:
+            username = st.text_input('이름')
+            email = st.text_input('이메일')
+
+        category = st.selectbox('카테고리', ['기능 개선', '새 기능 제안', '버그 신고', '기타'])
         suggestion = st.text_area('건의사항')
+        file = st.file_uploader("문제를 보여줄 스크린샷이나 문서 첨부", type=['png', 'jpg', 'jpeg', 'pdf'])
+
+        # 파일 처리 예시
+        if file is not None:
+            # 파일 저장 경로 지정
+            file_path = f'recommendations/{file.name}'
+            # 파일 저장
+            with open(file_path, "wb") as f:
+                f.write(file.getbuffer())
+            # 저장된 파일 경로를 출력하거나 로깅
+            st.success('파일이 성공적으로 업로드되었습니다.')
+            file_info = file_path  # 파일 경로를 건의사항과 함께 저장할 때 사용
+        else:
+            file_info = "첨부파일 없음"
+
         submit_button = st.button('제출')
         
         # new_data = {'이름': username, '이메일': email, '건의사항': suggestion}

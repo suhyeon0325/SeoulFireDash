@@ -28,3 +28,18 @@ def select_data(df, column_name='자치구', key_suffix=''):
 def select_dong(df, column_name='동', key_suffix='_dong'):
     return select_data(df, column_name, key_suffix)
 
+
+#  차트 유형 선택 최소화를 위한 함수
+def select_chart_type(key_suffix=''):
+    """
+    차트 유형을 선택하는 함수.
+    :param column: 데이터프레임의 컬럼명
+    :param key_suffix: Streamlit 위젯의 고유 key 식별자에 추가될 접미사
+    :return: 선택된 차트 유형
+    """
+    chart_type = st.selectbox(
+        '차트 유형 선택',
+        ('막대 그래프', '원형 차트'),
+        key=f'chart_type_{key_suffix}'
+    )
+    return chart_type

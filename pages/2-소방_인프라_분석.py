@@ -39,14 +39,10 @@ def main():
     # 스트림릿 대시보드
     st.header('서울시 소방 인프라', divider="gray")
     
-    col1, col2 = st.columns([3, 9])
-    with col1:
+    col1, col2 = st.columns([7, 3])
+    with col1:        
+
         with st.container(border=True, height=700):
-            st.write('무언가 추가해 볼 예정..')
-
-    with col2:        
-
-        with st.container(border=True, height=700):   
             st.subheader('서울시 소방 인프라 시각화')
             tab1, tab2, tab3 = st.tabs(["소방서 및 안전센터", "비상 소화장치", "소방용수"])
 
@@ -69,6 +65,43 @@ def main():
 
                 # 서울시 비상용수 시각화
                 visualize_fire_water(grid, column_name='소방용수_수')
+    with col2:
+        
+        with st.container(border=True, height=700):
+            st.markdown("""
+                <div style='text-align: center; margin-bottom: 20px;'>
+                    <button style='
+                        border: none;
+                        pointer-events: none;
+                        color: white;
+                        padding: 10px 20px;
+                        text-align: center;
+                        text-decoration: none;
+                        display: inline-block;
+                        font-size: 16px;
+                        font-weight: bold;
+                        margin: 4px 2px;
+                        cursor: pointer;
+                        background-color: #F24C3D;
+                        border-radius: 8px;'>
+                    소방 복지 및 정책
+                    </button>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            st.link_button("일일 화재 현황 📈", "https://www.nfds.go.kr/dashboard/quicklook.do", use_container_width=True, help="한눈에 화재 현황을 확인해보세요.")
+            st.link_button("화재예방법 🛡️", "https://www.nfds.go.kr/bbs/selectBbsList.do?bbs=B04", use_container_width=True, help="화재를 예방하는 방법을 알아보세요.")
+            st.link_button("소화기 사용요령 🔥", "https://www.nfds.go.kr/bbs/selectBbsDetail.do?bbs=B06&bbs_no=7753&pageNo=1", use_container_width=True, help="소화기 사용법을 올바르게 알고 화재에 대응하세요.")
+            st.link_button("옥내소화전 사용방법 🚒", "https://www.nfds.go.kr/bbs/selectBbsDetail.do?bbs=B06&bbs_no=7756&pageNo=1", use_container_width=True, help="옥내소화전 사용 방법을 숙지하세요.")
+            st.link_button("소화기 사용기한 확인 ⏳", "https://bigdata-119.kr/service/frxtInfr#tab04", use_container_width=True, help="소화기의 사용 기한을 확인해 안전을 유지하세요.")
+            st.link_button("주택용 소방시설 설치 🏠", "https://fire.seoul.go.kr/pages/cnts.do?id=4808", use_container_width=True, help="취약계층을 위한 주택용 소방시설 설치 정보입니다.")
+            st.link_button("소방시설 불법행위신고 🚫", "https://fire.seoul.go.kr/pages/cnts.do?id=4113", use_container_width=True, help="불법 소방시설 행위를 신고해 포상금을 받으세요.")
+            st.link_button("안전신문고 📢", "https://www.safetyreport.go.kr/#safereport/safereport", use_container_width=True, help="소방 안전 관련 불법 행위를 신고할 수 있는 곳입니다.")
+            st.link_button("소방민원센터 📜", "https://www.safeland.go.kr/somin/index.do", use_container_width=True, help="소방 관련 민원을 신청할 수 있는 곳입니다.")
+            st.link_button("소방기술민원센터 💡", "https://www.safeland.go.kr/safeland/index.do", use_container_width=True, help="소방시설 및 화재 예방 관련 자료를 제공합니다.")
+            st.link_button("칭찬하기 👏", "https://fire.seoul.go.kr/pages/cnts.do?id=184", use_container_width=True, help="소방관님들에게 감사의 메시지를 전하세요.")
+
+
            
 
  

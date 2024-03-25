@@ -378,6 +378,10 @@ def main():
                 - **좁은 골목에 주택이 촘촘히 위치한 지역**
                 - 불법주정차 차량이 많아 **사람도 겨우 지나갈 수 있는 길이 많음**
                 - **비상소화장치가 설치되면 좋을 것**
+                - **좌표 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20133039.png?raw=true" width="400" height="300">
+                                
                 - **주변 사진**
                                 
                 <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20173334.png?raw=true" width="400" height="300">

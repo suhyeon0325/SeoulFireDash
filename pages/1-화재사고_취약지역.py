@@ -30,22 +30,23 @@ def main():
                         "출동소요시간 점수", "순위", "전체 점수", "고령자 수 점수"]
     columns_for_df_09 = [col for col in df.columns if col not in columns_to_exclude]
     df_09 = df[columns_for_df_09]
-    df_09.rename(columns={'서울시 주거 시설 중 주택 비율': '주택 중 아파트를 제외한 건물 비율'}, inplace=True)
-
+    df_09 = df_09.rename(columns={'서울시 주거 시설 중 주택 비율': '주택 중 아파트를 제외한 건물 비율'})
+    df_3 = df[['자치구', '순위', '전체 점수']]
+    df_3 = df_3.sort_values(by='순위', ascending=True)
     merged_data = gdf.merge(df, left_on='구', right_on='자치구')
     
     st.header('화재사고 취약지역 분석', divider="gray")
 
     with st.container(border=True, height=700):
         st.subheader('서울시 주택화재 취약지역 분석')
-
-        tab1, tab2, tab3 = st.tabs(['전체 보기', '상위 5개구만 보기', '표로 보기'])
+        
+        tab1, tab2, tab3 = st.tabs(['전체 보기', '상/하위 5개구만 보기', '표로 보기'])
         with tab1:
             
             selected_column = st.selectbox('분석 카테고리 선택', options=df_09.columns[1:], index=0, key='_selected_data_1')
-
+            
             # 선택한 열에 대한 가로 막대 그래프 시각화
-            visualize_horizontal_bar_chart(df, selected_column, title=f"서울시 자치구 {selected_column} 분석")
+            visualize_horizontal_bar_chart(df_09, selected_column, title=f"서울시 자치구별 {selected_column} 분석")
 
         with tab2:
             selected_column = st.selectbox('분석 카테고리 선택', options=df_09.columns[1:], index=0, key='_selected_data_2')
@@ -75,31 +76,40 @@ def main():
 
         with tab3:
             st.caption('표 상단의 열을 클릭하면, 해당 열을 기준으로 데이터를 오름차순 혹은 내림차순으로 정렬할 수 있습니다.')
-            st.dataframe(df, height=450, use_container_width=True)
+            st.dataframe(df, height=500, use_container_width=True)
 
 
 
     # 지도 시각화 대시보드 구성
-    with st.container(border=True, height=800):
-        st.subheader('취약 지역 지도 시각화')
-        with st.popover("💡 **점수 기준**"):
-            st.markdown("""
-                각 카테고리별로 지역의 취약성을 분석하여 순위를 매긴 뒤,
-                모든 카테고리의 순위를 합산하여 최종 점수를 산출했습니다.
-                :orange[**점수가 높을수록 소방 취약지역입니다.**]
-                        
-                **카테고리**: 비상소화장치 설치개수, 주택 중 아파트를 제외한 건물 비율,	인구밀도(명/km^2),	노후 주택 수, 소방관 1명당 담당인구, 화재발생건수, 안전센터 1개소당 담당인구, 출동소요시간, 고령자 수
-            """)
+    col1, col2 = st.columns([7,3])
+    with col1:
+        with st.container(border=True, height=600): 
+            st.subheader('서울시 구별 취약지역 점수 지도', divider='gray')
+            with st.popover("💡 **점수 기준**"):
+                st.markdown("""
+                    각 카테고리별로 지역의 취약성을 분석하여 순위를 매긴 뒤,
+                    모든 카테고리의 순위를 합산하여 최종 점수를 산출했습니다.
+                    :orange[**점수가 높을수록 소방 취약지역입니다.**]
+                            
+                    **카테고리**: 비상소화장치 설치개수, 주택 중 아파트를 제외한 건물 비율,	인구밀도(명/km^2),	노후 주택 수, 소방관 1명당 담당인구, 화재발생건수, 안전센터 1개소당 담당인구, 출동소요시간, 고령자 수
+                """)
 
-        # 지도 시각화
-        html_string = create_and_show_map(
-        data=merged_data,  # 'geometry' 열 포함 GeoDataFrame
-        columns=['자치구', '전체 점수'], 
-        key_on='feature.properties.자치구'
-        )
+        
+            # 지도 시각화
+            html_string = create_and_show_map(
+            data=merged_data,  # 'geometry' 열 포함 GeoDataFrame
+            columns=['자치구', '전체 점수'], 
+            key_on='feature.properties.자치구'
+            )
 
-        # 스트림릿에서 지도 표시
-        st.components.v1.html(html_string, height=700)
+            # 스트림릿에서 지도 표시
+            st.components.v1.html(html_string, height=430)
+
+    with col2:
+        with st.container(border=True, height=600): 
+            st.markdown("**취약점수 순위**")
+            st.dataframe(df_3, height=510, use_container_width=True, hide_index=True)
+
 
 if __name__ == "__main__":
     main()

@@ -45,18 +45,26 @@ def create_and_show_map(data, columns, key_on, fill_color='YlOrRd'):
 
     # 툴팁 추가
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['자치구', '전체 점수'],
-                                        aliases=['자치구: ', '전체 점수:'],  # HTML 스타일 적용을 위해 aliases 사용 안 함
-                                        labels=False,
+        folium.features.GeoJsonTooltip(fields = [
+                                                    '자치구', '전체 점수', '순위','비상소화장치 설치개수 점수', '서울시 주거 시설 중 주택 비율 점수', '인구밀도(명/km^2) 점수', 
+                                                    '노후 주택 수 점수', '소방관 1명당 담당인구 점수', '화재발생건수 점수', '안전센터 1개소당 담당인구 점수', 
+                                                    '출동소요시간 점수',  '고령자 수 점수'
+                                                ],
+                                        aliases = [
+                                            '자치구', '전체 점수', '비상소화장치 설치개수 점수', '순위', '서울시 주거 시설 중 주택 비율 점수', '인구밀도(명/km^2) 점수', 
+                                                    '노후 주택 수 점수', '소방관 1명당 담당인구 점수', '화재발생건수 점수', '안전센터 1개소당 담당인구 점수', 
+                                                    '출동소요시간 점수', '고령자 수 점수'
+                                        ],      
+                                        labels=True,
                                         sticky=True,
                                         style="""
                                             background-color: #F0EFEF;
                                             color: #333333;
                                             font-family: Arial;
-                                            font-size: 14px;
+                                            font-size: 13px;
                                             font-weight: bold;
                                             border: 2px solid black;
-                                            border-radius: 3px;
+                                            border-radius: 5px;
                                             box-shadow: 3px;
                                         """                                  
     ))

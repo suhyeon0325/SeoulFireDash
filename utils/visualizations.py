@@ -93,7 +93,7 @@ def visualize_horizontal_bar_chart(df, selected_column, title, color_scale='Reds
     # y축 레이블이 더 넓게 표시되도록 조정 및 글꼴 크기 조정, 레전드 위치 조정
     fig.update_layout(plot_bgcolor='rgba(240, 240, 240, 0.6)',
                       margin=dict(l=50, b=100),  # 바텀 마진을 늘려 레전드에 공간을 만듭니다.
-                      width=700
+                      width=700,height=500
                       )
     fig.update_yaxes(tickmode='array', tickvals=df_sorted['자치구'], tickfont=dict(size=10))
     

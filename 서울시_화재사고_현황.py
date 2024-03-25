@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import geopandas as gpd
 from plotly.subplots import make_subplots
 from utils.data_loader import load_data
-from utils.filters import select_data, select_dong
+from utils.filters import select_data, select_dong, select_chart_type
 from utils.visualizations import visualize_bar_chart, visualize_pie_chart, visualize_facilities, visualize_bar_chart_updated
 from streamlit_option_menu import option_menu
 
@@ -46,7 +46,7 @@ def main():
     st.header('서울시 화재사고 현황', help='이 페이지에서는 서울시 내의 최근 화재 사고 발생 통계, 화재 유형별 및 지역별 분석에 관한 정보를 제공합니다. 2021, 2022년도의 데이터를 사용하였습니다.', divider='gray')
 
     # 서브헤더 생성
-    st.subheader('2022 서울시 화재 정보')
+    st.subheader('서울시 화재 정보', help='2022년도 정보입니다.')
 
     # 메트릭 열 생성
     col1, col2, col3, col4 = st.columns([1,1,1,1])
@@ -99,14 +99,12 @@ def main():
 
 
             with col2:
-                chart_type = st.selectbox(
-                '차트 유형 선택',
-                ('막대 그래프', '원형 차트'),  # 더 친숙하고 이해하기 쉬운 단어 사용
-                key='chart_type'
-                )
+ 
+                chart_type_1 = select_chart_type(key_suffix='_tab_2')
 
 
-            if chart_type == '원형 차트':
+
+            if chart_type_1 == '원형 차트':
 
                 # 화재 발생 유형별 데이터 집계
                 labels = ['실화 발생', '방화 발생', '기타 발생']
@@ -129,7 +127,7 @@ def main():
                                     title=f"{selected_sig_data['자치구'].iloc[0]} - 2021년과 2022년 화재 발생 유형 분석", 
                                     colors=custom_colors)
                         
-            elif chart_type == '막대 그래프':
+            elif chart_type_1 == '막대 그래프':
                 # 바차트 시각화 함수 호출
                 visualize_bar_chart_updated(
                     df=selected_sig_data,
@@ -152,13 +150,9 @@ def main():
 
             with col2:
                 # 차트 유형 선택
-                chart_type = st.selectbox(
-                    '차트 유형 선택',
-                    ('막대 그래프', '원형 차트'),
-                    key='chart_type_tab3'
-                )
+                chart_type_2 = select_chart_type(key_suffix='_tab_3')
 
-            if chart_type =='막대 그래프':
+            if chart_type_2 =='막대 그래프':
                 # 시각화
                 visualize_bar_chart_updated(
                     df=selected_sig_data,
@@ -171,7 +165,7 @@ def main():
                     colors_list=[['#EE6A66', '#1E1A77'], ['#FAD04A', '#2B2726'], ['#9FC031', '#EEDFE2']]
                 )
 
-            elif chart_type == '원형 차트':
+            elif chart_type_2 == '원형 차트':
                 # 화재 피해금액 데이터 집계
                 labels = ['부동산 피해액', '동산 피해액']
                 values_2021 = [
@@ -200,14 +194,9 @@ def main():
                 selected_sig_4 = select_data(data, '자치구', '_sig_select_4')
 
             with col2:
-                # 차트 유형 선택
-                chart_type = st.selectbox(
-                '차트 유형 선택',
-                ('막대 그래프', '원형 차트'),  # 사용자에게 친숙한 용어 사용
-                key='chart_type_tab4'
-                )
+                chart_type_3 = select_chart_type(key_suffix='_tab_4')
 
-            if chart_type == '막대 그래프':
+            if chart_type_3 == '막대 그래프':
                 # 막대 그래프 시각화 코드 추가 (예시: 인명피해 비교)
                 visualize_bar_chart_updated(
                     df=selected_sig_4,
@@ -232,7 +221,7 @@ def main():
                     ]
                 )
 
-            elif chart_type == '원형 차트':
+            elif chart_type_3 == '원형 차트':
                 # 2021년 인명피해 데이터 집계 및 파이차트 시각화
                 labels_p = ['사망 인명피해', '부상 인명피해']
                 values_2021_p = [
