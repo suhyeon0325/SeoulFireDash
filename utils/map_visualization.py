@@ -263,7 +263,7 @@ def display_fire_extinguisher_map(center, locations, zoom_start=13):
         # 선택적으로, 팝업도 추가할 수 있습니다.
         folium.Marker(
             location=[lat, lon],
-            popup=f'<b>{idx+1}. {label}</b><br><img src="{image_url}" width="150" height="100">',
+            popup=f'<b>{idx+1}. {label}</b></b><br>{lat},{lon}</b><br><img src="{image_url}" width="150" height="100">',
             icon=folium.Icon(color="red", icon="info-sign"),
         ).add_to(m)
 

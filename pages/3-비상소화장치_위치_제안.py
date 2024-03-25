@@ -127,45 +127,257 @@ def main():
             col3, col4 = st.columns([1,1])
             with col3:
                 with st.popover("**1번 위치**", use_container_width=True):
-                    st.markdown("가나다라")
+                    st.markdown("""
+                **잠실동 / 경위도좌표 X,Y (37.5085071,127.0825862)**
+                - **길이 좁아**서 소방차가 들어가기 힘듦
+                - **소화전이 위치**한 곳
+                - **노후 주택**이 많은 곳
+                - **좌표 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20131913.png?raw=true" width="400" height="300">                
+
+                """, unsafe_allow_html=True)                                
                 with st.popover("**3번 위치**", use_container_width=True):
-                    st.markdown("가나다라")
+                    st.markdown("""
+                **삼전동 / 경위도좌표 X,Y (37.50231025,127.0901942)**
+                - **필로티 구조빌딩**이 밀집
+                - **좌표 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20132425.png?raw=true" width="400" height="300">                
+
+                """, unsafe_allow_html=True)                                 
                 with st.popover("**5번 위치**", use_container_width=True):
-                    st.markdown("가나다라") 
+                    st.markdown("""
+                **삼전동 / 경위도좌표 X,Y (37.504103,127.090679)**                
+                - 길이 좁지는 않지만, **거주가 주차구역** 때문에 소방차가 다닐 수 없음
+                - **주거지역 가까이에 플라스틱판넬**도 보이는 구조물이 있어서 선정
+                - **좌표 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20132839.png?raw=true" width="400" height="300">                
+
+                """, unsafe_allow_html=True) 
                 with st.popover("**7번 위치**", use_container_width=True):
-                    st.markdown("가나다라") 
+                    st.markdown("""
+                **석촌동 / 경위도좌표 X,Y (37.50097974, 127.1000492)**
+                - **소방차 접근이 힘든 길**과, **노후화가 진행된 주택들**이 많이 밀집
+                - 비상소화장치 장소를 선정
+                - **좌표 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20132956.png?raw=true" width="400" height="300">                
+
+                """, unsafe_allow_html=True) 
                 with st.popover("**9번 위치**", use_container_width=True):
-                    st.markdown("주변에 식당•술집 골목이 있고 주택가로 들어오면 길이 확 좁아진다. 여기도 소방차가 안 쪽으로 진입하는 데 시간이 꽤 걸릴 것 같다. 지나다니는 사람들이 많아 차가 지나가면 움직이기 힘든 골목이다.")   
+                    st.markdown("""
+                **방이동 / 경위도좌표 X,Y (37.51174,127.110053)**
+                - 주변에 **식당•술집 골목**이 있고, 주택가로 들어오면 길이 확 좁아짐
+                - 여기도 **소방차 진입**에 시간이 많이 걸릴 것 같음
+                - 지나다니는 **사람들이 많아** 차가 지나갈 때 움직이기 힘든 골목
+                - **좌표 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img12(1).png?raw=true" width="400" height="300">                
+                    
+                - **주변 사진**
+
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img13(1).png?raw=true" width="400" height="300">  
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img14(1).png?raw=true" width="400" height="300"> 
+                """, unsafe_allow_html=True)
                 with st.popover("**11번 위치**", use_container_width=True):
-                    st.markdown("넓은 도로와 좁은 도로가 반복되는 곳. 신축건물과 노후건물이 같이 있는 구역임. 마커가 찍힌 곳은 좁긴 한데 바로 옆에 길들이 관리가 잘 되어있는 편이다. 그래도 임시로 주차가 되어있을 경우 길이 좁아지는 곳이 많음")  
+                    st.markdown("""
+                **가락본동 / 경위도좌표 X,Y (37.499000, 127.120611)**
+                - **넓은 도로와 좁은 도로가 반복**되는 곳
+                - **신축건물과 노후건물**이 공존하는 구역
+                - 마커가 찍힌 곳은 좁지만, **주변 길들이 관리가 잘 되어 있음**
+                - **임시로 주차**되어 있는 경우, 길이 좁아지는 곳이 많음
+                - **좌표 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img5.png?raw=true" width="400" height="300">                
+                
+                - **주변 사진**
+
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img5(1).png?raw=true" width="400" height="300">  
+                """, unsafe_allow_html=True)
                 with st.popover("**13번 위치**", use_container_width=True):
-                    st.markdown("로드맵으로 봤을 땐 바로 옆에 큰 도로가 있어서 비상소화장치가 크게 필요없지 않을까 했는데, 식당이 많고 좁은 골목이 많았으며 차량 통행이 많은 구역이라 일반 승용차들도 이 위치로 들어오는데 많은 시간이 걸리는 게 보였음. 아마 소방차가 와도 안쪽으로 진입하는 시간이 지체될 것으로 보임. 그래서인지 소화기가 설치되어 있는 주택이 꽤 보였다.")  
+                    st.markdown("""
+                **송파2동 / 경위도좌표 X,Y (37.500694, 127.112639)**
+                - **식당이 많고 좁은 골목**이 많아 차량 통행이 많은 구역
+                - **소방차 진입 시간이 지체될 것**으로 예상
+                - 소화기가 설치된 주택이 많음을 관찰
+                - **사거리, 단독/노후주택이 밀집**되어 있고, **좁은 뒷골목들**이 많음
+                - 이 골목들은 대로와 연결되어 있지 않아, **소방차는 블록을 한 바퀴 돌아야 도달** 가능
+                - **학교 근처 상가건물 사거리**에 비상소화장치를 설치하는 것이 유리
+                - **좌표 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img6(1).png?raw=true" width="400" height="300">  
+                
+                - **주변 사진**
+
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img6.png?raw=true" width="400" height="300">                 
+                
+                - **주변 진입로 사진**: 차량이 매우 많음
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img7.png?raw=true" width="400" height="300">                                                 
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img8.png?raw=true" width="400" height="300">                                                               
+                """, unsafe_allow_html=True)
                 with st.popover("**15번 위치**", use_container_width=True):
-                    st.markdown("가나다라")  
+                    st.markdown("""
+                **마천2동 / 경위도좌표 X,Y (37.499138,127.149098)**
+                - **화재가 났던 구역보다 로드맵 상에서 안 보이는 지역**에 비상소화장치 설치 고려
+                - **주차된 차량**이 많음
+                - **좌표 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20133212.png?raw=true" width="400" height="300">  
+                """, unsafe_allow_html=True)     
                 with st.popover("**17번 위치**", use_container_width=True):
-                    st.markdown("낡은 주택이 많고 좁은 길이 많으며 경사가 많다. 길에 정차된 차량때문에 통행이 더 힘들 것 같다. 여기도 마찬가지로 소방차 진입시간을 고려하여 비상소화장치를 설치하면 좋겠다.") 
+                    st.markdown("""
+                **거여1동 / 경위도좌표 X, Y(37.497698, 127.143332)**
+                - **낡은 주택**이 많고 **좁은 길**, **경사**가 많음
+                - 길에 **정차된 차량** 때문에 통행이 더 어려움
+                - 소방차 진입 시간을 고려하여 **비상소화장치 설치** 필요
+                - **좌표 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img18.png?raw=true" width="400" height="300">  
+                
+                - **주변 사진**
+
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img31.png?raw=true" width="400" height="300">   
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img32.png?raw=true" width="400" height="300">                                                                                              
+                """, unsafe_allow_html=True)                                  
+                              
                 with st.popover("**19번 위치**", use_container_width=True):
-                    st.markdown("오래된 주택이 많고 길에 주정차된 차량과 쓰레기 등 장애물들이 많다. 근처 길도 전부 좁은 길이라 비상소화장치의 필요성이 있을 듯")                      
+                    st.markdown("""
+                **오금동 / 경위도좌표X, Y (37.502313, 127.134786)**
+                - **오래된 주택**이 많고 길에 **주정차된 차량과 쓰레기** 등 장애물이 많음
+                - 근처 길이 모두 **좁아 비상소화장치 필요성**이 높음
+                - **송파소방서** 관할구역 내에서도 **눈에 띄게 좁은 길이 많은 곳**
+                - **비상소화장치 선정지역**으로 고려해도 좋을 것 같음
+                - **좌표 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img18.png?raw=true" width="400" height="300">  
+                
+                - **주변 사진**
+
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img19.png?raw=true" width="400" height="300">                                                                             
+                """, unsafe_allow_html=True)  
+
             with col4:
                 with st.popover("**2번 위치**", use_container_width=True):
-                    st.markdown("가나다라")
+                    st.markdown("""
+                **잠실동 / 경위도좌표 X,Y (37.50511389,127.0817572)**
+                - **길이 좁아서 소방차가 들어가기 힘든 곳**
+                - **소화전이 위치한 곳**
+                - **노후 주택이 많은 곳**
+                - **좌표 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20132301.png?raw=true" width="400" height="300">  
+                """, unsafe_allow_html=True)  
                 with st.popover("**4번 위치**", use_container_width=True):
-                    st.markdown("가나다라")                                                
+                    st.markdown("""
+                **삼전동 / 경위도좌표 X,Y (37.50094046,127.0936817)**
+                - **길이 굉장히 좁음**
+                - **좌표 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20132509.png?raw=true" width="400" height="300">  
+                """, unsafe_allow_html=True)  
                 with st.popover("**6번 위치**", use_container_width=True):
-                    st.markdown("가나다라")
+                    st.markdown("""
+                **석촌동 / 경위도좌표 X,Y (37.49991962,127.0974103)**
+                - **좁은 길은 있지만 소방차가 못 들어갈 만한 지역은 없음**
+                - 불법 주차된 차가 있다면 소방차 진입이 어려울 수 있음
+                - **좌표 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-03-25%20132919.png?raw=true" width="400" height="300">  
+                """, unsafe_allow_html=True)  
                 with st.popover("**8번 위치**", use_container_width=True):
-                    st.markdown("네이버 지도 로드맵 사진(23년 3월)으로 볼 때보다 새로 지어진 건물이 많이 보였다. 놀이터 및 보행로, 좁은 길이 많고 지나다니는 사람이 많아서 일반 차량이 진입하는 데도 꽤 시간이 걸릴 것으로 보임.") 
-                with st.popover("**10번 위치**", use_container_width=True):
-                    st.markdown("도로 자체는 나름 깔끔하고 잘 관리되어 있는데 차량이 접근하는 시간이 꽤 걸릴 것 같다. 길에 주차구역이 종종 있는데 차량들이 여럿 지나갈 경우 통과하는 데 오래 걸림. 근데 신축빌라가 많이 지어지는 듯? 엄~청 오래된 건물과 신축건물이 섞여있는 지역이다. ") 
-                with st.popover("**12번 위치**", use_container_width=True):
-                    st.markdown("주변에 식당, 술집이 많은 편. 주택가에는 주차된 차가 있을 경우 승용차가 겨우 지나가는 폭임. 큰 도로가 옆에 있어서 진입이 어려울 것 같진 않지만 노후주택이 많아 화재가 나면 피해가 클 것으로 보임")   
-                with st.popover("**14번 위치**", use_container_width=True):
-                    st.markdown("가나다라")  
-                with st.popover("**16번 위치**", use_container_width=True):
-                    st.markdown("낡은 주택과 좁은 골목으로 이루어진 지역이다. 큰 도로가 바로 옆에 있긴 하지만 차들이 얽히면 사람이 지나가기 힘들어진다. 소방차 진입 시간을 고려하여 비상소화장치를 설치하면 좋을 듯…")  
-                with st.popover("**18번 위치**", use_container_width=True):
-                    st.markdown("주변 길이 모두 좁고 주차된 차들이 많다. 송파소방서가 가깝긴 하지만... 원활한 차량 통행이 힘들다는 점을 고려하여 비상소화장치를 배치하면 좋겠다.")  
+                    st.markdown("""
+                    **송파1동 / 경위도좌표 X,Y (37.50884075, 127.1087034)**
+                    - 최근 **새로 지어진 건물이 많음**
+                    - **놀이터 및 보행로, 좁은 길이 많고** 지나다니는 사람이 많아 일반 차량 진입에도 시간이 많이 걸림
+                    - **좌표 사진**
+                                
+                    <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img9.png?raw=true" width="400" height="300">                
+                    
+                    - **주변 사진**
 
+                    <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img10.png?raw=true" width="400" height="300">  
+                    <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img12.png?raw=true" width="400" height="300"> 
+                    """, unsafe_allow_html=True)
+                with st.popover("**10번 위치**", use_container_width=True):
+                    st.markdown("""
+                **방이동 / 경위도좌표 X,Y (37.51299316, 127.1161285)**
+                - 도로는 **나름 깔끔하고 잘 관리**되어 있지만, 차량 접근 시간이 오래 걸릴 것 같음
+                - **길에 주차구역이 종종 있어**, 여러 차량이 지나갈 경우 통과에 오래 걸림
+                - **오래된 건물과 신축빌라가 섞여 있는 지역**
+                - **좌표 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img14.png?raw=true" width="400" height="300">                
+                    
+                - **주변 사진**
+
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img15.png?raw=true" width="400" height="300">  
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img16.png?raw=true" width="400" height="300"> 
+                """, unsafe_allow_html=True)                    
+                with st.popover("**12번 위치**", use_container_width=True):
+                    st.markdown("""
+                **가락본동 / 경위도좌표 X,Y (37.496917, 127.120417)**
+                - 주변에 **식당, 술집이 많음**
+                - 주택가에는 주차된 차가 있을 경우 **승용차가 겨우 지나가는 폭**
+                - 큰 도로가 옆에 있어 진입은 어렵지 않지만, **노후주택이 많아 화재 시 피해가 클 것**
+                - **골목길이 화재 발생지역과 가까워**, 차량이 한 대만 주정차되어 있어도 **소방차량의 진입이 어려움**
+                - **노후 건물에 교회와 노인복지센터가 위치**하여, 화재사고 시 대량의 인명피해가 예상되는 구간
+                - **비상소화장치의 설치가 필요한 구간**
+                - **좌표 사진** 
+                                                             
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img4.png?raw=true" width="400" height="300">
+                
+                - **주변 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img1.png?raw=true" width="400" height="300">
+                """, unsafe_allow_html=True)
+                    
+                with st.popover("**14번 위치**", use_container_width=True):
+                    st.markdown("""
+                **마천1동 / 경위도좌표 X,Y (37.492321,127.154682)**
+                - **좁은 골목에 주택이 촘촘히 위치한 지역**
+                - 불법주정차 차량이 많아 **사람도 겨우 지나갈 수 있는 길이 많음**
+                - **비상소화장치가 설치되면 좋을 것**
+                """)
+
+                with st.popover("**16번 위치**", use_container_width=True):
+                    st.markdown("""
+                **거여1동 / 경위도좌표 X, Y (37.493358, 127.142836)**                
+                - **낡은 주택과 좁은 골목**으로 이루어진 지역
+                - 큰 도로가 바로 옆이긴 하지만, 차들이 얽히면 **사람이 지나가기 힘듦**
+                - **소방차 진입 시간을 고려**하여 비상소화장치를 설치하면 좋을 것
+                - 화재 발생건수가 많았던 만큼, **빠른 접근이 어려운 곳**에 비상소화장치 설치 필요
+                 - **좌표 사진** 
+                                                             
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img25.png?raw=true" width="400" height="300">
+                
+                - **주변 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img26.png?raw=true" width="400" height="300">
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img28.png?raw=true" width="400" height="300">
+                """, unsafe_allow_html=True)
+
+                with st.popover("**18번 위치**", use_container_width=True):
+                    st.markdown("""
+                **오금동 / 경위도좌표X, Y (37.503962, 127.140793)**
+                - 주변 길이 모두 **좁고 주차된 차들이 많음**
+                - **송파소방서가 가까움**에도 불구하고, 원활한 차량 통행이 어려움
+                - **노후/단독주택이 많은 지역**이지만, 최근 **신축 빌라가 지어지는 곳**도 있음
+                - 특히 **문정로25길 쪽**에 협소한 폭의 도로와 노후주택이 집중되어 있어, 이곳에 비상소화장치 설치 고려 필요
+                 - **좌표 사진** 
+                                                             
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img23.png?raw=true" width="400" height="300">
+                
+                - **주변 사진**
+                                
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img21.png?raw=true" width="400" height="300">
+                <img src="https://github.com/suhyeon0325/multicamp_semi/blob/main/data/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%83%81%EC%86%8C%ED%99%94%EC%9E%A5%EC%B9%98%EC%A0%9C%EC%95%88%EC%9C%84%EC%B9%98%EC%9D%98%20%EC%82%AC%EB%B3%B8_Img22.png?raw=true" width="400" height="300">
+                """, unsafe_allow_html=True)
+
+
+                
 
     with st.container(border=True, height=900):
         st.subheader('송파구 소방 인프라 분석')
