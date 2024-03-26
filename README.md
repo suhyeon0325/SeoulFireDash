@@ -1,6 +1,6 @@
 # SeoulFireDash
 
-**Version 0.1.4**
+**Version 0.1.4**:
 - **Data Caching for Speed:** Implemented data caching to enhance application performance.
 - **Updated Front Page with Latest Data:** Now includes data from 2018 to March 2024, replacing the previous 2021-2022 dataset.
 - **2024 Monthly Fire Incident Prediction Graph:** Introduced a new graph predicting monthly fire incidents for 2024 using machine learning techniques.
@@ -9,7 +9,7 @@
 - **New Section in Firefighting Infrastructure Analysis Page:** Added 'Fire Service Accessibility Analysis: Building Fires Exceeding Golden Time' section, with seasonal color-coded markers visualizing building fires where fire service arrived past the critical response time in 2021.
 - **Enhanced Emergency Hydrant Location Suggestion Page for Songpa District:** Added pie chart visualizations alongside bar graphs for a clearer understanding of housing types distribution by dong.
 
-**Version 0.1.3**
+**Version 0.1.3**:
 - **Sidebar Icons & UI Enhancements**: Introduced intuitive icons for sidebar navigation and refreshed the UI theme for a better user experience.
 - **Enhanced Suggestions Page**:
   - Added anonymity and file upload features for submitting suggestions, improving user engagement and feedback detail.
