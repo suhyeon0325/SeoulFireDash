@@ -11,7 +11,7 @@ def visualize_trend_by_district_with_tabs(df):
 
     selected_districts = []
 
-    with st.container(border=True, height=600):
+    with st.container(border=True, height=650):
         option = st.radio("**화재 추세 분석**", ("서울시 전체", "각 구별로 비교하기"), horizontal=True)
 
         if option == "서울시 전체":
