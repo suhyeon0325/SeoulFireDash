@@ -189,3 +189,50 @@ def visualize_housing_type_distribution_by_selected_dong(df, selected_dong):
     fig = px.bar(df_melted, x='주택 유형', y='수량', text_auto=True, color='수량',
                  color_continuous_scale=px.colors.sequential.OrRd, title=f"{selected_dong} 주택 유형별 분포")
     return fig
+
+# 18~23 시각화 함수
+def visualize_trend_by_district_with_tabs(df):
+    columns = ['화재건수', '사망', '부상', '인명피해 계', '부동산피해(천원)', '동산피해(천원)', '재산피해(천원)', '재산피해/건당(천원)']
+    years = [f'{year}' for year in range(18, 24)]  # 연도 리스트 (2018-2023)
+
+    # 미리 selected_districts 변수를 정의해둡니다.
+    selected_districts = []
+
+    left_column, right_column = st.columns([1, 3])
+
+    with left_column:
+        with st.container(border=True, height=560):
+            option = st.radio("**데이터 범위 선택**", ("각 구별로 비교하기", "서울시 전체"), horizontal=True)
+
+            if option == "서울시 전체":
+                df = df[df['자치구'] == '서울시']
+            else:
+                districts_options = df['자치구'].unique().tolist()
+                if '서울시' in districts_options:
+                    districts_options.remove('서울시')
+                default_districts = [district for district in ['강북구', '송파구', '영등포구'] if district in districts_options]
+                selected_districts = st.multiselect('**자치구 선택**', options=districts_options, default=default_districts)
+                
+                if not selected_districts:
+                    st.error('적어도 하나 이상의 자치구를 선택해야 합니다.', icon="🚨")
+                    return  # 추가 처리를 중지하고 함수 종료
+                
+                df = df[df['자치구'].isin(selected_districts)]
+
+    with right_column:
+        with st.container(border=True, height=560):
+            # 선택된 자치구가 있거나, "서울시 전체" 옵션이 선택된 경우에 그래프를 표시합니다.
+            if selected_districts or option == "서울시 전체":
+                tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs(columns)
+                tabs = [tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8]
+
+                for tab, column in zip(tabs, columns):
+                    with tab:
+                        data_list = []
+                        for year in years:
+                            for index, row in df.iterrows():
+                                data_list.append({'자치구': row['자치구'], '연도': f'20{year}', column: row[f'{year}_{column}']})
+
+                        new_df = pd.DataFrame(data_list)
+                        fig = px.line(new_df, x='연도', y=column, color='자치구', title=f'자치구별 {column} 추세 (2018-2023)')
+                        st.plotly_chart(fig, use_container_width=True)
