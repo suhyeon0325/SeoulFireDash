@@ -52,12 +52,12 @@ def main():
             st.metric(label="**재산 피해/건당 💰**", value='7,911 천원', delta='+ 4,321 천원', delta_color="inverse",
                       help = '전년동기: 3,590 천원')
 
-    # 지역별 화재 추이 시각화            
+    # 지역별 화재 추이 시각화                        
     visualize_trend_by_district_with_tabs(df)
 
     # 동별 화재발생 장소 분석 시각화
     with st.container(border=True, height=700):
-        st.subheader('화재 장소 유형 분석')
+        st.markdown('<h4>화재 장소 유형 분석</h4>', unsafe_allow_html=True) 
         tab1, tab2 = st.tabs(["트리맵으로 보기", "막대 그래프로 보기"])
         with tab1:            
             display_treemap(dong, select_data, select_dong)

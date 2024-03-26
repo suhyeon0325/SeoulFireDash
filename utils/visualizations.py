@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px 
-import geopandas as gpd
+from plotly.subplots import make_subplots
 
 # 1. 서울시 화재사고 현황 페이지 - 각 탭, 범위별 추세 시각화
 def visualize_trend_by_district_with_tabs(df):
@@ -122,60 +122,74 @@ def visualize_facilities(df_selected):
 
 # 2. 화재사고 취약지역 페이지 - 전체보기탭: 가로 막대그래프 시각화 함수
 @st.cache_data
-def visualize_horizontal_bar_chart(df, selected_column, title, color_scale='Reds'):
+def visualize_vertical_bar_chart(df, selected_column, title, color_scale='Reds'):
     """
-    스트림릿에서 선택한 열에 따른 자치구별 가로 막대 그래프를 시각화하는 함수.
+    스트림릿에서 선택한 열에 따른 자치구별 세로 막대 그래프를 시각화하는 함수.
     
     :param df: 데이터프레임
     :param selected_column: 사용자가 선택한 열 이름
-    :param title: 그래프 제목 (기본값: '가로 막대 그래프')
+    :param title: 그래프 제목
     :param color_scale: 막대 색상 스케일 (사용자가 선택 가능)
     """
-    df_sorted = df.sort_values(by=selected_column)
+    df_sorted = df.sort_values(by=selected_column, ascending=False)
     
-    fig = px.bar(df_sorted, y='자치구', x=selected_column,
+    fig = px.bar(df_sorted, x='자치구', y=selected_column,
                  labels={'자치구': '자치구', selected_column: selected_column},
-                 title=title, orientation='h',
+                 title=title, orientation='v',  # 세로 막대 그래프를 위해 orientation을 'v'로 설정
                  color=selected_column, color_continuous_scale=px.colors.sequential.__dict__[color_scale])
     
-    # y축 레이블이 더 넓게 표시되도록 조정 및 글꼴 크기 조정, 레전드 위치 조정
-    fig.update_layout(plot_bgcolor='rgba(240, 240, 240, 0.6)',
-                      margin=dict(l=50, b=100),  # 바텀 마진을 늘려 레전드에 공간을 만듭니다.
-                      width=700,height=500
+    # x축 레이블이 더 넓게 표시되도록 조정 및 글꼴 크기 조정, 레전드 위치 조정
+    fig.update_layout(plot_bgcolor='rgba(240, 240, 240, 0)',
+                      margin=dict(l=100, b=150),  # 좌측과 바텀 마진을 늘려 레전드 및 레이블에 공간을 만듭니다.
+                      width=700, height=500
                       )
-    fig.update_yaxes(tickmode='array', tickvals=df_sorted['자치구'], tickfont=dict(size=10))
+    fig.update_xaxes(tickmode='array', tickvals=df_sorted['자치구'], tickangle=-45, tickfont=dict(size=10))  # x축 레이블 각도 조정
     
     st.plotly_chart(fig, use_container_width=True)
 
 # 2. 화재사고 취약지역 페이지 - 상/하위 5개만 보기탭: 가로 막대그래프 시각화 함수
-def visualize_top_bottom_districts(df, column_name='비상소화장치 설치개수'):
+def visualize_top_districts_with_seoul_average(df, column_name='비상소화장치 설치개수'):
     """
-    선택된 카테고리에 따라 상위 5개구 혹은 하위 5개구를 시각화하는 함수입니다.
+    선택된 카테고리에 따라 상위 5개구 및 서울시 평균을 포함하여 시각화하는 함수입니다.
     
     :param df: 데이터프레임
-    :param column_name: 분석할 카테고리의 열 이름. 기본값은 '비상소화장치 설치개수'
+    :param column_name: 분석할 카테고리의 열 이름. '비상소화장치 설치개수'의 경우 하위 5개구를, 나머지는 상위 5개구를 표시합니다.
     """
     # 분석 카테고리 선택
-    selected_column = st.selectbox('분석 카테고리 선택', options=df.columns[1:], index=0, key='_selected_data_2')
+    selected_column = st.selectbox('분석 카테고리 선택', options=df.columns[1:], index=0, key='_selected_data_4')
 
+    # 서울시 평균 계산
+    seoul_average = df[selected_column].mean()
+    # 서울시 평균 행 추가
+    average_row = pd.DataFrame({'자치구': ['서울시 평균'], selected_column: [seoul_average]})
+    
     if selected_column == column_name:
-        # 하위 5개 구 시각화
-        df_sorted = df.nsmallest(5, selected_column)
-        title = f'{selected_column} - 하위 5개구 분석'
+        # '비상소화장치 설치개수'의 경우 하위 5개 구 시각화
+        districts = df.nsmallest(5, selected_column)
+        title = f'{selected_column} 분석: 하위 5개구 및 서울시 평균'
     else:
-        # 상위 5개 구 시각화
-        df_sorted = df.nlargest(5, selected_column).iloc[::-1]  # 역순 정렬
-        title = f'{selected_column} - 상위 5개구 분석'
-
+        # 나머지 경우 상위 5개 구 시각화
+        districts = df.nlargest(5, selected_column)
+        title = f'{selected_column} 분석: 상위 5개구 및 서울시 평균'
+    
+    # 시각화할 데이터 프레임 생성
+    visual_df = pd.concat([districts, average_row]).reset_index(drop=True)
+    
     # 시각화
-    fig = px.bar(df_sorted, y='자치구', x=selected_column, labels={'자치구': '자치구', selected_column: selected_column},
-                 title=title, orientation='h', color=selected_column, color_continuous_scale=px.colors.sequential.Reds)
+    fig = px.bar(visual_df, x='자치구', y=selected_column, 
+                labels={'자치구': '자치구', selected_column: selected_column},
+                title=title, orientation='v', 
+                color=selected_column,
+                color_continuous_scale=px.colors.sequential.Reds)  
 
-    fig.update_layout(plot_bgcolor='rgba(240, 240, 240, 0.6)')
-    fig.update_yaxes(tickmode='array', tickvals=df_sorted['자치구'])
+    fig.update_layout(plot_bgcolor='rgba(240, 240, 240, 0)')
+    fig.update_xaxes(tickmode='array', tickvals=visual_df['자치구'])
+
 
     # 스트림릿에 그래프 표시
     st.plotly_chart(fig, use_container_width=True)
+
+
 
 # 4. 비상소화장치 위치 제안 페이지 - 화재건수탭: 동별 화재발생 건수
 @st.cache_data
@@ -279,8 +293,34 @@ def visualize_elderly_population_ratio_by_selected_year(df, selected_year):
 
 # 4. 비상소화장치 위치 제안 페이지 - 주택현황탭: 1 동별 주택유형 분포
 def visualize_housing_type_distribution_by_selected_dong(df, selected_dong):
+    # 선택된 동에 해당하는 데이터 필터링
     df_dong = df[df['동'] == selected_dong]
+    
+    # '소계' 항목 제거
+    df_dong = df_dong.drop(columns=['소계'])
+    
+    # 데이터를 '시점', '동'을 기준으로 melt 실행
     df_melted = df_dong.melt(id_vars=['시점', '동'], var_name='주택 유형', value_name='수량')
-    fig = px.bar(df_melted, x='주택 유형', y='수량', text_auto=True, color='수량',
-                 color_continuous_scale=px.colors.sequential.OrRd, title=f"{selected_dong} 주택 유형별 분포")
-    return fig         
+    
+    # 막대 그래프와 파이 차트를 포함한 서브플롯 생성
+    fig = make_subplots(rows=1, cols=2, specs=[[{"type": "bar"}, {"type": "pie"}]], subplot_titles=("막대 그래프", "파이 차트"))
+
+    # 왼쪽 열에 막대 그래프 추가
+    fig.add_trace(go.Bar(x=df_melted['주택 유형'], y=df_melted['수량'], text=df_melted['수량'], textposition='auto',
+                        marker=dict(color=df_melted['수량'], colorscale='Reds'), name="주택 유형별 분포"), row=1, col=1)
+
+    # 오른쪽 열에 파이 차트 추가, 색상 및 레전드 명시적 지정
+    fig.add_trace(go.Pie(labels=df_melted['주택 유형'], values=df_melted['수량'],
+                        pull=[0.1 if i == df_melted['수량'].idxmax() else 0 for i in range(len(df_melted))],
+                        marker=dict(colors=px.colors.qualitative.Plotly), name=""),
+                row=1, col=2)
+
+    # 레전드 항목을 제거하고 싶은 경우, 다음과 같이 설정
+    fig.update_traces(showlegend=False)
+
+    # 서브플롯 레이아웃 업데이트
+    fig.update_layout(title_text=f"{selected_dong} 주택 유형별 분포")
+
+    return fig
+
+   

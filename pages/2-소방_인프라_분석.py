@@ -32,8 +32,8 @@ def main():
     col1, col2 = st.columns([7, 3])
     
     with col1:  # 첫 번째 컬럼 시작
-        with st.container(border=True, height=700):
-            st.markdown('**서울시 소방 시설 위치 시각화**')
+        with st.container(border=True, height=650):
+            st.markdown('<h4>서울시 소방 시설 위치 시각화</h4>', unsafe_allow_html=True) 
             # 소방 인프라 시각화 탭
             tab1, tab2, tab3 = st.tabs(["소방서 및 안전센터", "비상 소화장치", "소방용수"])
 
@@ -51,17 +51,21 @@ def main():
                 visualize_fire_water(grid, column_name='소방용수_수')
     
     with col2:  # 두 번째 컬럼 시작
-        with st.container(border=True, height=700):
+        with st.container(border=True, height=650):
             # 소방 관련 정보 버튼 및 링크
             create_html_button("소방 복지 및 정책")
             display_fire_safety_links()
 
     # 골든타임 분석 섹션
     with st.container(border=True, height=650):
-        st.markdown('**소방 서비스 접근성 분석: 골든타임 초과 건물화재사고**')
+        st.markdown('<h4>소방 서비스 접근성 분석: 골든타임 초과 건물화재사고</h4>', unsafe_allow_html=True) 
         col1, col2 = st.columns([2, 8])
         
         with col1: 
+     
+            with st.popover("⏰ **골든타임**", use_container_width=True):
+                st.markdown('소방차 골든타임은 7분입니다. 골든타임 내에 소방대원이 도착하여 화재를 진압할 수 있다면, 인명 및 재산 피해를 최소화할 수 있습니다. 따라서 소방서의 위치 선정과 응급 대응 시스템의 효율성이 매우 중요합니다.')
+
             # 골든타임 정보 표시
             display_season_colors()
             

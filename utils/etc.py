@@ -66,7 +66,6 @@ def display_fire_safety_links():
     create_link_button("주택용 소방시설 설치 🏠", "https://fire.seoul.go.kr/pages/cnts.do?id=4808", "취약계층을 위한 주택용 소방시설 설치 정보입니다.")
     create_link_button("소방시설 불법행위신고 🚫", "https://fire.seoul.go.kr/pages/cnts.do?id=4113", "불법 소방시설 행위를 신고해 포상금을 받으세요.")
     create_link_button("안전신문고 📢", "https://www.safetyreport.go.kr/#safereport/safereport", "소방 안전 관련 불법 행위를 신고할 수 있는 곳입니다.")
-    create_link_button("소방민원센터 📜", "https://www.safeland.go.kr/somin/index.do", "소방 관련 민원을 신청할 수 있는 곳입니다.")
     create_link_button("소방기술민원센터 💡", "https://www.safeland.go.kr/safeland/index.do", "소방시설 및 화재 예방 관련 자료를 제공합니다.")
     create_link_button("칭찬하기 👏", "https://fire.seoul.go.kr/pages/cnts.do?id=184", "소방관님들에게 감사의 메시지를 전하세요.")
 
@@ -75,25 +74,34 @@ def display_fire_safety_links():
 def display_season_colors():
     st.markdown("""
         <style>
+            .color-box-container {
+                display: flex;
+                justify-content: space-around; /* 가로로 나열하며 동일한 간격 유지 */
+                flex-wrap: wrap; /* 필요한 경우 줄 바꿈 */
+            }
             .color-box {
                 padding: 10px;
                 border-radius: 5px;
                 color: #fff;
-                margin: 10px 0;
+                margin: 10px;
                 font-weight: bold;
+                text-align: center; /* 글자 가운데 정렬 */
+                flex: 1; /* Flex 항목들이 유연하게 늘어나서 사용 가능한 공간을 채움 */
+                min-width: 120px; /* 최소 너비 설정 */
             }
             .spring { background-color: #2ecc71; }
             .summer { background-color: #e74c3c; }
             .autumn { background-color: #f39c12; }
             .winter { background-color: #3498db; }
         </style>
-        <div>
+        <div class="color-box-container">
             <div class="color-box spring">봄 - 초록색</div>
             <div class="color-box summer">여름 - 빨간색</div>
             <div class="color-box autumn">가을 - 주황색</div>
             <div class="color-box winter">겨울 - 파란색</div>
         </div>
-        """, unsafe_allow_html=True)  
+        """, unsafe_allow_html=True)
+    
 
 # 3,4 페이지 버튼 스타일 html 함수 
 @st.cache_data

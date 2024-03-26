@@ -4,6 +4,7 @@ import geopandas as gpd
 from folium.plugins import MarkerCluster
 from streamlit_folium import folium_static
 import streamlit as st
+from folium.features import DivIcon
 
 # 2. 화재사고 취약 페이지 - 서울시 구별 취약지역 점수 지도
 @st.cache_data
@@ -64,6 +65,21 @@ def create_and_show_map(_data, columns, key_on, fill_color='YlOrRd'):
                                             box-shadow: 3px;
                                         """                                  
     ))
+
+    # 각 자치구의 중심 좌표에 텍스트 레이블 추가
+    for _, row in _data.iterrows():
+        # 자치구의 중심 좌표 계산
+        centroid = row['geometry'].centroid
+        text = row['자치구']
+        
+        # 중심 좌표에 텍스트 레이블을 표시하는 마커 추가
+        folium.Marker(
+            [centroid.y, centroid.x],
+            icon=DivIcon(
+                icon_anchor=(0,0),
+                html=f'<div style="font-size: 8pt; font-weight: bold; background: rgba(245, 245, 245, 0.6); padding: 4px 6px; border-radius: 5px; text-align: center; color: #1C1C1C; white-space: nowrap; min-width: 50px;">{text}</div>',
+            )
+        ).add_to(seoul_map)
 
     # HTML로 변환 후 반환
     return seoul_map._repr_html_()
@@ -264,7 +280,7 @@ def display_fire_incidents_map(df):
         ).add_to(map_seoul)
     
     # Streamlit에 지도 표시
-    folium_static(map_seoul, width=820)                        
+    folium_static(map_seoul, width=800)                        
 
 # 4. 비상소화장치 위치 제안 페이지 - 송파구 비상소화장치 제안 위치 시각화
 @st.cache_data

@@ -2,7 +2,7 @@
 import streamlit as st
 # utils 패키지 내 필요한 함수들을 import
 from utils.data_loader import load_data, load_shp_data
-from utils.visualizations import visualize_horizontal_bar_chart, visualize_top_bottom_districts
+from utils.visualizations import visualize_vertical_bar_chart, visualize_top_districts_with_seoul_average
 from utils.map_visualization import create_and_show_map
 from utils.etc import setup_sidebar_links
 
@@ -31,17 +31,17 @@ def main():
 
     # 주택화재 취약지역 분석
     with st.container(border=True, height=700):
-        st.subheader('서울시 주택화재 취약지역 분석')
+        st.markdown('<h4>서울시 주택화재 취약지역 분석</h4>', unsafe_allow_html=True) 
         tab1, tab2, tab3 = st.tabs(['전체 보기', '상/하위 5개구만 보기', '표로 보기'])
 
         # 전체 보기 탭
         with tab1:
             selected_column = st.selectbox('분석 카테고리 선택', options=df_09.columns[1:], index=0, key='_selected_data_1')
-            visualize_horizontal_bar_chart(df_09, selected_column, title=f"서울시 자치구별 {selected_column} 분석")
+            visualize_vertical_bar_chart(df_09, selected_column, title=f"서울시 자치구별 {selected_column} 분석")
 
         # 상/하위 5개구만 보기 탭
         with tab2:
-            visualize_top_bottom_districts(df_09)
+            visualize_top_districts_with_seoul_average(df_09)
 
         # 표로 보기 탭
         with tab3:
@@ -52,7 +52,7 @@ def main():
     col1, col2 = st.columns([7, 3])
     with col1:
         with st.container(border=True, height=600): 
-            st.subheader('서울시 구별 취약지역 점수 지도', divider='gray')
+            st.markdown('<h4>서울시 구별 취약지역 점수 지도</h4>', unsafe_allow_html=True) 
             html_string = create_and_show_map(_data=merged_data, columns=['자치구', '전체 점수'], key_on='feature.properties.자치구')
             st.components.v1.html(html_string, height=430)
 

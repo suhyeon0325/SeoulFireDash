@@ -48,7 +48,8 @@ def main():
         with st.container(border=True, height=650):  
             col3, col4 = st.columns([7,3])
             with col3: 
-                st.subheader('송파구 비상소화장치 제안 위치')
+               st.markdown('<h4>송파구 비상소화장치 제안 위치</h4>', unsafe_allow_html=True)
+
             with col4: 
                 with st.popover("💡 **위치 선정 방법**"):
                     st.markdown("""
@@ -216,17 +217,17 @@ def main():
                
     # 송파구 소방 인프라 분석 섹션
     with st.container(border=True, height=900):
-        st.subheader('송파구 소방 인프라 분석')
+        st.markdown('<h4>송파구 소방 인프라 분석</h4>', unsafe_allow_html=True)
         tab1, tab2, tab3, tab4 = st.tabs(["송파구 소방 인프라", "화재 건수", "노년 인구", " 주택 현황"])
          
         with tab1:    
             # 비상소화장치 위치 시각화    
-            st.subheader('현재 송파구 비상소화장치 위치')
+            st.markdown('**현재 송파구 비상소화장치 위치**')
             create_fire_equip_map(data)  # fire_equip_df는 당신의 데이터프레임 변수명입니다.
 
         with tab2:
             # 송파구 화재 건수 분석
-            st.subheader('송파구 화재 건수 분석')
+            st.markdown('**송파구 화재 건수 분석**')            
             select = st.radio("선택", ["동별 화재발생 건수", "연도별 화재발생 건수"],horizontal=True, label_visibility="collapsed")
             if select == '연도별 화재발생 건수':
                 # 2020~2023 총 화재 건수 시각화
@@ -244,7 +245,7 @@ def main():
             
         with tab3:
             # 송파구 노년 인구 분석
-            st.subheader('송파구 노년 인구 분석')
+            st.markdown('**송파구 노년 인구 분석**')   
             select = st.radio("선택", ["거주인구", "노년인구", "동별 노년인구", "노년인구 비율"],horizontal=True, label_visibility="collapsed")
 
             if select == '거주인구':
@@ -265,7 +266,7 @@ def main():
                 fig = go.Figure()
                 fig.add_trace(go.Bar(x=시점, y=노년인구, marker_color=colors, width=0.4, text=df_P['노년 전체 인구']))
                 fig.update_layout(title_text='송파구 2022~2023년도 노년인구 수', yaxis_title='노년인구', xaxis_title='시점')
-                st.plotly_chart(fig)
+                st.plotly_chart(fig, use_container_width=True)
 
             elif select == '동별 노년인구':                    
                 # 선택된 연도에 대한 거주 인구 시각화
@@ -282,7 +283,7 @@ def main():
 
         with tab4:
             # 송파구 주택현황 분석
-            st.subheader('송파구 주택현황 분석')
+            st.markdown('**송파구 주택현황 분석**') 
             select_1 = st.radio("선택", ["동별 주택유형 분포", "동별 주택수"], horizontal=True, label_visibility="collapsed")
             if select_1 == "동별 주택유형 분포":
                 # 동 선택 위젯
