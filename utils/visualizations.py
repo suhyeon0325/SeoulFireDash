@@ -25,7 +25,7 @@ def visualize_bar_chart(df, x_axis, y_axes, names, title, xaxis_title='월', yax
     for y_axis, name, color in zip(y_axes, names, colors):
         fig.add_trace(go.Bar(x=x_axis, y=df[y_axis].values.flatten(), name=name, marker_color=color))
     fig.update_layout(title=title, xaxis_title=xaxis_title, yaxis_title=yaxis_title, legend_title='년도', barmode='group')
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width=True)
 
 # 바차트 시각화 서브플롯
 def visualize_bar_chart_updated(df, x_axes, y_axes_list, names_list, title, xaxis_titles, yaxis_title, colors_list):
@@ -56,7 +56,7 @@ def visualize_bar_chart_updated(df, x_axes, y_axes_list, names_list, title, xaxi
     fig.update_layout(title=title, yaxis_title=yaxis_title, barmode='group')
     
     # Streamlit에 차트 표시
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width=True)
 
 def visualize_pie_chart(labels, values_list, names, title, colors=['#F25E6B', '#032CA6', '#FCE77C']):
     """
@@ -119,7 +119,7 @@ def visualize_facilities(df_selected):
         fig.add_trace(go.Bar(x=[column], y=[total], marker_color=color_map.get(column), showlegend=False))
 
     fig.update_layout(title="시설 유형별 총계", xaxis_title="시설 유형", yaxis_title="총계")
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width=True)
 
 # 송파구 연도별 화재발생현황(동)
 def visualize_fire_counts_by_selected_year(df, selected_year):
@@ -201,8 +201,8 @@ def visualize_trend_by_district_with_tabs(df):
     left_column, right_column = st.columns([1, 3])
 
     with left_column:
-        with st.container(border=True, height=560):
-            option = st.radio("**데이터 범위 선택**", ("각 구별로 비교하기", "서울시 전체"), horizontal=True)
+        with st.container(border=True, height=600):
+            option = st.radio("**데이터 범위 선택**", ("서울시 전체", "각 구별로 비교하기"), horizontal=True)
 
             if option == "서울시 전체":
                 df = df[df['자치구'] == '서울시']
@@ -220,7 +220,7 @@ def visualize_trend_by_district_with_tabs(df):
                 df = df[df['자치구'].isin(selected_districts)]
 
     with right_column:
-        with st.container(border=True, height=560):
+        with st.container(border=True, height=600):
             # 선택된 자치구가 있거나, "서울시 전체" 옵션이 선택된 경우에 그래프를 표시합니다.
             if selected_districts or option == "서울시 전체":
                 tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs(columns)
@@ -234,5 +234,88 @@ def visualize_trend_by_district_with_tabs(df):
                                 data_list.append({'자치구': row['자치구'], '연도': f'20{year}', column: row[f'{year}_{column}']})
 
                         new_df = pd.DataFrame(data_list)
-                        fig = px.line(new_df, x='연도', y=column, color='자치구', title=f'자치구별 {column} 추세 (2018-2023)')
-                        st.plotly_chart(fig, use_container_width=True)
+                        # 그래프 제목 설정을 위한 조건문 추가
+                        if option == "서울시 전체":
+                            title = f'서울시 전체 {column} 추세 (2018-2023)'
+                            fig = px.line(new_df, x='연도', y=column, color='자치구', title=title)
+                            fig.update_layout(height=400)
+                            st.plotly_chart(fig, use_container_width=True)
+
+                            if column == "화재건수":
+                                st.image('data/사진/2024_서울시_월별화재건수_예측.png')
+ 
+                        else:
+                            title = f'자치구별 {column} 추세 (2018-2023)'
+                            fig = px.line(new_df, x='연도', y=column, color='자치구', title=title)
+                            st.plotly_chart(fig, use_container_width=True)
+            
+# 서울시 화재사고 현황페이지_장소유형_트리맵 시각화 함수
+def display_treemap(dong, select_data, select_dong):
+    col1, col2 = st.columns(2)
+
+    with col1:
+        # 구 선택
+        df_filtered_by_gu = select_data(dong, '자치구', '_gu')
+
+    with col2:
+        # 동 선택
+        df_filtered_by_dong = select_dong(df_filtered_by_gu, '동', '_dong_1')
+
+    # 화재 발생 장소 유형
+    place_types = ['단독주택', '공동주택', '기타주택', '학교', '일반업무', '판매시설', '숙박시설', '종교시설', '의료시설', '공장 및 창고', '작업장', '위락오락시설', '음식점', '일상서비스시설', '기타']
+
+    # 장소 유형별 화재 발생 건수 데이터를 '장소 유형'과 '건수' 컬럼을 가진 새로운 데이터프레임으로 변환
+    df_treemap = df_filtered_by_dong.melt(id_vars=['자치구', '동'], value_vars=place_types, var_name='장소 유형', value_name='건수')
+
+    # 건수가 0 이상인 데이터만 필터링
+    df_treemap = df_treemap[df_treemap['건수'] > 0]
+
+    # 사용자 지정 색상 리스트
+    colors = ['#F25E6B', '#F2C744', '#A1BF34', '#EEDFE2', '#FCE77C', '#E2D0F8', '#DCE2F0', '#F2EFBB', '#D5D971', '#6779A1', '#9B7776','#1BBFBF', '#D94B2B', '#D98F89', '#FFDEDC', '#ACC7B4']
+
+    # 트리맵 생성
+    fig = px.treemap(df_treemap, path=['자치구', '동', '장소 유형'], values='건수',
+                    color='장소 유형',
+                    hover_data=['건수'],
+                    color_discrete_sequence=colors)
+
+    # 차트 제목 및 스타일 설정
+    fig.update_layout(title='동별 화재 장소유형 트리맵', font=dict(family="Arial, sans-serif", size=14, color="black"))
+
+    # 툴팁 커스터마이징
+    fig.update_traces(
+        hovertemplate='장소 유형: %{label}<br>건수: %{value}<br>전체 대비 비율: %{percentRoot:.2%}',
+        textfont=dict(family="Arial, sans-serif", size=12, color="black")
+    )
+
+    # Streamlit에 트리맵 표시
+    st.plotly_chart(fig, use_container_width=True)                            
+
+def visualize_top_bottom_districts(df, column_name='비상소화장치 설치개수'):
+    """
+    선택된 카테고리에 따라 상위 5개구 혹은 하위 5개구를 시각화하는 함수입니다.
+    
+    :param df: 데이터프레임
+    :param column_name: 분석할 카테고리의 열 이름. 기본값은 '비상소화장치 설치개수'
+    """
+    # 분석 카테고리 선택
+    selected_column = st.selectbox('분석 카테고리 선택', options=df.columns[1:], index=0, key='_selected_data_2')
+
+    if selected_column == column_name:
+        # 하위 5개 구 시각화
+        df_sorted = df.nsmallest(5, selected_column)
+        title = f'{selected_column} - 하위 5개구 분석'
+    else:
+        # 상위 5개 구 시각화
+        df_sorted = df.nlargest(5, selected_column).iloc[::-1]  # 역순 정렬
+        title = f'{selected_column} - 상위 5개구 분석'
+
+    # 시각화
+    fig = px.bar(df_sorted, y='자치구', x=selected_column, labels={'자치구': '자치구', selected_column: selected_column},
+                 title=title, orientation='h', color=selected_column, color_continuous_scale=px.colors.sequential.Reds)
+
+    fig.update_layout(plot_bgcolor='rgba(240, 240, 240, 0.6)')
+    fig.update_yaxes(tickmode='array', tickvals=df_sorted['자치구'])
+
+    # 스트림릿에 그래프 표시
+    st.plotly_chart(fig, use_container_width=True)

@@ -277,3 +277,80 @@ def display_fire_extinguisher_map(center, locations, zoom_start=13):
 
     # Streamlit을 사용하여 지도 표시
     folium_static(m)
+
+# 골든타임 초과 시각화 함수(팝업텍스트 생성, 색 생성, 시각화)
+# 팝업 텍스트를 생성하는 함수 (HTML 스타일 적용)
+def create_popup_html(row):
+    return f'''
+    <html>
+        <head><style>
+            .popup {{
+                font-family: Arial, sans-serif;
+                font-size: 12px;
+                color: #333333;
+            }}
+            .title {{
+                font-weight: bold;
+                color: #0078A8;
+                margin-bottom: 5px;
+            }}
+            .info {{
+                margin-bottom: 2px;
+            }}
+        </style></head>
+        <body>
+            <div class="popup">
+                <div class="title">화재 정보</div>
+                <div class="info">사망수: {row['사망수']}, 부상자수: {row['부상자수']}</div>
+                <div class="info">재산피해금액: {row['재산피해금액']}만원</div>
+                <div class="info">출동소요시간: {row['출동소요시간']}초</div>
+                <div class="info">화재진압시간: {row['화재진압시간']}초</div>
+                <div class="info">위치: {row['시군구명']}, {row['읍면동명']}</div>
+                <div class="info">계절: {row['계절']}, 시간대: {row['시간대']}</div>
+                <div class="info">화재발생일시: {row['화재발생일시']}</div>
+            </div>
+        </body>
+    </html>
+    '''
+
+# 계절별 색상을 결정하는 함수
+def get_color(season):
+    if season == '봄':
+        return 'green'
+    elif season == '여름':
+        return 'red'
+    elif season == '가을':
+        return 'orange'
+    elif season == '겨울':
+        return 'blue'
+    else:
+        return 'gray'  # 계절 정보가 없는 경우
+                            
+# 지도를 생성하고 Streamlit에 표시하는 함수
+def display_fire_incidents_map(df):
+    # NaN 값을 가진 행 제거
+    df_filtered = df.dropna(subset=['위도', '경도'])
+    
+    # 서울의 중심 좌표로 지도 생성
+    map_seoul = folium.Map(location=[37.5665, 126.9780], zoom_start=11)
+    
+    # 데이터프레임을 순회하며 CircleMarker 추가
+    for idx, row in df_filtered.iterrows():
+        color = get_color(row['계절'])  # 계절별 색상
+        tooltip_text = f'출동소요시간: {row["출동소요시간"]}초'  # 툴팁 텍스트
+        popup_html = create_popup_html(row)  # 팝업 HTML 텍스트 생성
+        popup = folium.Popup(popup_html, max_width=300)  # 여기서 Popup 객체 생성
+
+        folium.CircleMarker(
+            [row['위도'], row['경도']],
+            radius=5,
+            color=color,
+            fill=True,
+            fill_color=color,
+            fill_opacity=0.7,
+            tooltip=tooltip_text,
+            popup=popup  # 생성된 Popup 객체를 사용
+        ).add_to(map_seoul)
+    
+    # Streamlit에 지도 표시
+    folium_static(map_seoul, width=800)                        

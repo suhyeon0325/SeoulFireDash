@@ -11,11 +11,12 @@ from streamlit_option_menu import option_menu
 import streamlit.components.v1 as components
 from streamlit_folium import folium_static
 import geopandas as gpd
+from utils.etc import setup_sidebar_links
 from plotly.subplots import make_subplots
-from utils.data_loader import load_data, load_shp_data, load_excel_data
+from utils.data_loader import load_data, load_shp_data, load_excel_data, get_locations_data
 from utils.filters import select_data, select_dong
 from utils.visualizations import visualize_bar_chart, visualize_housing_type_distribution_by_selected_dong, visualize_elderly_population_ratio_by_selected_year, visualize_elderly_population_by_year, visualize_population_by_selected_year, visualize_fire_counts_by_selected_year, visualize_pie_chart, visualize_bar_chart_updated, visualize_horizontal_bar_chart
-from utils.map_visualization import create_and_show_map, create_fire_equip_map, display_fire_extinguisher_map
+from utils.map_visualization import create_and_show_map, display_fire_incidents_map, create_fire_equip_map, display_fire_extinguisher_map
 
 # 페이지 설정
 
@@ -23,11 +24,7 @@ st.set_page_config(
    layout="wide",
    initial_sidebar_state="expanded", page_icon='🧯'
 )
-st.sidebar.page_link("서울시_화재사고_현황.py", label="서울시 화재사고 현황", icon="🔥")
-st.sidebar.page_link("pages/1-화재사고_취약지역.py", label="화재사고 취약지역", icon="⚠️")
-st.sidebar.page_link("pages/2-소방_인프라_분석.py", label="소방 인프라 분석", icon="🚒")
-st.sidebar.page_link("pages/3-비상소화장치_위치_제안.py", label="비상소화장치 위치 제안", icon="🧯")
-st.sidebar.page_link("pages/4-건의사항.py", label="건의사항", icon="💬")
+setup_sidebar_links()
 data = load_excel_data("data/(송파소방서)비상소화장치.xlsx")
 df = load_data("data/2020-2022_송파구_동별_화재건수.csv", encoding='CP949')
 df_P = load_data("data/2022-2023_송파구_인구.csv", encoding='CP949')
@@ -50,10 +47,10 @@ def main():
     col1, col2 = st.columns([7,3])
     with col1:
         with st.container(border=True, height=650):  
-            col5, col6 = st.columns([7,3])
-            with col5: 
+            col3, col4 = st.columns([7,3])
+            with col3: 
                 st.subheader('송파구 비상소화장치 제안 위치')
-            with col6: 
+            with col4: 
                 with st.popover("💡 **위치 선정 방법**"):
                     st.markdown("""
                         <div style="font-family: sans-serif;">
@@ -74,28 +71,7 @@ def main():
 
             # 송파구의 중심 좌표 설정
             center = [37.514543, 127.106597]
-            # 비상 소화장치 위치 데이터 (위도, 경도, 설명)
-            locations = [
-                (37.5085071, 127.0825862, '잠실동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/01_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.50511389, 127.0817572, '잠실동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/02_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.50231025, 127.0901942, '삼전동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/03_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.50094046, 127.0936817, '삼전동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/04_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.504103, 127.090679, '삼전동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/05_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.49991962, 127.0974103, '석촌동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/06_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.50097974,127.1000492, '석촌동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/07_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.50884075,127.1087034, '송파동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/08_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.511740, 127.110053, '방이동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/09_%EC%A2%8C%ED%91%9C.png?raw=true'),  
-                (37.51299316, 127.1161285, '방이동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/10_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.499000, 127.120611, '가락본동, 가락1동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/11_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.496917, 127.120417, '가락본동, 가락1동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/12_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.500694, 127.112639, '송파2동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/13_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.492321, 127.154682, '마천1동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/14_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.499138, 127.149098, '마천2동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/15_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.493358, 127.142836, '거여1동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/16_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.497698, 127.143332, '거여1동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/17_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.503962, 127.140793, '오금동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/18_%EC%A2%8C%ED%91%9C.png?raw=true'),
-                (37.502313, 127.134786, '오금동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/19_%EC%A2%8C%ED%91%9C.png?raw=true')
-            ]
+            locations = get_locations_data()
 
             # 지도 표시 함수 호출
             display_fire_extinguisher_map(center, locations)
