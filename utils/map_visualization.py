@@ -1,17 +1,13 @@
 import folium
 import streamlit.components.v1 as components
 import geopandas as gpd
-from shapely import wkt
 from folium.plugins import MarkerCluster
 from streamlit_folium import folium_static
 import streamlit as st
-from folium import plugins
-import branca
-from folium import IFrame
 
-
-# 화재사고 취약 페이지 - 지도 시각화
-def create_and_show_map(data, columns, key_on, fill_color='YlOrRd'):
+# 2. 화재사고 취약 페이지 - 서울시 구별 취약지역 점수 지도
+@st.cache_data
+def create_and_show_map(_data, columns, key_on, fill_color='YlOrRd'):
     """
     GeoDataFrame의 지리 정보를 사용하여 서울시 자치구별 지도에 Choropleth 레이어를 추가하고 시각화하는 함수.
 
@@ -30,9 +26,9 @@ def create_and_show_map(data, columns, key_on, fill_color='YlOrRd'):
     
     # Choropleth 레이어 추가
     choropleth = folium.Choropleth(
-        geo_data=data,
+        geo_data=_data,
         name='choropleth',
-        data=data,
+        data=_data,
         columns=columns,
         key_on=key_on,
         fill_color=fill_color,
@@ -72,8 +68,31 @@ def create_and_show_map(data, columns, key_on, fill_color='YlOrRd'):
     # HTML로 변환 후 반환
     return seoul_map._repr_html_()
 
+# 3. 서울시 소방 인프라 페이지 - tab1: 서울시 소방서 및 안전센터 시각화
+# 지도 생성 및 마커 추가 함수
+@st.cache_data
+def create_folium_map(df):
+    m = folium.Map(location=[37.5642135, 127.0016985], zoom_start=11)
+    colors = {
+        '소방서': 'red',
+        '안전센터': 'blue',
+        '구조대': 'orange',
+        '소방항공대': 'lightblue',
+        '특수대응단': 'purple'
+    }
 
-# 서울시 비상소화장치 시각화
+    for index, row in df.iterrows():
+        popup_content = f"<b>서센터명:</b> {row['서ㆍ센터명']}<br><b>유형구분명:</b> {row['유형구분명']}"
+        folium.Marker(
+            location=[row['위도'], row['경도']],
+            popup=folium.Popup(popup_content, max_width=300),
+            icon=folium.Icon(color=colors[row['유형구분명']])
+        ).add_to(m)
+
+    return m
+
+# 3. 서울시 소방 인프라 페이지 - tab2: 비상 소화장치 클러스터링 시각화
+@st.cache_data
 def display_folium_map_with_clusters(gdf):
     """
     GeoDataFrame의 포인트들을 클러스터링하여 Folium 지도에 표시하고, 이를 스트림릿에서 보여주는 개선된 함수.
@@ -102,7 +121,8 @@ def display_folium_map_with_clusters(gdf):
     folium_static(m)
 
 
-# 소방용수 함수 정의
+# 3. 서울시 소방 인프라 페이지 - tab3: 서울시 소방용수 그리드 시각화
+@st.cache_data
 def visualize_fire_water(grid, column_name='소방용수_수'):
     """
     소방용수 분포를 지도에 시각화하는 함수입니다.
@@ -122,6 +142,7 @@ def visualize_fire_water(grid, column_name='소방용수_수'):
     map_fw = folium.Map(location=[37.564, 126.997], zoom_start=11, tiles='OpenStreetMap')
 
     # 색상을 결정하는 함수. 여기서는 단순화를 위해 소방용수의 양에 따라 색상을 분류합니다.
+    @st.cache_data
     def color_scale(amount):
         """
         소방용수의 양에 따라 색상을 매핑하는 함수입니다. 소방용수의 양이 1부터 10까지는 각각 다른 색상을,
@@ -148,7 +169,7 @@ def visualize_fire_water(grid, column_name='소방용수_수'):
         elif amount == 1:
             return '#E1F5FE' 
         else:
-            return '#808080' # 회색 (양이 0 또는 정의되지 않은 경우)
+            return '#808080' 
 
 
     # GeoPandas DataFrame을 이용하여 지도에 추가
@@ -164,29 +185,122 @@ def visualize_fire_water(grid, column_name='소방용수_수'):
     # 지도 표시 (스트림릿으로 변환시 st.write(m) 사용)
     folium_static(map_fw)
 
-# 서울시 소방서 및 안전센터 시각화 함수
-# 지도 생성 및 마커 추가 함수
-def create_folium_map(df):
-    m = folium.Map(location=[37.5642135, 127.0016985], zoom_start=11)
-    colors = {
-        '소방서': 'red',
-        '안전센터': 'blue',
-        '구조대': 'orange',
-        '소방항공대': 'lightblue',
-        '특수대응단': 'purple'
-    }
 
-    for index, row in df.iterrows():
-        popup_content = f"<b>서센터명:</b> {row['서ㆍ센터명']}<br><b>유형구분명:</b> {row['유형구분명']}"
+# 3. 소방 인프라 분석 페이지 - 골든타임 초과 시각화 함수(팝업텍스트 생성, 색 생성, 시각화)
+# 팝업 텍스트를 생성하는 함수 (HTML 스타일 적용)
+@st.cache_data
+def create_popup_html(row):
+    return f'''
+    <html>
+        <head><style>
+            .popup {{
+                font-family: Arial, sans-serif;
+                font-size: 12px;
+                color: #333333;
+            }}
+            .title {{
+                font-weight: bold;
+                color: #0078A8;
+                margin-bottom: 5px;
+            }}
+            .info {{
+                margin-bottom: 2px;
+            }}
+        </style></head>
+        <body>
+            <div class="popup">
+                <div class="title">화재 정보</div>
+                <div class="info">사망수: {row['사망수']}, 부상자수: {row['부상자수']}</div>
+                <div class="info">재산피해금액: {row['재산피해금액']}만원</div>
+                <div class="info">출동소요시간: {row['출동소요시간']}초</div>
+                <div class="info">화재진압시간: {row['화재진압시간']}초</div>
+                <div class="info">위치: {row['시군구명']}, {row['읍면동명']}</div>
+                <div class="info">계절: {row['계절']}, 시간대: {row['시간대']}</div>
+                <div class="info">화재발생일시: {row['화재발생일시']}</div>
+            </div>
+        </body>
+    </html>
+    '''
+
+# 계절별 색상을 결정하는 함수
+@st.cache_data
+def get_color(season):
+    if season == '봄':
+        return 'green'
+    elif season == '여름':
+        return 'red'
+    elif season == '가을':
+        return 'orange'
+    elif season == '겨울':
+        return 'blue'
+    else:
+        return 'gray'  # 계절 정보가 없는 경우
+                            
+# 지도를 생성하고 Streamlit에 표시하는 함수
+@st.cache_data
+def display_fire_incidents_map(df):
+    # NaN 값을 가진 행 제거
+    df_filtered = df.dropna(subset=['위도', '경도'])
+    
+    # 서울의 중심 좌표로 지도 생성
+    map_seoul = folium.Map(location=[37.5665, 126.9780], zoom_start=11)
+    
+    # 데이터프레임을 순회하며 CircleMarker 추가
+    for idx, row in df_filtered.iterrows():
+        color = get_color(row['계절'])  # 계절별 색상
+        tooltip_text = f'출동소요시간: {row["출동소요시간"]}초'  # 툴팁 텍스트
+        popup_html = create_popup_html(row)  # 팝업 HTML 텍스트 생성
+        popup = folium.Popup(popup_html, max_width=300)  # 여기서 Popup 객체 생성
+
+        folium.CircleMarker(
+            [row['위도'], row['경도']],
+            radius=5,
+            color=color,
+            fill=True,
+            fill_color=color,
+            fill_opacity=0.7,
+            tooltip=tooltip_text,
+            popup=popup  # 생성된 Popup 객체를 사용
+        ).add_to(map_seoul)
+    
+    # Streamlit에 지도 표시
+    folium_static(map_seoul, width=820)                        
+
+# 4. 비상소화장치 위치 제안 페이지 - 송파구 비상소화장치 제안 위치 시각화
+@st.cache_data
+def display_fire_extinguisher_map(center, locations, zoom_start=13):
+    """
+    비상 소화장치 위치와 관련 정보를 포함한 지도를 생성하고 표시하는 함수.
+    
+    :param center: 지도의 중심이 될 위치의 (위도, 경도)
+    :param locations: 비상 소화장치의 위치, 각 위치는 (위도, 경도, 설명, 사진 URL)의 튜플로 구성됨
+    :param zoom_start: 초기 지도 줌 레벨
+    """
+
+    m = folium.Map(location=center, zoom_start=13)
+
+    for idx, (lat, lon, label, image_path) in enumerate(locations):
+        # 마커에 표시할 번호를 포함한 HTML 문자열 생성
+        icon_html = f"""<div style="font-family: Arial; font-size: 12px; color: blue;"><b>{idx+1}</b></div>"""
+        
+        # DivIcon을 사용하여 번호를 포함한 아이콘 생성
+        icon = folium.DivIcon(html=icon_html)
+        
+        # DivIcon 아이콘을 사용하는 마커 추가
+        folium.Marker([lat, lon], icon=icon).add_to(m)
+        
+        # 선택적으로, 팝업도 추가할 수 있습니다.
         folium.Marker(
-            location=[row['위도'], row['경도']],
-            popup=folium.Popup(popup_content, max_width=300),
-            icon=folium.Icon(color=colors[row['유형구분명']])
+            location=[lat, lon],
+            popup=f'<b>{idx+1}. {label}</b></b><br>{lat},{lon}</b><br><img src="{image_path}" width="150" height="100">',
+            icon=folium.Icon(color="red", icon="info-sign"),
         ).add_to(m)
 
-    return m
+    # Streamlit을 사용하여 지도 표시
+    folium_static(m)
 
-# 송파구 비상소화장치 시각화 함수
+# 4. 비상소화장치 위치 제안 페이지 - 하단 tab1: 송파구 현재 비상소화장치 위치 시각화
+@st.cache_data
 def create_fire_equip_map(fire_equip):
     map_songpa = folium.Map(location=[37.514543, 127.106597], zoom_start=13)
 
@@ -245,112 +359,3 @@ def create_fire_equip_map(fire_equip):
     
     map_songpa.get_root().html.add_child(folium.Element(legend_html))
     map_songpa.save('map_with_legend.html') 
-
-# 비상소화장치 위치 제안
-def display_fire_extinguisher_map(center, locations, zoom_start=13):
-    """
-    비상 소화장치 위치와 관련 정보를 포함한 지도를 생성하고 표시하는 함수.
-    
-    :param center: 지도의 중심이 될 위치의 (위도, 경도)
-    :param locations: 비상 소화장치의 위치, 각 위치는 (위도, 경도, 설명, 사진 URL)의 튜플로 구성됨
-    :param zoom_start: 초기 지도 줌 레벨
-    """
-
-    m = folium.Map(location=center, zoom_start=13)
-
-    for idx, (lat, lon, label, image_path) in enumerate(locations):
-        # 마커에 표시할 번호를 포함한 HTML 문자열 생성
-        icon_html = f"""<div style="font-family: Arial; font-size: 12px; color: blue;"><b>{idx+1}</b></div>"""
-        
-        # DivIcon을 사용하여 번호를 포함한 아이콘 생성
-        icon = folium.DivIcon(html=icon_html)
-        
-        # DivIcon 아이콘을 사용하는 마커 추가
-        folium.Marker([lat, lon], icon=icon).add_to(m)
-        
-        # 선택적으로, 팝업도 추가할 수 있습니다.
-        folium.Marker(
-            location=[lat, lon],
-            popup=f'<b>{idx+1}. {label}</b></b><br>{lat},{lon}</b><br><img src="{image_path}" width="150" height="100">',
-            icon=folium.Icon(color="red", icon="info-sign"),
-        ).add_to(m)
-
-    # Streamlit을 사용하여 지도 표시
-    folium_static(m)
-
-# 골든타임 초과 시각화 함수(팝업텍스트 생성, 색 생성, 시각화)
-# 팝업 텍스트를 생성하는 함수 (HTML 스타일 적용)
-def create_popup_html(row):
-    return f'''
-    <html>
-        <head><style>
-            .popup {{
-                font-family: Arial, sans-serif;
-                font-size: 12px;
-                color: #333333;
-            }}
-            .title {{
-                font-weight: bold;
-                color: #0078A8;
-                margin-bottom: 5px;
-            }}
-            .info {{
-                margin-bottom: 2px;
-            }}
-        </style></head>
-        <body>
-            <div class="popup">
-                <div class="title">화재 정보</div>
-                <div class="info">사망수: {row['사망수']}, 부상자수: {row['부상자수']}</div>
-                <div class="info">재산피해금액: {row['재산피해금액']}만원</div>
-                <div class="info">출동소요시간: {row['출동소요시간']}초</div>
-                <div class="info">화재진압시간: {row['화재진압시간']}초</div>
-                <div class="info">위치: {row['시군구명']}, {row['읍면동명']}</div>
-                <div class="info">계절: {row['계절']}, 시간대: {row['시간대']}</div>
-                <div class="info">화재발생일시: {row['화재발생일시']}</div>
-            </div>
-        </body>
-    </html>
-    '''
-
-# 계절별 색상을 결정하는 함수
-def get_color(season):
-    if season == '봄':
-        return 'green'
-    elif season == '여름':
-        return 'red'
-    elif season == '가을':
-        return 'orange'
-    elif season == '겨울':
-        return 'blue'
-    else:
-        return 'gray'  # 계절 정보가 없는 경우
-                            
-# 지도를 생성하고 Streamlit에 표시하는 함수
-def display_fire_incidents_map(df):
-    # NaN 값을 가진 행 제거
-    df_filtered = df.dropna(subset=['위도', '경도'])
-    
-    # 서울의 중심 좌표로 지도 생성
-    map_seoul = folium.Map(location=[37.5665, 126.9780], zoom_start=11)
-    
-    # 데이터프레임을 순회하며 CircleMarker 추가
-    for idx, row in df_filtered.iterrows():
-        color = get_color(row['계절'])  # 계절별 색상
-        tooltip_text = f'출동소요시간: {row["출동소요시간"]}초'  # 툴팁 텍스트
-        popup_html = create_popup_html(row)  # 팝업 HTML 텍스트 생성
-        popup = folium.Popup(popup_html, max_width=300)  # 여기서 Popup 객체 생성
-
-        folium.CircleMarker(
-            [row['위도'], row['경도']],
-            radius=5,
-            color=color,
-            fill=True,
-            fill_color=color,
-            fill_opacity=0.7,
-            tooltip=tooltip_text,
-            popup=popup  # 생성된 Popup 객체를 사용
-        ).add_to(map_seoul)
-    
-    # Streamlit에 지도 표시
-    folium_static(map_seoul, width=800)                        

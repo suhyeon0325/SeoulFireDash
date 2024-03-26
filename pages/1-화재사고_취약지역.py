@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 import streamlit as st
+# utils 패키지 내 필요한 함수들을 import
 from utils.data_loader import load_data, load_shp_data
 from utils.visualizations import visualize_horizontal_bar_chart, visualize_top_bottom_districts
 from utils.map_visualization import create_and_show_map
@@ -52,7 +53,7 @@ def main():
     with col1:
         with st.container(border=True, height=600): 
             st.subheader('서울시 구별 취약지역 점수 지도', divider='gray')
-            html_string = create_and_show_map(data=merged_data, columns=['자치구', '전체 점수'], key_on='feature.properties.자치구')
+            html_string = create_and_show_map(_data=merged_data, columns=['자치구', '전체 점수'], key_on='feature.properties.자치구')
             st.components.v1.html(html_string, height=430)
 
     with col2:

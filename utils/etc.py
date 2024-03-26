@@ -1,28 +1,47 @@
 import streamlit as st
 
-# HTML과 CSS를 사용하여 스타일링된 마크다운 텍스트 정의
-def display_season_colors():
-    st.markdown("""
-        <style>
-            .color-box {
-                padding: 10px;
-                border-radius: 5px;
-                color: #fff;
-                margin: 10px 0;
-            }
-            .spring { background-color: #2ecc71; }
-            .summer { background-color: #e74c3c; }
-            .autumn { background-color: #f39c12; }
-            .winter { background-color: #3498db; }
-        </style>
-        <div>
-            <div class="color-box spring">봄 - 초록색</div>
-            <div class="color-box summer">여름 - 빨간색</div>
-            <div class="color-box autumn">가을 - 주황색</div>
-            <div class="color-box winter">겨울 - 파란색</div>
-        </div>
-        """, unsafe_allow_html=True)
+# 0. 모든 페이지 - 각 페이지 링크 생성 함수
+@st.cache_data
+def add_sidebar_page_link(file_path, label, icon):
+    """
+    Streamlit 사이드바에 페이지 링크를 추가하는 함수입니다.
 
+    :param file_path: 페이지 파일의 경로입니다.
+    :param label: 사이드바에 표시될 레이블입니다.
+    :param icon: 레이블 옆에 표시될 아이콘입니다.
+    """
+    st.sidebar.page_link(file_path, label=label, icon=icon)
+
+# 0. 모든 페이지 - 사이드바에 페이지 링크 추가
+@st.cache_data
+def setup_sidebar_links():
+    """
+    사이드바에 여러 페이지 링크를 추가하는 함수입니다.
+    """
+    add_sidebar_page_link("서울시_화재사고_현황.py", "서울시 화재사고 현황", "🔥")
+    add_sidebar_page_link("pages/1-화재사고_취약지역.py", "화재사고 취약지역", "⚠️")
+    add_sidebar_page_link("pages/2-소방_인프라_분석.py", "소방 인프라 분석", "🚒")
+    add_sidebar_page_link("pages/3-비상소화장치_위치_제안.py", "비상소화장치 위치 제안", "🧯")
+    add_sidebar_page_link("pages/4-건의사항.py", "건의사항", "💬")
+
+# 1. 서울시 화재사고 현황 페이지 - 구 선택 필터링 함수
+def select_data(df, column_name='자치구', key_suffix=''):
+    """
+    자치구 선택을 통해 데이터를 필터링하는 함수.
+    :param df: 데이터프레임
+    :param column_name: 필터링할 컬럼명
+    :param key_suffix: Streamlit 위젯의 고유 key 식별자에 추가될 접미사
+    :return: 선택된 자치구에 해당하는 데이터프레임
+    """
+    selected = st.selectbox(f'{column_name} 선택', options=df[column_name].unique(), key=f'{column_name}_select{key_suffix}')
+    return df[df[column_name] == selected]
+
+# 1. 서울시 화재사고 현황 페이지 - 동 선택 필터링 함수
+def select_dong(df, column_name='동', key_suffix='_dong'):
+    return select_data(df, column_name, key_suffix)
+
+# 3. 소방 인프라 분석 페이지 - 오른쪽 열: 링크 버튼 생성 함수  
+@st.cache_data
 def create_link_button(title, url, help_text):
     """
     Streamlit의 link_button을 생성하는 함수.
@@ -33,6 +52,8 @@ def create_link_button(title, url, help_text):
     """
     st.link_button(title, url, use_container_width=True, help=help_text)
 
+# 3. 소방 인프라 분석 페이지 - 오른쪽 열: 소방 복지 및 정책 링크
+@st.cache_data
 def display_fire_safety_links():
     """
     다양한 소방 및 화재안전 관련 링크를 표시하는 함수.
@@ -49,6 +70,33 @@ def display_fire_safety_links():
     create_link_button("소방기술민원센터 💡", "https://www.safeland.go.kr/safeland/index.do", "소방시설 및 화재 예방 관련 자료를 제공합니다.")
     create_link_button("칭찬하기 👏", "https://fire.seoul.go.kr/pages/cnts.do?id=184", "소방관님들에게 감사의 메시지를 전하세요.")
 
+# 3. 소방 인프라 분석 페이지 - 계절별 색상 마크다운 박스 함수
+@st.cache_data
+def display_season_colors():
+    st.markdown("""
+        <style>
+            .color-box {
+                padding: 10px;
+                border-radius: 5px;
+                color: #fff;
+                margin: 10px 0;
+                font-weight: bold;
+            }
+            .spring { background-color: #2ecc71; }
+            .summer { background-color: #e74c3c; }
+            .autumn { background-color: #f39c12; }
+            .winter { background-color: #3498db; }
+        </style>
+        <div>
+            <div class="color-box spring">봄 - 초록색</div>
+            <div class="color-box summer">여름 - 빨간색</div>
+            <div class="color-box autumn">가을 - 주황색</div>
+            <div class="color-box winter">겨울 - 파란색</div>
+        </div>
+        """, unsafe_allow_html=True)  
+
+# 3,4 페이지 버튼 스타일 html 함수 
+@st.cache_data
 def create_html_button(button_text):
     """
     HTML 버튼을 생성하고 Streamlit 앱에 표시하는 함수
@@ -76,25 +124,18 @@ def create_html_button(button_text):
                 """
     st.markdown(button_html, unsafe_allow_html=True)
 
-def add_sidebar_page_link(file_path, label, icon):
+# 4. 비상소화장치 위치 제안 - 오른쪽 열: 각 위치별 상세정보
+@st.cache_data
+def show_location_info(st, location_number, location_details, images):
     """
-    Streamlit 사이드바에 페이지 링크를 추가하는 함수입니다.
-
-    :param file_path: 페이지 파일의 경로입니다.
-    :param label: 사이드바에 표시될 레이블입니다.
-    :param icon: 레이블 옆에 표시될 아이콘입니다.
+    위치 정보와 관련된 사진을 표시하는 함수
+    st: Streamlit 모듈
+    location_number: 위치 번호 (예: "1번 위치")
+    location_details: 위치에 대한 설명 텍스트
+    images: 사진 파일 경로와 캡션을 담은 리스트 [(파일경로, 캡션), ...]
     """
-    st.sidebar.page_link(file_path, label=label, icon=icon)
-
-def setup_sidebar_links():
-    """
-    사이드바에 여러 페이지 링크를 추가하는 함수입니다.
-    """
-    add_sidebar_page_link("서울시_화재사고_현황.py", "서울시 화재사고 현황", "🔥")
-    add_sidebar_page_link("pages/1-화재사고_취약지역.py", "화재사고 취약지역", "⚠️")
-    add_sidebar_page_link("pages/2-소방_인프라_분석.py", "소방 인프라 분석", "🚒")
-    add_sidebar_page_link("pages/3-비상소화장치_위치_제안.py", "비상소화장치 위치 제안", "🧯")
-    add_sidebar_page_link("pages/4-건의사항.py", "건의사항", "💬")
-
-
+    with st.popover(f"**{location_number}**", use_container_width=True):
+        st.markdown(location_details, unsafe_allow_html=True)
+        for img_path, caption in images:
+            st.image(img_path, caption=caption, width=400)
 

@@ -1,10 +1,10 @@
 # -*- coding:utf-8 -*-
 import streamlit as st
 import pandas as pd
+# utils 패키지 내 필요한 함수들을 import
 from utils.data_loader import load_data
-from utils.filters import select_data, select_dong
 from utils.visualizations import display_treemap, visualize_trend_by_district_with_tabs, visualize_facilities
-from utils.etc import setup_sidebar_links
+from utils.etc import setup_sidebar_links, select_data, select_dong
 
 # 스트림릿 페이지 기본 설정
 st.set_page_config(layout="wide",
@@ -52,7 +52,7 @@ def main():
             st.metric(label="**재산 피해/건당 💰**", value='7,911 천원', delta='+ 4,321 천원', delta_color="inverse",
                       help = '전년동기: 3,590 천원')
 
-    # 지역별 화재 추이 시각화        
+    # 지역별 화재 추이 시각화            
     visualize_trend_by_district_with_tabs(df)
 
     # 동별 화재발생 장소 분석 시각화

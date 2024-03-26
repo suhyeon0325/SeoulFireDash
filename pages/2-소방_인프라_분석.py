@@ -3,6 +3,7 @@ import streamlit as st
 import geopandas as gpd
 from streamlit_folium import folium_static
 from shapely import wkt
+# utils 패키지 내 필요한 함수들을 import
 from utils.data_loader import load_data
 from utils.map_visualization import display_fire_incidents_map, create_folium_map, display_folium_map_with_clusters, visualize_fire_water
 from utils.etc import setup_sidebar_links, display_season_colors, display_fire_safety_links, create_html_button
@@ -32,7 +33,7 @@ def main():
     
     with col1:  # 첫 번째 컬럼 시작
         with st.container(border=True, height=700):
-            st.subheader('서울시 소방 인프라 시각화')
+            st.markdown('**서울시 소방 시설 위치 시각화**')
             # 소방 인프라 시각화 탭
             tab1, tab2, tab3 = st.tabs(["소방서 및 안전센터", "비상 소화장치", "소방용수"])
 
@@ -57,7 +58,7 @@ def main():
 
     # 골든타임 분석 섹션
     with st.container(border=True, height=650):
-        st.subheader('소방 서비스 접근성 분석: 골든타임 초과 건물화재사고', divider="gray")
+        st.markdown('**소방 서비스 접근성 분석: 골든타임 초과 건물화재사고**')
         col1, col2 = st.columns([2, 8])
         
         with col1: 
