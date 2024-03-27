@@ -90,7 +90,6 @@ def create_and_show_map(_data, columns, key_on, fill_color='YlOrRd'):
     return seoul_map._repr_html_()
 
 # 3. 서울시 소방 인프라 페이지 - tab1: 서울시 소방서 및 안전센터 시각화
-# 지도 생성 및 마커 추가 함수
 @st.cache_data
 def create_folium_map(df):
     """
@@ -236,9 +235,7 @@ def visualize_fire_water(grid, column_name='소방용수_수'):
     # 지도 표시 (스트림릿으로 변환시 st.write(m) 사용)
     folium_static(map_fw)
 
-
 # 3. 소방 인프라 분석 페이지 - 골든타임 초과 시각화 함수(팝업텍스트 생성, 색 생성, 시각화)
-# 지도를 생성하고 Streamlit에 표시하는 함수
 @st.cache_data
 def display_fire_incidents_map(df):
     """
@@ -261,7 +258,6 @@ def display_fire_incidents_map(df):
         - The `get_color` function assigns colors to markers based on the season ('봄': green, '여름': red,
           '가을': orange, '겨울': blue, and default: gray).
     """
-    # Implementation omitted for brevity
 
     # NaN 값을 가진 행 제거
     df_filtered = df.dropna(subset=['위도', '경도'])
@@ -354,7 +350,6 @@ def display_fire_extinguisher_map(center, locations, zoom_start=13):
     Returns:
         None: This function does not return anything but displays a map within a Streamlit application.
     """
-
     m = folium.Map(location=center, zoom_start=zoom_start)
 
     # 우선순위에 따른 마커 색상 매핑
@@ -409,7 +404,6 @@ def create_fire_equip_map(fire_equip):
         '영세민밀집': 'purple',
         '소방차진입불가': 'orange'
     }
-
     for index, row in fire_equip.iterrows():
         icon_color = colors.get(row['설치지역'], 'gray')
         popup_html = f"""
@@ -443,7 +437,6 @@ def create_fire_equip_map(fire_equip):
          &nbsp; 영세민밀집: <i style="background:#BF4EAC; border-radius: 50%; width: 12px; height: 12px; display: inline-block;"></i> 보라<br>
     </div>
     '''
-
     map_songpa.get_root().html.add_child(folium.Element(legend_html))
 
     # 기존의 create_fire_equip_map 함수 끝부분에 다음 코드 추가

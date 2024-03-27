@@ -6,22 +6,11 @@ def setup_sidebar_links():
     """
     Adds links to various pages in the sidebar of the Streamlit application.
 
-    This function utilizes Streamlit's sidebar functionality to add navigation links
-    that allow users to easily switch between different pages of the application.
-    Each link is associated with a specific page of the application and is represented
-    with a unique icon for intuitive navigation.
-
     Args:
         None
 
     Returns:
         None
-
-    Notes:
-        - This function must be called at the start of the Streamlit app to ensure the
-          sidebar links are setup before any page content is rendered.
-        - The `@st.cache_data` decorator is used to cache the setup of sidebar links,
-          preventing unnecessary re-executions and enhancing app performance.
     """
     st.sidebar.page_link("서울시_화재사고_현황.py", label="서울시 화재사고 현황", icon="🔥")
     st.sidebar.page_link("pages/1-화재사고_취약지역.py", label="화재사고 취약지역", icon="⚠️")
@@ -44,10 +33,6 @@ def display_season_colors():
 
     Returns:
         None
-
-    Notes:
-        This function uses HTML and CSS for styling the color guide. The unsafe_allow_html
-        parameter of the st.markdown method is set to True to enable HTML rendering.
     """
     st.markdown("""
         <style>
@@ -95,12 +80,6 @@ def create_html_button(button_text):
 
     Returns:
         None
-
-    Notes:
-        This function uses HTML for the button's styling and markdown for its display within
-        the Streamlit app. The `unsafe_allow_html` parameter is set to True to enable the rendering
-        of HTML content. The button created by this function is non-interactive, as it is intended
-        for display purposes only.
     """
     button_html = f"""
                 <div style='text-align: center; margin-bottom: 20px;'>
@@ -145,12 +124,6 @@ def show_location_info(st, location_number, location_details, images):
 
     Returns:
         None
-
-    Notes:
-        This function uses the `st.popover` method to create a clickable popover component.
-        The `unsafe_allow_html=True` parameter allows the use of HTML in the markdown for
-        `location_details`, enabling styled text display. Images are displayed with a fixed
-        width of 400 pixels.
     """
     with st.popover(f"**{location_number}**", use_container_width=True):
         st.markdown(location_details, unsafe_allow_html=True)

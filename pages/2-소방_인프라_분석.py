@@ -125,12 +125,6 @@ def main():
             st.link_button("소방기술민원센터 💡", "https://www.safeland.go.kr/safeland/index.do", use_container_width=True, help="소방시설 및 화재 예방 관련 자료를 제공합니다.")
             st.link_button("칭찬하기 👏", "https://fire.seoul.go.kr/pages/cnts.do?id=184", use_container_width=True, help="소방관님들에게 감사의 메시지를 전하세요.")
 
-
-
-
-
-
-
     # 골든타임 초과 건물화재사고를 분석하는 섹션
     with st.container(border=True, height=650):
 

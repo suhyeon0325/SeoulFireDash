@@ -22,11 +22,6 @@ def visualize_trend_by_district_with_tabs(df):
     Raises:
         ValueError: If no districts are selected when the option to compare specific
                     districts is chosen, a ValueError is raised to prompt the user for selection.
-
-    Notes:
-        This function is designed to be used within a Streamlit application. It relies
-        on Streamlit's API for rendering the UI components and will not work as intended
-        outside of a Streamlit context.
     """
 
     columns = ['화재건수', '사망', '부상', '인명피해 계', '부동산피해(천원)', '동산피해(천원)', '재산피해(천원)', '재산피해/건당(천원)']
@@ -98,15 +93,6 @@ def display_treemap(df):
                            for district ('자치구'), neighborhood ('동'), and various
                            location types that represent the place of fire incidents.
 
-    Returns:
-        None: This function primarily modifies the Streamlit UI by adding a treemap
-              visualization and does not have a return value.
-
-    Notes:
-        This function requires the 'plotly' and 'streamlit' libraries to render the
-        treemap visualization and to interact with the Streamlit UI, respectively.
-        It assumes the DataFrame has a specific structure, with '자치구' and '동' columns
-        followed by columns representing different location types where fires occurred.
     """
 
     col1, col2 = st.columns(2)
@@ -160,9 +146,6 @@ def visualize_facilities(df_selected):
     Returns:
         None: Displays a bar chart in the Streamlit application. 
 
-    Notes:
-        Requires 'plotly' for chart generation and 'streamlit' for display. Assumes the DataFrame 
-        structure includes area ('자치구' and '동') followed by facility type columns.
     """
 
     fig = go.Figure()
@@ -184,10 +167,6 @@ def visualize_facilities(df_selected):
 def visualize_vertical_bar_chart(df, selected_column, title, color_scale='Reds'):
     """
     Visualizes a vertical bar chart in Streamlit, displaying data from a selected column across districts.
-
-    This function sorts the DataFrame based on the values of the selected column in descending order,
-    then creates a vertical bar chart using Plotly. The chart features customization options such
-    as title and color scale, and is displayed within a Streamlit app. 
 
     Args:
         df (pd.DataFrame): The DataFrame containing the data to visualize.
@@ -224,11 +203,6 @@ def visualize_top_districts_with_seoul_average(df, column_name='비상소화장�
     """
     Visualizes the top 5 districts and the Seoul city average for a selected category.
 
-    The function allows users to select a category for analysis from the DataFrame. Depending on the category selected,
-    it either displays the top 5 districts for most categories or the bottom 5 districts if the category is related to
-    emergency hydrant installations. The Seoul city average is calculated and displayed alongside the selected districts
-    for comparison.
-
     Args:
         df (pd.DataFrame): The DataFrame containing the data to be analyzed.
         column_name (str): The name of the column to analyze. Defaults to '비상소화장치 설치개수'. For this specific column,
@@ -237,9 +211,6 @@ def visualize_top_districts_with_seoul_average(df, column_name='비상소화장�
     Returns:
         None: The function directly displays the bar chart in the Streamlit app, without returning any value.
 
-    Notes:
-        The visualization is dynamically updated based on the user's selection of the analysis category.
-        The Seoul city average is included in the visualization for comparative analysis.
     """
 
     # 분석 카테고리 선택
@@ -311,9 +282,6 @@ def visualize_fire_incidents(df, new_data, title, xaxis_title='시점', yaxis_ti
     """
     Visualizes fire incident data with the option to include new data, displaying the total fire incidents over time. 
 
-    This function aggregates fire incident data by time period and visualizes it using a bar chart. 
-    It allows for the inclusion of new data points and customization of the chart's appearance.
-
     Args:
         df (pd.DataFrame): The original dataset containing fire incidents. 
                            It must include columns for time period ('시점') and number of incidents ('화재건수').
@@ -325,9 +293,6 @@ def visualize_fire_incidents(df, new_data, title, xaxis_title='시점', yaxis_ti
         colors (list of str, optional): A list of strings representing colors for the bar chart. 
                                         Defaults to ['#fc8d59', '#fdcc8a', '#e34a33', '#b30000'].
 
-    Notes:
-        This function utilizes Plotly for visualization and Streamlit for displaying the plot in a web application. 
-        The 'st.plotly_chart' function is used to render the chart within a Streamlit container.
     """
 
     # 기존 데이터에서 '시점'에 따른 '화재건수' 집계
@@ -369,10 +334,14 @@ def visualize_population_by_selected_year(df, selected_year):
 # 4. 비상소화장치 위치 제안 페이지 - 노년인구탭: 3 동별 노년인구
 def visualize_elderly_population_by_year(df, time_column='시점'):
     """
-    각 연도별로 '65세이상 인구'를 시각화하는 함수입니다.
-    
-    :param df: 데이터프레임, '시점'과 '65세이상 인구', '동' 컬럼을 포함해야 합니다.
-    :param time_column: 시간을 나타내는 컬럼의 이름, 기본값은 '시점'입니다.
+    Visualizes the population of individuals aged 65 and above for each year.
+
+    Args:
+        df (pandas.DataFrame): A DataFrame containing at least the columns specified by `time_column`, 
+            '65세이상 인구' (population aged 65 and above), and '동' (districts).
+        time_column (str, optional): The name of the column in `df` that represents the time aspect. 
+            Defaults to '시점'.
+
     """
     unique_years = df[time_column].unique() # '시점' 컬럼의 고유값을 가져옵니다.
     
@@ -394,6 +363,18 @@ def visualize_elderly_population_by_year(df, time_column='시점'):
 # 4. 비상소화장치 위치 제안 페이지 - 노년인구탭: 4 노년인구 비율
 @st.cache_data
 def visualize_elderly_population_ratio_by_selected_year(df, selected_year):
+    """
+    Visualizes the ratio of the population aged 65 and above in the selected year across different districts.
+
+    This function computes the ratio of the elderly population to the total population for each district in 
+    the specified year. It then generates and displays a bar chart visualizing these ratios.
+
+    Args:
+        df (pandas.DataFrame): A DataFrame containing the columns '시점' (year), '65세이상 인구' (population aged 65 and above),
+            '전체인구' (total population), and '동' (districts).
+        selected_year (int): The year for which the elderly population ratio should be visualized.
+
+    """
     df_year = df[df['시점'] == selected_year].copy()
     df_year.loc[:, '65세이상 인구 비율'] = (df_year['65세이상 인구'] / df_year['전체인구']) * 100
     df_year.sort_values(by='65세이상 인구 비율', ascending=True, inplace=True)
@@ -409,6 +390,20 @@ def visualize_elderly_population_ratio_by_selected_year(df, selected_year):
 
 # 4. 비상소화장치 위치 제안 페이지 - 주택현황탭: 1 동별 주택유형 분포
 def visualize_housing_type_distribution_by_selected_dong(df, selected_dong):
+    """
+    Visualizes the distribution of different housing types in a selected district using both bar and pie charts.
+
+    This function filters the dataset for the specified district, removes the 'Total' column, and then melts the DataFrame 
+    to have a long format suitable for visualization. It generates a subplot containing a bar chart and a pie chart to 
+    show the distribution of housing types within the selected district.
+
+    Args:
+        df (pandas.DataFrame): A DataFrame that includes '동' (district), housing types as columns, and their corresponding 
+            counts. It should also contain a '시점' column indicating the time point of data collection.
+        selected_dong (str): The name of the district for which the housing type distribution is to be visualized.
+
+    """
+
     # 선택된 동에 해당하는 데이터 필터링
     df_dong = df[df['동'] == selected_dong]
     
