@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 # utils 패키지 내 필요한 함수들을 import
-from utils.etc import setup_sidebar_links
+from utils.ui_helpers import setup_sidebar_links
 
 # 페이지 설정
 st.set_page_config(

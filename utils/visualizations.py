@@ -6,6 +6,29 @@ from plotly.subplots import make_subplots
 
 # 1. 서울시 화재사고 현황 페이지 - 각 탭, 범위별 추세 시각화
 def visualize_trend_by_district_with_tabs(df):
+    """
+    Visualizes the trend of various fire-related statistics across districts in Seoul
+    with the option to view the entire city or compare specific districts. The trends
+    are displayed through interactive tabs, each representing a different statistic.
+
+    Args:
+        df (pd.DataFrame): A DataFrame containing fire incident data, structured with
+                           columns for each year and statistic, as well as a district column.
+
+    Returns:
+        None: This function primarily modifies the Streamlit UI by adding charts and
+              interactive elements, and does not have a return value.
+
+    Raises:
+        ValueError: If no districts are selected when the option to compare specific
+                    districts is chosen, a ValueError is raised to prompt the user for selection.
+
+    Notes:
+        This function is designed to be used within a Streamlit application. It relies
+        on Streamlit's API for rendering the UI components and will not work as intended
+        outside of a Streamlit context.
+    """
+
     columns = ['화재건수', '사망', '부상', '인명피해 계', '부동산피해(천원)', '동산피해(천원)', '재산피해(천원)', '재산피해/건당(천원)']
     years = [f'{year}' for year in range(18, 24)]  # 연도 리스트 (2018-2023)
 
@@ -63,49 +86,85 @@ def visualize_trend_by_district_with_tabs(df):
 
 
 # 1. 서울시 화재사고 현황 페이지 - 장소유형별 트리맵 시각화 함수
-def display_treemap(dong, select_data, select_dong):
+def display_treemap(df):
+    """
+    Displays a treemap visualization of fire incidents by location type within a specific
+    district ('자치구') and neighborhood ('동') in Seoul. The visualization allows users
+    to select a district and a neighborhood from dropdown menus, and it aggregates
+    fire incident data by location type within the selected area.
+
+    Args:
+        df (pd.DataFrame): A DataFrame containing fire incident data, with columns
+                           for district ('자치구'), neighborhood ('동'), and various
+                           location types that represent the place of fire incidents.
+
+    Returns:
+        None: This function primarily modifies the Streamlit UI by adding a treemap
+              visualization and does not have a return value.
+
+    Notes:
+        This function requires the 'plotly' and 'streamlit' libraries to render the
+        treemap visualization and to interact with the Streamlit UI, respectively.
+        It assumes the DataFrame has a specific structure, with '자치구' and '동' columns
+        followed by columns representing different location types where fires occurred.
+    """
+
     col1, col2 = st.columns(2)
 
     with col1:
-        # 구 선택
-        df_filtered_by_gu = select_data(dong, '자치구', '_gu')
+        # '자치구' 선택을 위한 스트림릿 셀렉트박스 구현
+        selected_gu = st.selectbox('자치구 선택', options=df['자치구'].unique(), key='자치구_select')
+        # 선택된 '자치구'에 해당하는 데이터만 필터링
+        df_filtered_by_gu = df[df['자치구'] == selected_gu]
 
     with col2:
-        # 동 선택
-        df_filtered_by_dong = select_dong(df_filtered_by_gu, '동', '_dong_1')
+        # '동' 선택을 위한 스트림릿 셀렉트박스 구현, 선택된 '자치구'에 해당하는 '동'만을 옵션으로 제공
+        selected_dong = st.selectbox('동 선택', options=df_filtered_by_gu['동'].unique(), key='동_select_dong')
+        # 선택된 '동'에 해당하는 데이터만 최종 필터링
+        df_filtered_by_dong = df_filtered_by_gu[df_filtered_by_gu['동'] == selected_dong]
 
-    # 화재 발생 장소 유형
-    place_types = ['단독주택', '공동주택', '기타주택', '학교', '일반업무', '판매시설', '숙박시설', '종교시설', '의료시설', '공장 및 창고', '작업장', '위락오락시설', '음식점', '일상서비스시설', '기타']
-
-    # 장소 유형별 화재 발생 건수 데이터를 '장소 유형'과 '건수' 컬럼을 가진 새로운 데이터프레임으로 변환
-    df_treemap = df_filtered_by_dong.melt(id_vars=['자치구', '동'], value_vars=place_types, var_name='장소 유형', value_name='건수')
+    # 화재 발생 장소 유형별로 화재 발생 건수 집계
+    df_agg = df_filtered_by_dong.melt(id_vars=['자치구', '동'], value_vars=df.columns[3:], var_name='장소 유형', value_name='건수')
+    df_agg = df_agg.groupby(['자치구', '동', '장소 유형']).sum().reset_index()
 
     # 건수가 0 이상인 데이터만 필터링
-    df_treemap = df_treemap[df_treemap['건수'] > 0]
+    df_agg = df_agg[df_agg['건수'] > 0]
 
     # 사용자 지정 색상 리스트
     colors = ['#F25E6B', '#F2C744', '#A1BF34', '#EEDFE2', '#FCE77C', '#E2D0F8', '#DCE2F0', '#F2EFBB', '#D5D971', '#6779A1', '#9B7776','#1BBFBF', '#D94B2B', '#D98F89', '#FFDEDC', '#ACC7B4']
 
     # 트리맵 생성
-    fig = px.treemap(df_treemap, path=['자치구', '동', '장소 유형'], values='건수',
-                    color='장소 유형',
-                    hover_data=['건수'],
-                    color_discrete_sequence=colors)
+    fig = px.treemap(df_agg, path=['자치구', '동', '장소 유형'], values='건수',
+                     color='장소 유형',
+                     hover_data=['건수'],
+                     color_discrete_sequence=colors)
 
     # 차트 제목 및 스타일 설정
     fig.update_layout(title='동별 화재 장소유형 트리맵', font=dict(family="Arial, sans-serif", size=14, color="black"))
 
-    # 툴팁 커스터마이징
-    fig.update_traces(
-        hovertemplate='장소 유형: %{label}<br>건수: %{value}<br>전체 대비 비율: %{percentRoot:.2%}',
-        textfont=dict(family="Arial, sans-serif", size=12, color="black")
-    )
-
     # Streamlit에 트리맵 표시
-    st.plotly_chart(fig, use_container_width=True)                            
+    st.plotly_chart(fig, use_container_width=True)
 
 # 1. 서울시 화재사고 현황 페이지 - 자치구별 장소유형 막대그래프 시각화 함수
 def visualize_facilities(df_selected):
+    """
+    Generates a bar chart showing the total counts for different facility types.
+    The bar chart highlights the aggregate counts of facilities by type within a given area, 
+    using a distinct color for each facility type.
+
+    Args:
+        df_selected (pd.DataFrame): DataFrame with counts of different facility types. 
+                                    The first two columns should be '자치구' and '동', 
+                                    followed by columns for each facility type.
+
+    Returns:
+        None: Displays a bar chart in the Streamlit application. 
+
+    Notes:
+        Requires 'plotly' for chart generation and 'streamlit' for display. Assumes the DataFrame 
+        structure includes area ('자치구' and '동') followed by facility type columns.
+    """
+
     fig = go.Figure()
 
     colors = ['#F25E6B', '#F2C744', '#A1BF34', '#EEDFE2', '#FCE77C', '#E2D0F8', '#DCE2F0', '#F2EFBB', '#D5D971', '#6779A1', '#9B7776','#1BBFBF', '#D94B2B', '#D98F89', '#FFDEDC', '#ACC7B4']
@@ -124,13 +183,26 @@ def visualize_facilities(df_selected):
 @st.cache_data
 def visualize_vertical_bar_chart(df, selected_column, title, color_scale='Reds'):
     """
-    스트림릿에서 선택한 열에 따른 자치구별 세로 막대 그래프를 시각화하는 함수.
-    
-    :param df: 데이터프레임
-    :param selected_column: 사용자가 선택한 열 이름
-    :param title: 그래프 제목
-    :param color_scale: 막대 색상 스케일 (사용자가 선택 가능)
+    Visualizes a vertical bar chart in Streamlit, displaying data from a selected column across districts.
+
+    This function sorts the DataFrame based on the values of the selected column in descending order,
+    then creates a vertical bar chart using Plotly. The chart features customization options such
+    as title and color scale, and is displayed within a Streamlit app. 
+
+    Args:
+        df (pd.DataFrame): The DataFrame containing the data to visualize.
+        selected_column (str): The name of the column to visualize.
+        title (str): The title of the graph.
+        color_scale (str): The color scale for the bars, default is 'Reds'.
+
+    Returns:
+        None: The function directly displays the vertical bar chart in the Streamlit app.
+
+    Notes:
+        The color scale can be customized by the user. Default orientation is vertical ('v').
+        The function is decorated with @st.cache_data to cache the data and improve performance.
     """
+
     df_sorted = df.sort_values(by=selected_column, ascending=False)
     
     fig = px.bar(df_sorted, x='자치구', y=selected_column,
@@ -150,11 +222,26 @@ def visualize_vertical_bar_chart(df, selected_column, title, color_scale='Reds')
 # 2. 화재사고 취약지역 페이지 - 상/하위 5개만 보기탭: 가로 막대그래프 시각화 함수
 def visualize_top_districts_with_seoul_average(df, column_name='비상소화장치 설치개수'):
     """
-    선택된 카테고리에 따라 상위 5개구 및 서울시 평균을 포함하여 시각화하는 함수입니다.
-    
-    :param df: 데이터프레임
-    :param column_name: 분석할 카테고리의 열 이름. '비상소화장치 설치개수'의 경우 하위 5개구를, 나머지는 상위 5개구를 표시합니다.
+    Visualizes the top 5 districts and the Seoul city average for a selected category.
+
+    The function allows users to select a category for analysis from the DataFrame. Depending on the category selected,
+    it either displays the top 5 districts for most categories or the bottom 5 districts if the category is related to
+    emergency hydrant installations. The Seoul city average is calculated and displayed alongside the selected districts
+    for comparison.
+
+    Args:
+        df (pd.DataFrame): The DataFrame containing the data to be analyzed.
+        column_name (str): The name of the column to analyze. Defaults to '비상소화장치 설치개수'. For this specific column,
+                           the function displays the bottom 5 districts instead of the top 5.
+
+    Returns:
+        None: The function directly displays the bar chart in the Streamlit app, without returning any value.
+
+    Notes:
+        The visualization is dynamically updated based on the user's selection of the analysis category.
+        The Seoul city average is included in the visualization for comparative analysis.
     """
+
     # 분석 카테고리 선택
     selected_column = st.selectbox('분석 카테고리 선택', options=df.columns[1:], index=0, key='_selected_data_4')
 
@@ -185,7 +272,6 @@ def visualize_top_districts_with_seoul_average(df, column_name='비상소화장�
     fig.update_layout(plot_bgcolor='rgba(240, 240, 240, 0)')
     fig.update_xaxes(tickmode='array', tickvals=visual_df['자치구'])
 
-
     # 스트림릿에 그래프 표시
     st.plotly_chart(fig, use_container_width=True)
 
@@ -194,6 +280,20 @@ def visualize_top_districts_with_seoul_average(df, column_name='비상소화장�
 # 4. 비상소화장치 위치 제안 페이지 - 화재건수탭: 동별 화재발생 건수
 @st.cache_data
 def visualize_fire_counts_by_selected_year(df, selected_year):
+    """
+    Visualizes fire incident counts by district for a selected year, using a horizontal bar chart.
+
+    Args:
+        df (pd.DataFrame): The DataFrame containing fire incident data, including a '시점' column for the year,
+                           a '동' column for the district, and a '화재건수' column for the number of fire incidents.
+        selected_year (int): The year for which the user wants to visualize fire incident counts.
+
+    Returns:
+        None: The function directly displays the horizontal bar chart in the Streamlit app, without returning any value.
+
+    Notes:
+        The function is decorated with @st.cache_data to improve performance by caching the data.
+    """
     df_year = df[df['시점'] == selected_year].sort_values(by='화재건수', ascending=True)
     fig = px.bar(df_year, x='화재건수', y='동', text_auto=True,
                  title=f"{selected_year}년 송파구 화재건수",
@@ -202,21 +302,34 @@ def visualize_fire_counts_by_selected_year(df, selected_year):
     fig.update_traces(textfont_size=10, textangle=0, textposition="outside", cliponaxis=False)
     fig.update_yaxes(tickmode='array', tickvals=df_year['동'].unique())
     fig.update_layout(height=600)
-    return fig
+
+    st.plotly_chart(fig, use_container_width=True)
 
 # 4. 비상소화장치 위치 제안 페이지 - 화재건수탭: 연도별 화재발생 건수
 @st.cache_data
 def visualize_fire_incidents(df, new_data, title, xaxis_title='시점', yaxis_title='화재건수', colors=['#fc8d59', '#fdcc8a', '#e34a33', '#b30000']):
     """
-    화재 건수에 대한 시각화를 생성하고 스트림릿을 사용하여 표시하는 함수.
+    Visualizes fire incident data with the option to include new data, displaying the total fire incidents over time. 
 
-    :param df: 화재 데이터가 담긴 pandas 데이터프레임.
-    :param new_data: 새로 추가할 데이터가 담긴 pandas 데이터프레임.
-    :param title: 차트의 제목.
-    :param xaxis_title: X축 제목.
-    :param yaxis_title: Y축 제목.
-    :param colors: 바 차트의 색상.
+    This function aggregates fire incident data by time period and visualizes it using a bar chart. 
+    It allows for the inclusion of new data points and customization of the chart's appearance.
+
+    Args:
+        df (pd.DataFrame): The original dataset containing fire incidents. 
+                           It must include columns for time period ('시점') and number of incidents ('화재건수').
+        new_data (pd.DataFrame): A DataFrame containing new fire incident data to be added to the original dataset. 
+                                 It must follow the same format as 'df'.
+        title (str): The title of the visualization.
+        xaxis_title (str, optional): The title of the x-axis. Defaults to '시점'.
+        yaxis_title (str, optional): The title of the y-axis. Defaults to '화재건수'.
+        colors (list of str, optional): A list of strings representing colors for the bar chart. 
+                                        Defaults to ['#fc8d59', '#fdcc8a', '#e34a33', '#b30000'].
+
+    Notes:
+        This function utilizes Plotly for visualization and Streamlit for displaying the plot in a web application. 
+        The 'st.plotly_chart' function is used to render the chart within a Streamlit container.
     """
+
     # 기존 데이터에서 '시점'에 따른 '화재건수' 집계
     df_grouped = df.groupby(['시점'])['화재건수'].sum().reset_index()
     # 새로운 데이터 추가
@@ -249,7 +362,9 @@ def visualize_population_by_selected_year(df, selected_year):
                  color_continuous_scale=px.colors.sequential.OrRd)
     fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
     fig.update_yaxes(tickmode='array', tickvals=df_year['동'].unique())
-    return fig
+    fig.update_layout(height=600)
+    
+    st.plotly_chart(fig, use_container_width=True)
 
 # 4. 비상소화장치 위치 제안 페이지 - 노년인구탭: 3 동별 노년인구
 def visualize_elderly_population_by_year(df, time_column='시점'):
@@ -289,7 +404,8 @@ def visualize_elderly_population_ratio_by_selected_year(df, selected_year):
                  color_continuous_scale=px.colors.sequential.OrRd)
     fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
     fig.update_yaxes(tickmode='array', tickvals=df_year['동'].unique())
-    return fig
+    fig.update_layout(height=600)
+    st.plotly_chart(fig, use_container_width=True)
 
 # 4. 비상소화장치 위치 제안 페이지 - 주택현황탭: 1 동별 주택유형 분포
 def visualize_housing_type_distribution_by_selected_dong(df, selected_dong):
@@ -321,6 +437,4 @@ def visualize_housing_type_distribution_by_selected_dong(df, selected_dong):
     # 서브플롯 레이아웃 업데이트
     fig.update_layout(title_text=f"{selected_dong} 주택 유형별 분포")
 
-    return fig
-
-   
+    st.plotly_chart(fig, use_container_width=True)
