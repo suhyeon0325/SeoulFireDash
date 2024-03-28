@@ -1,5 +1,10 @@
 # SeoulFireDash
 
+**Version 1.0.0**:
+- **Firefighting Infrastructure Analysis Page Enhancements**: We've implemented a feature allowing users to filter visualizations of fire stations, safety centers, and emergency hydrants by district (Gu) and neighborhood (Dong) within Seoul. This granularity provides a more localized view, aiding in precise planning and assessment.  
+- **Emergency Hydrant Location Suggestion Updates for Songpa District**: Prioritization of emergency hydrant placement locations within the Songpa District has been introduced, with marker colors now varying according to priority levels. This enhancement aids in quick identification and strategizing of emergency hydrant installations, focusing on areas of utmost importance first.
+
+
 **Version 0.1.4**:
 - **Data Caching for Speed:** Implemented data caching to enhance application performance.
 - **Updated Front Page with Latest Data:** Now includes data from 2018 to March 2024, replacing the previous 2021-2022 dataset.
