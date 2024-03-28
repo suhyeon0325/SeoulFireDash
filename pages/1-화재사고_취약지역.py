@@ -45,7 +45,7 @@ def main():
         st.markdown('<h4>서울시 주택화재 취약지역 분석</h4>', unsafe_allow_html=True)
 
         # 탭 생성
-        tab1, tab2, tab3 = st.tabs(['전체 보기', '상/하위 5개구만 보기', '표로 보기'])
+        tab1, tab2, tab3 = st.tabs(['전체 보기', '상/하위 5개구만 보기', '테이블로 보기'])
 
         with tab1: # 탭 1 - 전체 보기
 
@@ -61,7 +61,7 @@ def main():
         with tab3: # 탭 3 - 표로 보기
 
             # 안내 문구
-            st.caption('표 상단의 열을 클릭하면, 해당 열을 기준으로 데이터를 오름차순 혹은 내림차순으로 정렬할 수 있습니다.')
+            st.caption('테이블 상단의 열을 클릭하면, 해당 열을 기준으로 데이터를 오름차순 혹은 내림차순으로 정렬할 수 있습니다.')
             
             # 데이터 프레임 시각화
             st.dataframe(df, height=500, use_container_width=True)
@@ -70,7 +70,7 @@ def main():
     col1, col2 = st.columns([7, 3])
     with col1: # 열 1 - 구별 취약지역 점수지도 시각화 섹션
         
-        with st.container(border=True, height=600): 
+        with st.container(border=True, height=700): 
             st.markdown('<h4>서울시 구별 취약지역 점수 지도</h4>', unsafe_allow_html=True) 
 
             # 점수 기준에 대한 설명을 제공하는 팝오버 생성
@@ -85,13 +85,13 @@ def main():
 
             # 취약지역 점수 지도 시각화
             html_string = create_and_show_map(_data=merged_data, columns=['자치구', '전체 점수'], key_on='feature.properties.자치구')
-            st.components.v1.html(html_string, height=430)
+            st.components.v1.html(html_string, height=570)
 
     with col2: # 열 2 - 취약점수 순위와 점수를 보여주는 데이터 프레임 섹션
         
-        with st.container(border=True, height=600): 
+        with st.container(border=True, height=700): 
             st.markdown("**취약점수 순위**")
-            st.dataframe(df_3, height=510, use_container_width=True, hide_index=True)
+            st.dataframe(df_3, height=600, use_container_width=True, hide_index=True)
 
 if __name__ == "__main__":
     main()
