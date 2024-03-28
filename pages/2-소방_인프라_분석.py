@@ -27,7 +27,7 @@ _gdf = gpd.GeoDataFrame(data, geometry='geometry') # GeoDataFrame으로 변환
 
 def main():
     # 메인 헤더
-    st.header('서울시 소방 인프라 분석', divider="gray")
+    st.header('서울시 소방 인프라 분석', help='이 페이지에서는 서울시에 위치한 소방 관련 시설의 위치 정보와 소방 서비스의 접근성을 확인할 수 있습니다.', divider="gray")
     
     # 메인 컨텐츠 컬럼 구성
     col1, col2 = st.columns([7, 3])

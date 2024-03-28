@@ -28,7 +28,8 @@ dong = dong.drop(columns=["Unnamed: 0"])
 
 def main():
     # 페이지 헤더 설정    
-    st.header('서울시 화재사고 현황', help='이 페이지에서는 서울시 내의 최근 화재 사고 발생 통계, 화재 유형별 및 지역별 분석에 관한 정보를 제공합니다.', divider='gray')
+    st.header('서울시 화재사고 현황', help='이 페이지에서는 서울시에서 발생한 최근 화재 사고에 대한 통계와 지역 및 장소 유형별 분석을 제공합니다.
+', divider='gray')
     
     # 기간 정보 표시
     st.button("**기간: 2024-02-24~2024-03-25**", disabled=True)

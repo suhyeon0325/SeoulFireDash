@@ -36,7 +36,7 @@ merged_data = gdf.merge(df, left_on='구', right_on='자치구')
 def main():
 
     # 헤더 설정
-    st.header('화재사고 취약지역 분석', divider="gray")
+    st.header('화재사고 취약지역 분석', help ='이 페이지에서는 서울시 내 주택화재 취약지를 다양한 분석 지표를 통해 탐색해보고, 지역별로 취약점수를 비교해 볼 수 있습니다.', divider="gray")
 
     # 주택화재 취약지역 분석
     with st.container(border=True, height=700):
