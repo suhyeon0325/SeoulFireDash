@@ -158,7 +158,7 @@ def main():
                     """, [('data/사진/15_좌표.png', '좌표사진'), ('data/사진/15_주변_1.png', '주변사진'), ('data/사진/15_주변_2.png', '주변사진')])
 
                 # 17번 위치 상세 정보
-                show_location_info(st, "🔵 17번 위치", """
+                show_location_info(st, "🟢 17번 위치", """
                     **거여1동 / 경위도좌표 X, Y(37.497698, 127.143332)**
                     - **낡은 주택**이 많고 **좁은 길**, **경사**가 많음
                     - 길에 **정차된 차량** 때문에 통행이 더 어려움
@@ -254,7 +254,7 @@ def main():
         # 부제목
         st.markdown('<h4>송파구 소방 인프라 분석</h4>', unsafe_allow_html=True)
         # 4개의 탭 생성
-        tab1, tab2, tab3, tab4 = st.tabs(["송파구 소방 인프라", "화재 건수", "노년 인구", " 주택 현황"])
+        tab1, tab2, tab3, tab4 = st.tabs(["비상소화장치", "화재 건수", "인구 및 노년 인구", " 주택 현황"])
          
         with tab1: # 탭 1 - 송파구 비상 소화장치 위치 시각화      
             st.markdown('**현재 송파구 비상소화장치 위치**')
@@ -273,7 +273,7 @@ def main():
             # 연도별 화재발생 건수를 선택한 경우 - 선택된 연도에 대한 화재건수 시각화
             else:
                 # 연도 선택 위젯
-                selected_year = st.selectbox('연도를 선택하세요.', options=sorted(df['시점'].unique(), reverse=True))
+                selected_year = st.selectbox('연도 선택', options=sorted(df['시점'].unique(), reverse=True))
 
                 # 선택된 연도에 대한 화재건수 시각화 함수 호출
                 visualize_fire_counts_by_selected_year(df, selected_year)
@@ -288,7 +288,7 @@ def main():
             if select == '거주인구':
 
                 # 연도 선택 위젯
-                selected_year = st.selectbox('연도를 선택하세요.', options=sorted(df_O['시점'].unique(), reverse=True))
+                selected_year = st.selectbox('연도 선택', options=sorted(df_O['시점'].unique(), reverse=True))
 
                 # 선택된 연도에 대한 거주인구 시각화 함수 호출
                 visualize_population_by_selected_year(df_O, selected_year)
@@ -314,7 +314,7 @@ def main():
             # 노년인구 비율을 선택한 경우 - 선택한 연도에 따라 노년인구 비율 시각화
             else:
                 # 연도 선택 위젯
-                selected_year = st.selectbox('연도를 선택하세요.', options=sorted(df_O['시점'].unique(), reverse=True))
+                selected_year = st.selectbox('연도 선택', options=sorted(df_O['시점'].unique(), reverse=True))
 
                 # 선택된 연도에 대한 노년인구 비율 시각화 함수 호출
                 visualize_elderly_population_ratio_by_selected_year(df_O, selected_year)
@@ -330,7 +330,7 @@ def main():
             if select_1 == "동별 주택유형 분포":
 
                 # 동 선택 위젯
-                selected_dong = st.selectbox('동을 선택하세요.', options=sorted(df_H['동'].unique()))
+                selected_dong = st.selectbox('동 선택', options=sorted(df_H['동'].unique()))
 
                 # 선택된 동에 대한 주택 유형별 분포 시각화 함수 호출
                 visualize_housing_type_distribution_by_selected_dong(df_H, selected_dong)

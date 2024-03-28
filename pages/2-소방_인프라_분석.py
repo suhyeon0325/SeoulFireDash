@@ -27,7 +27,7 @@ _gdf = gpd.GeoDataFrame(data, geometry='geometry') # GeoDataFrame으로 변환
 
 def main():
     # 메인 헤더
-    st.header('서울시 소방 인프라', divider="gray")
+    st.header('서울시 소방 인프라 분석', divider="gray")
     
     # 메인 컨텐츠 컬럼 구성
     col1, col2 = st.columns([7, 3])
@@ -36,7 +36,7 @@ def main():
         with st.container(border=True, height=750):
 
             # 부제목
-            st.markdown('<h4>서울시 소방 시설 위치 시각화</h4>', unsafe_allow_html=True) 
+            st.markdown('<h4>서울시 소방 인프라 위치 시각화</h4>', unsafe_allow_html=True) 
 
             # 3개의 탭 생성
             tab1, tab2, tab3 = st.tabs(["소방서 및 안전센터", "비상 소화장치", "소방용수"])
