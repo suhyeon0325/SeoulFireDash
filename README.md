@@ -65,7 +65,12 @@
 
 
 ## 데모 페이지
-대시보드 데모: [서울시 소방 대시보드](https://suhyeon0325-seoulfiredash----zpxwpg.streamlit.app/)
+대시보드 사이트: [서울시 소방 대시보드](https://suhyeon0325-seoulfiredash----zpxwpg.streamlit.app/)
+
+Streamlit 대시보드 데모 영상: [유튜브에서 보기](https://youtu.be/Y15JNbI---8?si=9U2TSQVvLB96yJF6)
+
+Django 대시보드 데모 영상: [유튜브에서 보기](https://youtu.be/UrKuKw7LCUs?si=E40njPHtkqsuWSG8)
+
 ![image](https://github.com/suhyeon0325/SeoulFireDash/assets/154944729/6a7f0226-2dcf-4535-9bb5-d6fe370afc4f)
 
 
