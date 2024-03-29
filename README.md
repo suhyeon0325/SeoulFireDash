@@ -1,50 +1,137 @@
-# SeoulFireDash
+# SeoulFireDash: 서울시의 화재 안전 강화 프로젝트
 
-**Version 1.0.1**:
-
-- **Added Help Tooltip to Page Headers**: Help tooltips have been added to the headers of each page, providing a brief description of their respective functionalities. This enhancement aims to improve user understanding of each page's purpose.
-- **Restricted Access to Suggestions**: Suggestions can now only be viewed by administrators, enhancing security and privacy by limiting access to sensitive information.
-- **Typo Resolution**: Corrected typos identified in this update, ensuring a smoother user experience and improved clarity throughout the application.
+![image](https://github.com/suhyeon0325/SeoulFireDash/assets/154944729/46b7b38d-2e3e-43e5-a5e7-9f5959273028)
 
 
-**Version 1.0.0**:
-- **Firefighting Infrastructure Analysis Page Enhancements**: We've implemented a feature allowing users to filter visualizations of fire stations, safety centers, and emergency hydrants by district (Gu) and neighborhood (Dong) within Seoul. This granularity provides a more localized view, aiding in precise planning and assessment.  
-- **Emergency Hydrant Location Suggestion Updates for Songpa District**: Prioritization of emergency hydrant placement locations within the Songpa District has been introduced, with marker colors now varying according to priority levels. This enhancement aids in quick identification and strategizing of emergency hydrant installations, focusing on areas of utmost importance first.
+## 프로젝트 개요
+
+대한민국의 수도인 서울시는 인구 밀도가 높아 화재 발생 시 큰 피해가 발생할 위험이 있습니다. 이 프로젝트는 화재로 인한 피해를 최소화하기 위해 서울시 내 비상소화장치 설치 장소를 제안합니다. 이를 통해 소방차 접근이 어려운 지역에서도 화재 대응을 가능하게 하는것이 목표입니다.
+
+## 분석 기간
+
+- 2024년 3월 11일 ~ 2024년 3월 28일(17일)
+
+## 목표
+
+- 서울시 내 주택화재 취약 지역 분석
+- 비상소화장치 설치 위치 제안
+
+## 기대 효과
+
+- 주거지역 중심의 새로운 화재 취약 지역 선정 기준 제공
+- 소방 인프라 파악을 용이하게 하는 대시보드 제작
+- 분석 방법을 다른 지역에도 적용 가능
+
+## 한계점
+
+- 재정적 요소 및 주민 불편 고려 필요
+- 세분화된 지역 데이터의 부족
+- 다양한 데이터의 필요성
+
+---
+
+## 팀원 소개
 
 
-**Version 0.1.4**:
-- **Data Caching for Speed:** Implemented data caching to enhance application performance.
-- **Updated Front Page with Latest Data:** Now includes data from 2018 to March 2024, replacing the previous 2021-2022 dataset.
-- **2024 Monthly Fire Incident Prediction Graph:** Introduced a new graph predicting monthly fire incidents for 2024 using machine learning techniques.
-- **Enhanced Vulnerability Analysis in Fire Accident Prone Areas:** Improved visualization with vertical bar graphs for easier comparison, including a new comparison feature against the Seoul average in the top/bottom 5 districts view.
-- **Seoul District Vulnerability Score Map Update:** Enhanced map readability by displaying district names on the map.
-- **New Section in Firefighting Infrastructure Analysis Page:** Added 'Fire Service Accessibility Analysis: Building Fires Exceeding Golden Time' section, with seasonal color-coded markers visualizing building fires where fire service arrived past the critical response time in 2021.
-- **Enhanced Emergency Hydrant Location Suggestion Page for Songpa District:** Added pie chart visualizations alongside bar graphs for a clearer understanding of housing types distribution by dong.
+| [김수현](https://github.com/suhyeon0325)           | [김영기](https://github.com/Y0un9Ki)          | [송인동](https://github.com/indongspace)            | [정소영](https://github.com/Jsoyoung)          | [정주영(팀장)](https://github.com/Ju0s)    | [최진혁](https://github.com/j2nhyeok)          |
+|-------------------|-----------------|-------------------|-----------------|----------------|----------------|
+| 데이터 수집       | 데이터 수집     | 데이터 수집       | 데이터 수집     | 데이터 수집     | 데이터 수집     |
+| 데이터 전처리     | 데이터 전처리   | 데이터 전처리     | 데이터 전처리   | 데이터 전처리   | 데이터 전처리   |
+| 데이터 분석       | 데이터 분석     | 데이터 분석       | 데이터 분석     | 데이터 분석     | 데이터 분석     |
+| 데이터 시각화     | 대시보드 구현(Django)| 데이터 시각화     | 데이터 시각화   | 데이터 시각화   | 지도 시각화     |
+| 클러스터링        |                 | 예측 시각화         |                 | 발표자료 제작   |                |
+| 대시보드 구현(Streamlit)|                 |                   |                 |  |                |
 
-**Version 0.1.3**:
-- **Sidebar Icons & UI Enhancements**: Introduced intuitive icons for sidebar navigation and refreshed the UI theme for a better user experience.
-- **Enhanced Suggestions Page**:
-  - Added anonymity and file upload features for submitting suggestions, improving user engagement and feedback detail.
-- **Emergency Hydrant Location Suggestion Map for Songpa District**: A new interactive map suggesting optimal locations for emergency hydrants, enriched with local firefighting resource insights.
-- **Firefighting Infrastructure & Welfare Information**: Updated the firefighting infrastructure page with direct links to policies and welfare information, enhancing public awareness and access to resources.
-- **Vulnerability Analysis Enhancement**: Integrated a vulnerability score ranking data frame in the fire accident vulnerability analysis, offering deeper insights into fire-prone areas.
+---
 
-**Version 0.1.2**:
-- **Fire Place Type Bar Graph**: A new bar graph visualization for fire incidents by place types, offering a clear and quick data understanding.
-- **Seoul Residential Fire Vulnerability Analysis Table**: An in-depth data table detailing fire vulnerability in Seoul's residential areas, complementing our graphical analyses.
-- **Emergency Hydrant Location Suggestion Page**: Introducing a map visualization for proposed emergency hydrant locations in Songpa District, along with insights into local firefighting resources, to enhance fire preparedness and infrastructure.
 
-**Version 0.1.1**: 
-- **Ward Fire Place Type Treemap**: Visualize fire incidents by place types within wards.
-- **Vulnerable Area Analysis**: Explore in-depth or top 5 most fire-prone areas based on critical indicators like emergency hydrant counts, building types, population density, old housing numbers, and more.
-- **Fire Vulnerability Mapping in Seoul**: New visual tool to pinpoint and assess fire-susceptible areas.
-- **Seoul Firefighting Infrastructure Visualization**: Map out crucial firefighting resources including stations, hydrants, and water supplies.
-- **Suggestions Page**: A new avenue for feedback and ideas to enhance app utility and user experience.
+## 개발 환경
+본 프로젝트는 다음 환경에서 구현되었습니다:
+- **Programming Languages**: Python (ver. 3.12.1)
 
-**Version 0.1.0** :
+- **Web Framework**: Streamlit (ver. 1.32.2)
 
-- **Dynamic Data Visualization**: Leveraging Streamlit for interactive visualization, allowing users to explore fire incident data, including incidents, casualties, and damages.
-- **In-depth Analysis**: Detailed analyses by incident type and region with custom filters and visualization options to uncover trends and patterns.
-- **Comparative Insights**: Analysis between 2021 and 2022 to highlight trends and evaluate fire prevention and response efforts.
-- **Data Integration**: Utilizing CSV and SHP files for a thorough representation of fire incidents and impacts.
-- **Efficiency and User Experience**: Enhanced data loading with `@st.cache_data`, improved data filtering for regional analysis, and optimized visualization for clearer insights.
+프로젝트는 Python이나 Streamlit의 다른 버전을 사용하여도 작동할 수 있습니다. 그러나 최적 호환성을 위해 제공된 `requirements.txt`에 명시된 버전 사용을 권장합니다.
+
+---
+
+
+## 주요 라이브러리
+라이브러리 목록은 [requirements.txt](https://github.com/suhyeon0325/SeoulFireDash/blob/main/requirements.txt)에서 확인 가능합니다.
+
+
+
+---
+
+
+## 데모 페이지
+대시보드 데모: [서울시 소방 대시보드](https://suhyeon0325-seoulfiredash----zpxwpg.streamlit.app/)
+![image](https://github.com/suhyeon0325/SeoulFireDash/assets/154944729/52c04b5d-ef56-4c40-9070-92de7349584a)
+
+
+
+---
+
+
+## 발표자료 PDF
+팀 프로젝트의 발표자료는 여기에서 확인할 수 있습니다: [발표자료](https://github.com/suhyeon0325/SeoulFireDash/blob/main/PPT_%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pdf)
+
+---
+
+
+## Release Notes
+개발 릴리즈 노트(EN)는 [Releases](https://github.com/suhyeon0325/SeoulFireDash/releases) 섹션에서 확인하세요.
+한국어 버전은 하단에 있습니다.
+
+---
+
+
+## License
+이 프로젝트는 [MIT License](https://github.com/suhyeon0325/SeoulFireDash/blob/main/LICENSE)에 따라 라이센스가 부여됩니다.
+
+---
+## Release (KO)
+
+### Version 1.0.1:
+
+- **페이지 헤더에 도움말 툴팁 추가**: 각 페이지의 헤더에 간단한 기능 설명을 제공하는 도움말 툴팁을 추가했습니다.
+- **건의사항 접근 제한**: 건의사항은 이제 관리자만 볼 수 있으며, 민감한 정보에 대한 접근을 제한하여 보안과 개인 정보 보호를 강화했습니다.
+- **오타 수정**: 이번 업데이트에서 발견된 오타를 수정하였습니다.
+
+### Version 1.0.0:
+- **소방 인프라 분석 페이지 개선**: 서울 내의 구(Dong)와 동(Gu)별로 소방서, 안전센터, 비상 소화전의 시각화를 필터링할 수 있는 기능을 도입했습니다. 이는 보다 지역화된 시각을 제공하여 정밀한 계획과 평가를 돕습니다.
+- **송파구 비상 소화전 위치 제안 업데이트**: 클러스터링을 통해 송파구 내 비상 소화전 배치 우선 순위를 도입하고, 마커 색상을 우선 순위에 따라 달리하여, 중요도가 높은 지역부터 비상 소화전 설치 전략을 신속하게 식별하고 계획할 수 있도록 했습니다.
+
+### Version 0.1.4:
+- **속도 향상을 위한 데이터 캐싱**: 사이트 성능을 향상시키기 위해 데이터 캐싱을 추가했습니다.
+- **최신 데이터로 전면 페이지 업데이트**: 이전의 2021-2022 데이터 세트를 대체하여, 2018년부터 2024년 3월까지의 데이터를 포함하도록 업데이트했습니다.
+- **2024년 월별 화재 사고 예측 그래프**: Prophet을 사용하여 2024년 월별 화재 사고를 예측하는 그래프를 추가했습니다.
+- **화재 사고 취약 지역에서의 취약성 분석 개선**: 막대 그래프를 수평에서 수직으로 변경하여 비교가 용이하도록 시각화를 개선했으며, 상/하위 5개구 지역 탭에서 서울 평균값을 추가했습니다.
+- **서울 지구 취약성 점수 지도 업데이트**: 각 구의 이름을 지도에 표시하여 가독성을 향상시켰습니다.
+- **소방 인프라 분석 페이지에 새로운 섹션 추가**: 2021년에 소방 서비스가 골든타임을 초과하여 도착한 건물 화재 사고를 계절별 색상 코드 마커로 시각화하는 '소방 서비스 접근성 분석: 골든타임을 초과하는 건물 화재' 섹션을 추가했습니다.
+- **송파구 비상 소화전 위치 제안 페이지 개선**: 동별 주택 유형 분포에 대한 이해를 돕기 위해 막대 그래프와 함께 파이 차트 시각화를 추가했습니다.
+
+### Version 0.1.3:
+- **사이드바 아이콘 및 UI 개선**: 사이드바 메뉴 탐색에 아이콘을 추가했고, 테마의 컬러를 새로 수정했습니다.
+- **건의사항 페이지 개선**: 사용자 참여와 피드백 세부 정보를 개선하기 위해 익명 제출 및 파일 업로드 기능을 추가했습니다.
+- **송파구 비상 소화전 위치 제안 지도**: 지역 소방 자원에 대한 인사이트를 더해 비상 소화전의 최적의 제안 위치를 지도에 시각화했습니다.
+- **소방 인프라 및 복지 정보 업데이트**: 소방 인프라 페이지에 정책 및 복지 정보에 대한 링크를 추가했습니다.
+- **취약성 분석 개선**: 화재에 취약한 지역에 대한 더 깊은 인사이트를 제공하기 위해 화재 사고 취약성 분석에 취약성 점수 순위 데이터 프레임을 추가했습니다.
+
+### Version 0.1.2:
+- **화재 발생 장소 유형 바 그래프**: 화재 사고 유형별 시각화를 위한 새로운 바 그래프를 도입하여 데이터 이해를 쉽고 빠르게 할 수 있습니다.
+- **서울 주거지 화재 취약성 분석 표**: 서울 주거지의 화재 취약성을 직관적인 데이터 테이블로 확인할 수 있습니다.
+- **비상 소화전 위치 제안 페이지**: 송파구의 제안된 비상 소화전 위치에 대한 지도 시각화와 지역 소방 자원에 대한 분석을 추가했습니다.
+
+### Version 0.1.1:
+- **구별 화재 발생 장소 유형 트리맵**: 구 내의 화재 사고 유형을 트리맵으로 시각화했습니다.
+- **취약 지역 분석**: 비상 소화전 수, 건물 유형, 인구 밀도, 노후 주택 수 등 중요 지표를 바탕으로 취약점수를 산출해서 순위를 매겼습니다.
+- **서울 화재 취약성 지도시각화**: 화재에 취약한 지역을 식별하고 평가할 수 있도록 지도에 시각화했습니다.
+- **서울 소방 인프라 시각화**: 소방서, 소화전, 소화용수 등 핵심 소방 자원을 지도에 시각화했습니다.
+- **건의사항 페이지**: 사용자들과의 소통을 위한 건의사항 페이지를 추가했습니다.
+
+### Version 0.1.0:
+- **동적 데이터 시각화**: Streamlit을 활용한 상호 작용적 시각화를 통해 사용자가 화재 사고 데이터를 탐색할 수 있게 합니다. 사고, 사상자, 손실 등의 정보가 포함됩니다.
+- **심층 분석**: 사고 유형 및 지역별로 맞춤 필터와 시각화 옵션을 사용하여 추세와 패턴을 발견할 수 있습니다.
+- **비교 인사이트**: 2021년과 2022년 사이의 추세를 분석하여 화재 예방 및 대응 노력을 평가합니다.
+- **효율성 및 사용자 경험 개선**: `@st.cache_data`를 사용한 데이터 로딩 개선, 지역 분석을 위한 데이터 필터링 개선, 명확한 통찰을 위한 시각화 최적화를 통해 사용자 경험을 개선했습니다.
