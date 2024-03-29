@@ -66,7 +66,8 @@
 
 ## 데모 페이지
 대시보드 데모: [서울시 소방 대시보드](https://suhyeon0325-seoulfiredash----zpxwpg.streamlit.app/)
-![image](https://github.com/suhyeon0325/SeoulFireDash/assets/154944729/52c04b5d-ef56-4c40-9070-92de7349584a)
+![image](https://github.com/suhyeon0325/SeoulFireDash/assets/154944729/6a7f0226-2dcf-4535-9bb5-d6fe370afc4f)
+
 
 
 
