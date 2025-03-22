@@ -12,8 +12,6 @@ st.set_page_config(layout="wide", initial_sidebar_state="expanded", page_icon='�
 
 # 데이터 로드
 df = load_data("data/total_rank.csv", encoding='cp949')
-gdf = load_data("data/boundary/boundary.shp")
-gdf.to_file("data/boundary/boundary.geojson", driver="GeoJSON")
 gdf = gpd.read_file("data/boundary/boundary.geojson")
 # 사이드바 링크 설정
 setup_sidebar_links()
