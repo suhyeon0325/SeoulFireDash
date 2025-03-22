@@ -264,8 +264,8 @@ def main():
          
         with tab1: # 탭 1 - 송파구 비상 소화장치 위치 시각화      
             st.markdown('**현재 송파구 비상소화장치 위치**')
-            create_fire_equip_map(data)  # fire_equip_df는 당신의 데이터프레임 변수명입니다.
-
+            create_fire_equip_map(data)  
+            
         with tab2: # 탭 2 - 송파구 화재 건수 분석
             st.markdown('**송파구 화재 건수 분석**')            
             # 선택 메뉴 생성
