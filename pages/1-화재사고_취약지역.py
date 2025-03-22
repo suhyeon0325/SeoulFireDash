@@ -5,14 +5,13 @@ from utils.data_loader import load_data
 from utils.visualizations import visualize_vertical_bar_chart, visualize_top_districts_with_seoul_average
 from utils.map_visualization import create_and_show_map
 from utils.ui_helpers import setup_sidebar_links
-import geopandas as gpd
 
 # 스트림릿 페이지 설정
 st.set_page_config(layout="wide", initial_sidebar_state="expanded", page_icon='⚠️')
 
 # 데이터 로드
 df = load_data("data/total_rank.csv", encoding='cp949')
-gdf = gpd.read_file("data/구경계_geo/boundary_geo.zip")
+gdf = load_data("data/boundary_geo/boundary_geo.shp")
 
 # 사이드바 링크 설정
 setup_sidebar_links()
