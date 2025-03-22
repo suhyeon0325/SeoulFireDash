@@ -9,23 +9,6 @@ from folium.features import DivIcon
 # 2. 화재사고 취약 페이지 - 서울시 구별 취약지역 점수 지도
 @st.cache_data
 def create_and_show_map(_data, columns, key_on, fill_color='YlOrRd'):
-    """
-    Creates and displays a Choropleth map layer using geographical information from a GeoDataFrame
-    to visualize Seoul's districts data. The map highlights areas based on the specified data column values,
-    allowing for a visual representation of various metrics across the city.
-
-    Args:
-        _data (GeoDataFrame): The GeoDataFrame containing the data and geographical information to be visualized.
-                              It must include a 'geometry' column with geographic data.
-        columns (list): A list containing the name of the column in GeoDataFrame that matches the 'key_on' parameter,
-                        and the name of the column containing the values to visualize.
-        key_on (str): The name of the feature property in the GeoDataFrame to bind the data to. For example,
-                      'feature.properties.district'.
-        fill_color (str, optional): The color palette for the Choropleth layer. Defaults to 'YlOrRd'.
-
-    Returns:
-        str: An HTML representation string of the generated Folium map.
-    """
 
     # 서울시 중심부의 위도와 경도로 지도 초기화
     seoul_map = folium.Map(location=[37.5642135, 127.0016985], zoom_start=11)
@@ -92,19 +75,7 @@ def create_and_show_map(_data, columns, key_on, fill_color='YlOrRd'):
 # 3. 서울시 소방 인프라 페이지 - tab1: 서울시 소방서 및 안전센터 시각화
 @st.cache_data
 def create_folium_map(df):
-    """
-    Generates a Folium map with marked locations based on the input DataFrame. Each location is represented as a 
-    CircleMarker on the map, with different colors indicating the type of fire service facility (e.g., fire stations, 
-    safety centers, rescue squads). A popup attached to each marker provides detailed information about the facility.
 
-    Args:
-        df (pandas.DataFrame): A DataFrame containing columns for the name and type of each facility, as well as 
-                               their latitude ('위도') and longitude ('경도'). Expected columns include '서ㆍ센터명' 
-                               for the facility name and '유형구분명' for the facility type.
-    
-    Returns:
-        None: The function directly renders a Folium map in the Streamlit app using folium_static.
-    """
     m = folium.Map(location=[37.5642135, 127.0016985], zoom_start=11)
     colors = {
         '소방서': 'red',
@@ -129,17 +100,7 @@ def create_folium_map(df):
 
 # 3. 서울시 소방 인프라 페이지 - tab2: 비상 소화장치 클러스터링 시각화
 def display_folium_map_with_clusters(gdf):
-    """
-    Displays a Folium map with clustered points from a GeoDataFrame in Streamlit. This function
-    creates a map centered on Seoul and uses clustering to group points based on proximity, 
-    improving the visualization of densely populated areas.
 
-    Args:
-        gdf (GeoDataFrame): A GeoDataFrame containing points to be displayed on the map. It must include
-                            a 'geometry' column with point coordinates and should contain '구' (district)
-                            and '동' (neighborhood) information for tooltips.
-
-     """
     # 서울시 중심에 지도를 생성하고, CartoDB Positron 타일을 사용
     m = folium.Map(location=[37.5665, 126.9780], tiles='OpenStreetMap', zoom_start=11)
     
@@ -165,24 +126,7 @@ def display_folium_map_with_clusters(gdf):
 # 3. 서울시 소방 인프라 페이지 - tab3: 서울시 소방용수 그리드 시각화
 @st.cache_data
 def visualize_fire_water(grid, column_name='소방용수_수'):
-    """
-    Visualizes the distribution of firefighting water resources on a map using GeoPandas and Folium. 
-    The function displays locations with firefighting water and changes the color on the map 
-    based on the quantity of available firefighting water.
 
-    Args:
-        grid (DataFrame): A DataFrame containing the distribution data of firefighting water. 
-                          The 'geometry' column should contain geographic information in WKT format, 
-                          and the column specified by column_name should contain the quantity of 
-                          firefighting water.
-        column_name (str, optional): The name of the column representing the quantity of firefighting 
-                                     water. Defaults to '소방용수_수'.
-
-    Note:
-        The color_scale function nested within visualizes the amount of firefighting water by 
-        assigning specific colors based on the water quantity, enhancing the map's visual appeal and 
-        informational value.
-    """
     # geometry 열을 GeoPandas의 geometry로 변환
     grid['geometry'] = gpd.GeoSeries.from_wkt(grid['geometry'])
     gdf = gpd.GeoDataFrame(grid, geometry='geometry')
@@ -238,26 +182,6 @@ def visualize_fire_water(grid, column_name='소방용수_수'):
 # 3. 소방 인프라 분석 페이지 - 골든타임 초과 시각화 함수(팝업텍스트 생성, 색 생성, 시각화)
 @st.cache_data
 def display_fire_incidents_map(df):
-    """
-    Displays a map in Streamlit showing the locations of fire incidents in Seoul, with markers
-    color-coded by season and detailed incident information available in a popup.
-
-    Args:
-        df (DataFrame): A pandas DataFrame containing fire incident data with columns for latitude ('위도'),
-                        longitude ('경도'), number of deaths ('사망수'), number of injuries ('부상자수'),
-                        property damage amount ('재산피해금액'), response time ('출동소요시간'),
-                        suppression time ('화재진압시간'), location ('시군구명', '읍면동명'),
-                        season ('계절'), time of day ('시간대'), and incident date ('화재발생일시').
-
-    The function includes nested functions `create_popup_html` to generate HTML content for popups and
-    `get_color` to determine marker colors based on the season of the incident. It then adds markers to
-    the map with tooltips showing the response time and popups with detailed incident information.
-
-    Note:
-        - The `create_popup_html` function formats the popup content using HTML and CSS for styling.
-        - The `get_color` function assigns colors to markers based on the season ('봄': green, '여름': red,
-          '가을': orange, '겨울': blue, and default: gray).
-    """
 
     # NaN 값을 가진 행 제거
     df_filtered = df.dropna(subset=['위도', '경도'])
@@ -338,18 +262,7 @@ def display_fire_incidents_map(df):
 # 4. 비상소화장치 위치 제안 페이지 - 송파구 비상소화장치 제안 위치 시각화
 @st.cache_data
 def display_fire_extinguisher_map(center, locations, zoom_start=13):
-    """
-    Generates and displays a map with locations and information about emergency fire extinguishers.
 
-    Args:
-        center (tuple): The latitude and longitude that will be the center of the map.
-        locations (list of tuples): A list of tuples, each representing the location of an emergency fire extinguisher.
-                                    Each tuple consists of (latitude, longitude, description, image URL, priority).
-        zoom_start (int, optional): The initial zoom level of the map. Defaults to 13.
-
-    Returns:
-        None: This function does not return anything but displays a map within a Streamlit application.
-    """
     m = folium.Map(location=center, zoom_start=zoom_start)
 
     # 우선순위에 따른 마커 색상 매핑
@@ -381,19 +294,6 @@ def display_fire_extinguisher_map(center, locations, zoom_start=13):
 # 4. 비상소화장치 위치 제안 페이지 - 하단 tab1: 송파구 현재 비상소화장치 위치 시각화
 @st.cache_data
 def create_fire_equip_map(fire_equip):
-    """
-    Generates and displays a map showing the distribution of fire equipment across a specific area, 
-    with markers colored according to the type of area where the equipment is installed.
-
-    Args:
-        fire_equip (DataFrame): A pandas DataFrame containing columns for the location ('경위도좌표Y', '경위도좌표X'), 
-                                area type ('설치지역'), equipment type ('설치유형구분'), detailed location ('상세위치'), 
-                                and address ('주소') of each piece of fire equipment.
-
-    Returns:
-        None: This function does not return anything but saves a map as an HTML file and displays it within a Streamlit application.
-              The map includes a legend explaining the color coding of the markers according to the installation area.
-    """
 
     map_songpa = folium.Map(location=[37.514543, 127.106597], zoom_start=13)
 

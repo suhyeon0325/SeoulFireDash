@@ -9,21 +9,7 @@ import streamlit as st
 # 데이터 로드 함수
 @st.cache_data
 def load_data(file_path, encoding=None):
-    """
-    Loads data from various file formats into a pandas DataFrame or a GeoPandas GeoDataFrame.
-    This function supports CSV, SHP, and Excel formats. It benefits from caching to enhance
-    performance, especially useful for handling large datasets.
 
-    Args:
-        file_path (str): The file path to the data file to be loaded. The function automatically
-                         determines the appropriate method to load the data based on the file extension.
-        encoding (str, optional): The encoding format used by the file. This is applicable only for
-                                  CSV files. If not specified, the default encoding will be used.
-
-    Returns:
-        pandas.DataFrame or geopandas.GeoDataFrame: A DataFrame or GeoDataFrame containing the loaded data
-                                                     from the specified file.
-    """
     # Determine the file type from the file extension
     file_type = file_path.split('.')[-1].lower()
 
@@ -41,17 +27,7 @@ def load_data(file_path, encoding=None):
 
 @st.cache_data
 def get_locations_data():
-    """
-    Loads and returns emergency hydrant location data.
 
-    This function retrieves a predefined list of emergency hydrant locations, each represented by a tuple containing
-    the latitude, longitude, description (area name), and an image URL. The image URL points to a visual representation
-    of the hydrant's location.
-
-    Returns:
-        list of tuple: A list where each tuple contains the latitude (float), longitude (float), description (str),
-                       and image URL (str) of an emergency hydrant location.
-    """
     locations = [
         (37.5085071, 127.0825862, '잠실동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/01_%EC%A2%8C%ED%91%9C.png?raw=true', 1),
         (37.50511389, 127.0817572, '잠실동', 'https://github.com/suhyeon0325/SeoulFireDash/blob/main/data/%EC%82%AC%EC%A7%84/02_%EC%A2%8C%ED%91%9C.png?raw=true', 1),
