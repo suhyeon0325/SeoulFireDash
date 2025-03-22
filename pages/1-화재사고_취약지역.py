@@ -12,7 +12,7 @@ st.set_page_config(layout="wide", initial_sidebar_state="expanded", page_icon='�
 
 # 데이터 로드
 df = load_data("data/total_rank.csv", encoding='cp949')
-gdf = gpd.read_file("data/구경계_geo/구경계_geo.zip")
+gdf = gpd.read_file("data/구경계_geo/boundary_geo.zip")
 
 # 사이드바 링크 설정
 setup_sidebar_links()
