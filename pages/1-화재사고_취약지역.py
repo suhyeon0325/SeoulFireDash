@@ -12,7 +12,7 @@ import os
 st.set_page_config(layout="wide", initial_sidebar_state="expanded", page_icon='⚠️')
 
 df = load_data("data/total_rank.csv", encoding='cp949')
-gdf = gpd.read_file("data/boundary/boundary.geojson")
+gdf = gpd.read_file("data/boundary/boundary.geojson", driver="GeoJSON")
 
 setup_sidebar_links()
 
