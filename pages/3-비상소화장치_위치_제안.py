@@ -3,57 +3,198 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
-# utils 패키지 내 필요한 함수들을 import
+from plotly.subplots import make_subplots
+import folium
+from streamlit_folium import folium_static
+import streamlit.components.v1 as components
 from utils.ui_helpers import setup_sidebar_links, create_html_button, show_location_info
 from utils.data_loader import load_data, get_locations_data
-from utils.map_visualization import create_fire_equip_map, display_fire_extinguisher_map
-from utils.visualizations import (
-    visualize_housing_type_distribution_by_selected_dong,
-    visualize_fire_incidents,
-    visualize_elderly_population_ratio_by_selected_year,
-    visualize_elderly_population_by_year,
-    visualize_population_by_selected_year,
-    visualize_fire_counts_by_selected_year
-)
+
 
 # 페이지 설정
-st.set_page_config(
-    layout="wide",
-    initial_sidebar_state="expanded", page_icon='🧯'
-)
-
-# 사이드바 설정
+st.set_page_config(layout="wide", initial_sidebar_state="expanded", page_icon='🧯')
 setup_sidebar_links()
 
-# 데이터 로드
+
+# 데이터 로드드
 data = load_data("data/(송파소방서)비상소화장치.xlsx")
 df = load_data("data/2020-2022_송파구_동별_화재건수.csv", encoding='CP949')
 df_P = load_data("data/2022-2023_송파구_인구.csv", encoding='CP949')
 df_O = load_data("data/2021-2023_송파구_고령자현황.csv", encoding='CP949')
 df_H = load_data("data/2020_송파구_주택.csv", encoding='CP949')
 
-# 데이터 전처리
-df = df.replace('-', 0) # '-' 값을 0으로 대체
-df['화재건수'] = df['화재건수'].astype(int) # '화재건수' 열의 데이터 타입을 정수형으로 변환
+df = df.replace('-', 0)
+df['화재건수'] = df['화재건수'].astype(int)
 
-# 주택 데이터셋에서 'X'값을 0으로 대체하고 데이터 타입을 정수형으로 변환
 df_H = df_H.replace('X', 0)
 df_H = df_H.astype({'단독주택': int, '연립주택': int, '다세대주택': int, '비거주용건물내주택': int})
 
-def main():
-    # 대시보드 헤더 설정
-    st.header('비상소화장치 위치 제안',help='송파구의 비상소화장치 위치를 제안하고, 송파구와 관련된 다양한 분석을 확인할 수 있습니다.', divider="gray")
-    st.caption('현재 서비스는 송파구 내에서만 사용가능합니다.')
 
-    # 비상소화장치 제안 위치 섹션
+# 시각화 함수
+@st.cache_data
+def songpa_fire_year(df, selected_year):
+    df_year = df[df['시점'] == selected_year].sort_values(by='화재건수', ascending=True)
+    fig = px.bar(df_year, x='화재건수', y='동', text_auto=True,
+                 title=f"{selected_year}년 송파구 화재건수",
+                 color='화재건수',
+                 color_continuous_scale=px.colors.sequential.OrRd)
+    fig.update_traces(textfont_size=10, textangle=0, textposition="outside", cliponaxis=False)
+    fig.update_yaxes(tickmode='array', tickvals=df_year['동'].unique())
+    fig.update_layout(height=600)
+    st.plotly_chart(fig, use_container_width=True)
+
+@st.cache_data
+def fire_incidents(df, new_data, title, xaxis_title='시점', yaxis_title='화재건수', colors=['#fc8d59', '#fdcc8a', '#e34a33', '#b30000']):
+    df_grouped = df.groupby(['시점'])['화재건수'].sum().reset_index()
+    df_grouped_updated = pd.concat([df_grouped, new_data]).reset_index(drop=True)
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        x=df_grouped_updated['시점'], 
+        y=df_grouped_updated['화재건수'], 
+        width=0.4, 
+        marker_color=colors, 
+        text=df_grouped_updated['화재건수']
+    ))
+    fig.update_layout(
+        title_text=title,
+        xaxis_type='category',
+        yaxis_title=yaxis_title,
+        xaxis_title=xaxis_title
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+@st.cache_data
+def population_by_selected_year(df, selected_year):
+    df_year = df[df['시점'] == selected_year].sort_values(by='전체인구', ascending=True)
+    fig = px.bar(df_year, x='전체인구', y='동', text_auto=True,
+                 title=f"{selected_year}년 송파구 거주인구",
+                 color='전체인구',
+                 color_continuous_scale=px.colors.sequential.OrRd)
+    fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
+    fig.update_yaxes(tickmode='array', tickvals=df_year['동'].unique())
+    fig.update_layout(height=600)
+    st.plotly_chart(fig, use_container_width=True)
+
+def elderly_population_by_year(df, time_column='시점'):
+    unique_years = df[time_column].unique()
+    selected_year = st.selectbox("연도 선택", options=sorted(unique_years, reverse=True), key='year_select')
+    df_year = df[df[time_column] == selected_year].sort_values(by='65세이상 인구', ascending=True)
+    fig = px.bar(df_year, x='65세이상 인구', y='동', text_auto=True,
+                 title=f"{selected_year}년 송파구 노년인구",
+                 color='65세이상 인구',
+                 color_continuous_scale=px.colors.sequential.OrRd)
+    fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
+    fig.update_yaxes(tickmode='array', tickvals=df_year['동'])
+    fig.update_layout(height=600)
+    st.plotly_chart(fig, use_container_width=True)
+
+@st.cache_data
+def elderly_population_ratio(df, selected_year):
+    df_year = df[df['시점'] == selected_year].copy()
+    df_year.loc[:, '65세이상 인구 비율'] = (df_year['65세이상 인구'] / df_year['전체인구']) * 100
+    df_year.sort_values(by='65세이상 인구 비율', ascending=True, inplace=True)
+    fig = px.bar(df_year, x='65세이상 인구 비율', y='동', text_auto=True,
+                 title=f"{selected_year}년 송파구 노년인구 비율",
+                 color='65세이상 인구 비율',
+                 color_continuous_scale=px.colors.sequential.OrRd)
+    fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
+    fig.update_yaxes(tickmode='array', tickvals=df_year['동'].unique())
+    fig.update_layout(height=600)
+    st.plotly_chart(fig, use_container_width=True)
+
+def housing_type_distribution(df, selected_dong):
+    df_dong = df[df['동'] == selected_dong]
+    df_dong = df_dong.drop(columns=['소계'])
+    df_melted = df_dong.melt(id_vars=['시점', '동'], var_name='주택 유형', value_name='수량')
+    fig = make_subplots(rows=1, cols=2, specs=[[{"type": "bar"}, {"type": "pie"}]], subplot_titles=("막대 그래프", "파이 차트"))
+    fig.add_trace(go.Bar(x=df_melted['주택 유형'], y=df_melted['수량'], text=df_melted['수량'], textposition='auto',
+                        marker=dict(color=df_melted['수량'], colorscale='Reds'), name="주택 유형별 분포"), row=1, col=1)
+    fig.add_trace(go.Pie(labels=df_melted['주택 유형'], values=df_melted['수량'],
+                        pull=[0.1 if i == df_melted['수량'].idxmax() else 0 for i in range(len(df_melted))],
+                        marker=dict(colors=px.colors.qualitative.Plotly), name=""), row=1, col=2)
+    fig.update_traces(showlegend=False)
+    fig.update_layout(title_text=f"{selected_dong} 주택 유형별 분포")
+    st.plotly_chart(fig, use_container_width=True)
+
+@st.cache_data
+def fire_extinguisher_map(center, locations, zoom_start=13):
+    m = folium.Map(location=center, zoom_start=zoom_start)
+    color_mapping = {1: "red", 2: "orange", 3: "green", 4: "blue"}
+    for idx, (lat, lon, label, image_path, priority) in enumerate(locations):
+        icon_html = f"""<div style="font-family: Arial; font-size: 12px; color: blue;"><b>{idx+1}</b></div>"""
+        icon = folium.DivIcon(html=icon_html)
+        marker_color = color_mapping.get(priority, "gray")
+        folium.Marker([lat, lon], icon=icon).add_to(m)
+        folium.Marker(
+            location=[lat, lon],
+            popup=f'<b>{idx+1}. {label}</b></b><br>{lat},{lon}</b><br><img src="{image_path}" width="150" height="100">',
+            icon=folium.Icon(color=marker_color, icon="info-sign"),
+        ).add_to(m)
+    folium_static(m)
+
+@st.cache_data
+def fire_equip_map(fire_equip):
+    map_songpa = folium.Map(location=[37.514543, 127.106597], zoom_start=13)
+    colors = {
+        '소방차진입곤란': 'red',
+        '주거지역': 'blue',
+        '시장지역': 'green',
+        '영세민밀집': 'purple',
+        '소방차진입불가': 'orange'
+    }
+    for index, row in fire_equip.iterrows():
+        icon_color = colors.get(row['설치지역'], 'gray')
+        popup_html = f"""
+        <h4>소방 장비 정보</h4>
+        <ul style="margin: 0; padding: 0;">
+            <li>설치지역: {row['설치지역']}</li>
+            <li>설치유형구분: {row['설치유형구분']}</li>
+            <li>상세위치: {row['상세위치']}</li>
+            <li>주소: {row['주소']}</li>
+        </ul>
+        """
+        popup = folium.Popup(popup_html, max_width=250)
+        folium.Marker(
+            location=[row['경위도좌표Y'], row['경위도좌표X']],
+            popup=popup,
+            tooltip=row['주소'],
+            icon=folium.Icon(color=icon_color)
+        ).add_to(map_songpa)
+
+    legend_html = '''
+    <div style="position: fixed; 
+         top: 10px; right: 10px; width: 180px; height: 120px; 
+         background-color: white; border:2px solid rgba(0,0,0,0.2); 
+         z-index:9999; font-size:11px; border-radius: 8px; 
+         box-shadow: 3px 3px 5px rgba(0,0,0,0.3); padding: 8px;">
+         <h4 style="text-align:center; font-size:14px; font-weight: bold; margin-top: 0;">설치지역별 마커 색상</h4>
+         &nbsp; 소방차진입곤란: <i style="background:#D33D2A; border-radius: 50%; width: 12px; height: 12px; display: inline-block;"></i> 빨강<br>
+         &nbsp; 소방차진입불가: <i style="background:#F0932F; border-radius: 50%; width: 12px; height: 12px; display: inline-block;"></i> 주황<br>
+         &nbsp; 시장지역: <i style="background:#73A626; border-radius: 50%; width: 12px; height: 12px; display: inline-block;"></i> 초록<br>
+         &nbsp; 주거지역: <i style="background:#3BACD9; border-radius: 50%; width: 12px; height: 12px; display: inline-block;"></i> 파랑<br>
+         &nbsp; 영세민밀집: <i style="background:#BF4EAC; border-radius: 50%; width: 12px; height: 12px; display: inline-block;"></i> 보라<br>
+    </div>
+    '''
+    map_songpa.get_root().html.add_child(folium.Element(legend_html))
+    map_songpa.save('map_with_legend.html')
+    with open('map_with_legend.html', 'r', encoding='utf-8') as f:
+        map_html = f.read()
+    components.html(map_html, height=600)
+
+
+# 메인    
+def main():
+
+    st.header('비상소화장치 위치 제안',help='송파구의 비상소화장치 위치를 제안하고, 송파구와 관련된 다양한 분석을 확인할 수 있습니다.', divider="gray")
+
     col1, col2 = st.columns([7,4])
-    with col1: # 열 1 - 비상소화장치 위치 지도 시각화
+    with col1: 
         with st.container(border=True, height=650):  
             col3, col4 = st.columns([7,3])
-            with col3: # 열 3 - 부제목 섹션
+            with col3: 
                st.markdown('<h4>송파구 비상소화장치 제안 위치</h4>', unsafe_allow_html=True)
 
-            with col4: # 열 4 - 위치 선정 방법 설명
+            with col4: 
                 with st.popover("💡 **위치 선정 방법**"):
                     st.markdown("""
                             <div style="font-family: sans-serif;">
@@ -83,12 +224,11 @@ def main():
                         """, unsafe_allow_html=True)
 
 
-            # 송파구 중심 좌표 설정 및 지도 시각화
             center = [37.514543, 127.106597]
             locations = get_locations_data()
-            display_fire_extinguisher_map(center, locations)
+            fire_extinguisher_map(center, locations)
 
-    with col2: # 열 2 - 각 위치에 대한 상세 정보 제공
+    with col2: 
         with st.container(border=True, height=650):  
             create_html_button('각 위치별 상세 정보')
 
@@ -257,50 +397,41 @@ def main():
                
     # 송파구 소방 인프라 분석 섹션
     with st.container(border=True, height=900):
-        # 부제목
+
         st.markdown('<h4>송파구 소방 인프라 분석</h4>', unsafe_allow_html=True)
-        # 4개의 탭 생성
+
         tab1, tab2, tab3, tab4 = st.tabs(["비상소화장치", "화재 건수", "인구 및 노년 인구", " 주택 현황"])
          
-        with tab1: # 탭 1 - 송파구 비상 소화장치 위치 시각화      
+        with tab1:     
             st.markdown('**현재 송파구 비상소화장치 위치**')
-            create_fire_equip_map(data)  
+            fire_equip_map(data)  
             
-        with tab2: # 탭 2 - 송파구 화재 건수 분석
+        with tab2: 
             st.markdown('**송파구 화재 건수 분석**')            
-            # 선택 메뉴 생성
+
             select = st.radio("선택", ["동별 화재발생 건수", "연도별 화재발생 건수"],horizontal=True, label_visibility="collapsed")
-            # 연도별 화재발생 건수를 선택한 경우 - 2020~2023 총 화재 건수 시각화
+
             if select == '연도별 화재발생 건수':
                 new_data = pd.DataFrame({'시점': [2023],'화재건수': [382]})
                 df_grouped = df.groupby(['시점'])['화재건수'].sum().reset_index()
-                visualize_fire_incidents(df, new_data, '송파구 2020~2023 총 화재건수')
+                fire_incidents(df, new_data, '송파구 2020~2023 총 화재건수')
 
-            # 연도별 화재발생 건수를 선택한 경우 - 선택된 연도에 대한 화재건수 시각화
+ 
             else:
-                # 연도 선택 위젯
                 selected_year = st.selectbox('연도 선택', options=sorted(df['시점'].unique(), reverse=True))
-
-                # 선택된 연도에 대한 화재건수 시각화 함수 호출
-                visualize_fire_counts_by_selected_year(df, selected_year)
+                songpa_fire_year(df, selected_year)
             
-        with tab3: # 탭 3 - 송파구 노년 인구 분석
+        with tab3:
             st.markdown('**송파구 노년 인구 분석**')   
 
-            # 노년 인구 분석에 대한 선택 옵션 제공
             select = st.radio("선택", ["노년인구", "동별 노년인구", "노년인구 비율", "거주인구"],horizontal=True, label_visibility="collapsed")
 
-            # 거주인구를 선택한 경우 - 선택한 연도에 따른 거주인구 시각화
             if select == '거주인구':
 
-                # 연도 선택 위젯
                 selected_year = st.selectbox('연도 선택', options=sorted(df_O['시점'].unique(), reverse=True))
 
-                # 선택된 연도에 대한 거주인구 시각화 함수 호출
-                visualize_population_by_selected_year(df_O, selected_year)
-                
-
-            # 노년인구를 선택한 경우 - 2020~2023 송파구 노년인구수 시각화
+                population_by_selected_year(df_O, selected_year)
+    
             elif select == '노년인구':
 
                 시점 = df_P['시점'].tolist()
@@ -313,42 +444,32 @@ def main():
                 fig.update_layout(title_text='송파구 2022~2023년도 노년인구 수', yaxis_title='노년인구', xaxis_title='시점')
                 st.plotly_chart(fig, use_container_width=True)
 
-            # 동별 노년인구를 선택한 경우 - 선택된 연도에 대한 거주 인구 시각화
             elif select == '동별 노년인구':                    
-                visualize_elderly_population_by_year(df_O)
-                
-            # 노년인구 비율을 선택한 경우 - 선택한 연도에 따라 노년인구 비율 시각화
+                elderly_population_by_year(df_O)
+
             else:
-                # 연도 선택 위젯
+
                 selected_year = st.selectbox('연도 선택', options=sorted(df_O['시점'].unique(), reverse=True))
 
-                # 선택된 연도에 대한 노년인구 비율 시각화 함수 호출
-                visualize_elderly_population_ratio_by_selected_year(df_O, selected_year)
+                elderly_population_ratio(df_O, selected_year)
                 
 
-        with tab4: # 탭 4 - 송파구 주택현황 분석
+        with tab4:
             st.markdown('**송파구 주택현황 분석**') 
 
-            # 선택 옵션 제공
             select_1 = st.radio("선택", ["동별 주택유형 분포", "동별 주택수"], horizontal=True, label_visibility="collapsed")
             
-            # 동별 주택유형 분포를 선택한 경우 - 선택한 동에 따라 주택유형 분포 시각화
             if select_1 == "동별 주택유형 분포":
 
-                # 동 선택 위젯
                 selected_dong = st.selectbox('동 선택', options=sorted(df_H['동'].unique()))
+                housing_type_distribution(df_H, selected_dong)
 
-                # 선택된 동에 대한 주택 유형별 분포 시각화 함수 호출
-                visualize_housing_type_distribution_by_selected_dong(df_H, selected_dong)
-                
-            # 동별 주택수를 선택한 경우 - 동별 주택수 가로 막대 그래프 시각화
             else: 
                 df_total = df_H[['동', '소계']]
                 df_total_sorted = df_total.sort_values('소계', ascending=True)
 
-                # 가로 막대 그래프 그리기
                 fig_total_sorted = px.bar(df_total_sorted, y='동', x='소계', text='소계',
-                                        orientation='h',  # 가로 막대 그래프 설정
+                                        orientation='h',  
                                         color='소계', color_continuous_scale=px.colors.sequential.OrRd,
                                         title="송파구 동별 주택 수(2020년)")
                 

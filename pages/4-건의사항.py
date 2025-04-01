@@ -1,18 +1,17 @@
+# -*- coding:utf-8 -*-
 import streamlit as st
 import pandas as pd
 import os
 from utils.ui_helpers import setup_sidebar_links
-from utils.data_loader import load_data
 
-st.set_page_config(
-    layout="wide",
-    initial_sidebar_state="expanded", page_icon='💬'
-)
 
+# 페이지 설정
+st.set_page_config(layout="wide", initial_sidebar_state="expanded", page_icon='💬')
 setup_sidebar_links()
 
+
+# 메인 
 def main():
-    # 페이지 제목 및 설명
     st.header('건의사항 페이지', divider='gray')
     st.markdown("""
     대시보드를 개선해 나갈 수 있도록 **건의사항을 남겨주세요🙇‍♂️**
@@ -21,11 +20,9 @@ def main():
     - 🐞 **사용 중 발견한 버그나 오류**
     """)
 
-    # 건의사항 파일 경로
     file_path = 'recommendations/건의사항.csv'  
 
     with st.container(border=True):
-        # 사용자로부터의 입력 처리
         anonymous = st.checkbox('익명으로 제출하기')
         if anonymous:
             username = "익명"
@@ -49,31 +46,29 @@ def main():
 
         submit_button = st.button('제출')
 
-    # 제출 버튼 클릭 시 데이터 처리
     if submit_button:
         new_data = {'이름': username, '이메일': email, '카테고리': category, '건의사항': suggestion, '파일': file_info}
-        df = pd.DataFrame([new_data])  # 새로운 데이터프레임 생성
+        df = pd.DataFrame([new_data])
         if os.path.exists(file_path):
-            df.to_csv(file_path, mode='a', header=False, index=False)  # 기존 파일에 데이터 추가
+            df.to_csv(file_path, mode='a', header=False, index=False)
         else:
-            df.to_csv(file_path, mode='w', header=True, index=False)  # 새 파일 생성
+            df.to_csv(file_path, mode='w', header=True, index=False)
         st.success('건의사항이 성공적으로 제출되었습니다.')
 
-    # 파일 존재 여부 및 건의사항 처리
     if os.path.exists(file_path):
-        df_건의사항 = pd.read_csv(file_path)  # 파일 로드
+        df_건의사항 = pd.read_csv(file_path)
         st.divider()
-        if '건의사항' in df_건의사항.columns:  # '건의사항' 열 존재 확인
+        if '건의사항' in df_건의사항.columns:
             selected_indices = st.multiselect(
                 '해결된 건의사항을 선택하세요.', 
                 df_건의사항.index, 
-                format_func=lambda x: df_건의사항.loc[x, '건의사항']  # 건의사항 내용으로 선택 목록 표시
+                format_func=lambda x: df_건의사항.loc[x, '건의사항']
             )
             if st.button('선택 항목 삭제'):
-                df_건의사항 = df_건의사항.drop(index=selected_indices)  # 선택된 건의사항 삭제
-                df_건의사항.to_csv(file_path, index=False)  # 변경사항 저장
+                df_건의사항 = df_건의사항.drop(index=selected_indices)
+                df_건의사항.to_csv(file_path, index=False)
                 st.success('선택한 항목이 삭제되었습니다.')
-            st.dataframe(df_건의사항, width=800, height=300)  # 업데이트된 건의사항 표시
-    
+            st.dataframe(df_건의사항, width=800, height=300)
+
 if __name__ == "__main__":
     main()
