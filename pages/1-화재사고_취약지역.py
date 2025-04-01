@@ -7,11 +7,13 @@ import folium
 from folium.features import DivIcon
 from utils.data_loader import load_data
 from utils.ui_helpers import setup_sidebar_links
+import os
 
 st.set_page_config(layout="wide", initial_sidebar_state="expanded", page_icon='⚠️')
 
 df = load_data("data/total_rank.csv", encoding='cp949')
-gdf = gpd.read_file("data/boundary/boundary.geojson", encoding="utf-8")
+gdf = gpd.read_file("data/boundary/boundary.geojson")
+
 setup_sidebar_links()
 
 columns_to_exclude = ["비상소화장치 설치개수 점수", "서울시 주거 시설 중 주택 비율 점수", "인구밀도(명/km^2) 점수", 
